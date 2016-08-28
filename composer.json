@@ -1,0 +1,11 @@
+{
+    "name": "jzpeepz/dynamo",
+    "description": "Quickly build admins for your existing application using real tables",
+    "authors": [
+        {
+            "name": "Jonathan Peoples",
+            "email": "jonathan@flex360.com"
+        }
+    ],
+    "require": {}
+}
