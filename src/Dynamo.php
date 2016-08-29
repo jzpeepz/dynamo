@@ -52,7 +52,7 @@ class Dynamo
 
     public function getRoute($action)
     {
-        return 'admin.' . strtolower($this->getBaseClass()) . '.' . $action;
+        return strtolower($this->getBaseClass()) . '.' . $action;
     }
 
     private function makeLabel($key)
