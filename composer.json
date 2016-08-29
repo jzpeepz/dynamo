@@ -1,6 +1,6 @@
 {
     "name": "jzpeepz/dynamo",
-    "description": "Quickly build admins for your existing application using real tables",
+    "description": "Quickly build admins for your existing Laravel application using real database tables",
     "authors": [
         {
             "name": "Jonathan Peoples",
