@@ -7,5 +7,10 @@
             "email": "jonathan@flex360.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Jzpeepz\\Dynamo\\": "src/"
+        }
+    }
 }
