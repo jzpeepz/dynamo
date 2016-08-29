@@ -9,11 +9,8 @@
     ],
     "require": {},
     "autoload": {
-        "classmap": [
-            "src"
-        ],
         "psr-4": {
             "Jzpeepz\\Dynamo\\": "src/"
         }
-    }
+    },
 }
