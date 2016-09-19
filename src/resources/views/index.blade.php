@@ -16,6 +16,25 @@
 
                         @include('dynamo::partials.alerts')
 
+                        @if ($dynamo->hasSearchable())
+                            <form action="{{ route($dynamo->getRoute('index')) }}" method="get" class="dynamo-search">
+
+                                <div class="form-group">
+                                    <label for="" class="sr-only">Search</label>
+                                    <div class="input-group">
+                                        <input type="text" name="q" class="form-control" placeholder="" value="{{ request()->input('q') }}">
+                                        <span class="input-group-btn">
+                                            @if (request()->has('q'))
+                                                <a href="{{ route($dynamo->getRoute('index')) }}" class="btn btn-default">Clear</a>
+                                            @endif
+                                            <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </form>
+                        @endif
+
                         @if ($items->isEmpty())
 
                             <div>No items found. <a href="{{ route($dynamo->getRoute('create')) }}">Add one.</a></div>
@@ -28,14 +47,14 @@
                                         @foreach ($dynamo->getIndexes() as $index)
                                             <th>{{ $index->label }}</th>
                                         @endforeach
-                                        <th>Action</th>
+                                        <th style="width: 110px;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($items as $item)
                                         <tr>
                                             @foreach ($dynamo->getIndexes() as $index)
-                                                <td>{{ $item->{$index->key} }}</td>
+                                                <td>{{ $dynamo->getValue($index->key, $item) }}</td>
                                             @endforeach
                                             <td>
                                                 <a href="{{ route($dynamo->getRoute('edit'), $item->id) }}" class="btn btn-default btn-xs">Edit</a>

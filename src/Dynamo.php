@@ -3,6 +3,7 @@
 namespace Jzpeepz\Dynamo;
 
 use DB;
+use Storage;
 
 class Dynamo
 {
@@ -12,6 +13,7 @@ class Dynamo
     private $fields = null;
     private $indexOrderBy = null;
     private $paginate = 200;
+    private $searchable = null;
 
     public function __construct($class)
     {
@@ -20,6 +22,7 @@ class Dynamo
         $this->indexes = collect();
         $this->fields = collect();
         $this->indexOrderBy = collect();
+        $this->searchable = collect();
     }
 
     public function __call($name, $arguments)
@@ -36,6 +39,24 @@ class Dynamo
     public static function make($class)
     {
         return new Dynamo($class);
+    }
+
+    public function store($item)
+    {
+        $data = request()->all();
+
+        // fill and save so that we have an id for saving uploaded files
+        if (! $item->exists) {
+            $item->save();
+        }
+
+        $data = $this->handleSpecialFields($item, $data);
+
+        // fill and save again
+        $item->fill($data);
+        $item->save();
+
+        return $item;
     }
 
     public function getName()
@@ -178,6 +199,11 @@ class Dynamo
     {
         $query = $this->class::whereRaw('1=1');
 
+        // do any searching
+        if (! $this->searchable->isEmpty() && request()->has('q')) {
+            $query = $query->where(DB::raw('CONCAT('.$this->getSearchableKeys()->implode(", ' ', ").')'), 'like', '%'.request()->input('q').'%');
+        }
+
         foreach($this->getIndexOrderBy() as $orderBy) {
             $query = $query->orderBy($orderBy['column'], $orderBy['sort']);
         }
@@ -189,5 +215,72 @@ class Dynamo
         }
 
         return $items;
+    }
+
+    public function handleSpecialFields($item, $data = [])
+    {
+        foreach ($data as $key => $value) {
+            if (is_object($value) && get_class($value) == "Illuminate\Http\UploadedFile") {
+                // handle uploaded files
+                $fileName = str_replace('.'.$value->getClientOriginalExtension(), '', $value->getClientOriginalName());
+                $destinationFileName = str_slug($fileName).'.'.strtolower($value->getClientOriginalExtension());
+
+                $disk = Storage::disk(config('dynamo.storage_disk'));
+                $disk->put(config('dynamo.upload_path').$destinationFileName, file_get_contents($value->getRealPath()));
+
+                $data[$key] = config('dynamo.upload_path').$destinationFileName;
+            }
+
+            if ($key == 'password') {
+                // handle password reset
+                if (empty($value)) {
+                    unset($data['password']);
+                } else {
+                    $data['password'] = bcrypt($value);
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    public function hasSearchable()
+    {
+        return ! $this->searchable->isEmpty();
+    }
+
+    public function getSearchableKeys()
+    {
+        return $this->searchable->map(function($field, $key){
+            return $field->key;
+        });
+    }
+
+    public function searchable($key, $type = null, $options = [])
+    {
+        $label = isset($options['label']) ? $options['label'] : null;
+        $type = ! empty($type) ? $$type : 'text';
+
+        $this->searchable->push(DynamoField::make([
+            'key' => $key,
+            'type' => $type,
+            'label' => empty($label) ? $this->makeLabel($key) : $label,
+            'options' => $options,
+        ]));
+
+        return $this;
+    }
+
+    public function getValue($key, $item)
+    {
+        // check to see if the key ends with '_id' meaning a refence to another model
+        $lastThree = substr($key, strlen($key)-3);
+        if ($lastThree == '_id') {
+            $class = '\\App\\'.studly_case(str_replace($lastThree, '', $key));
+            $model = $class::find($item->$key);
+            return $model;
+        }
+
+        return $item->$key;
     }
 }

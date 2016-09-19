@@ -55,11 +55,7 @@ class DynamoController extends Controller
     {
         $item = new $this->dynamo->class;
 
-        $data = $request->all();
-
-        $item->fill($data);
-
-        $item->save();
+        $this->dynamo->store($item);
 
         session(['alert-success' => $this->dynamo->getName() . ' was saved successfully!']);
 
@@ -107,11 +103,7 @@ class DynamoController extends Controller
     {
         $item = $this->dynamo->class::find($id);
 
-        $data = $request->all();
-
-        $item->fill($data);
-
-        $item->save();
+        $this->dynamo->store($item);
 
         session(['alert-success' => $this->dynamo->getName() . ' was saved successfully!']);
 
