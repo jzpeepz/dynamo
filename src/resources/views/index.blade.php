@@ -67,7 +67,7 @@
                                 </tbody>
                             </table>
 
-                            {{ $items->links() }}
+                            {{ method_exists($items, 'links') ? $items->links() : null }}
 
                         @endif
                     </div>

@@ -220,7 +220,7 @@ class Dynamo
     public function handleSpecialFields($item, $data = [])
     {
         foreach ($data as $key => $value) {
-            if (is_object($value) && get_class($value) == "Illuminate\Http\UploadedFile") {
+            if (is_object($value) && (get_class($value) == "Illuminate\Http\UploadedFile" || get_class($value) == "Symfony\Component\HttpFoundation\File\UploadedFile")) {
                 // handle uploaded files
                 $fileName = str_replace('.'.$value->getClientOriginalExtension(), '', $value->getClientOriginalName());
                 $destinationFileName = str_slug($fileName).'.'.strtolower($value->getClientOriginalExtension());

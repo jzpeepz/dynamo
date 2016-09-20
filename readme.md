@@ -14,6 +14,16 @@ Publish the Dynamo config file:
 
 NOTE: If using a local disk for uploading, be sure to symlink it to your public directory and provide the proper path in the config file.
 
+## Configuration
+
+`storage_disk` Storage disk to use to store uploaded files. Default: local
+
+`upload_path` Path within the storage disk to store the uploaded files. This is also the directory within the public directory to which the storage directory is linked. Default: /uploads/
+
+`route_prefix` Prefix to add to all Dynamo routes. Default is empty.
+
+`layout` Layout to use with Dynamo views. Default: layouts.app
+
 ## Usage
 
 ### Generating your first admin

@@ -3,7 +3,7 @@
 return [
     'storage_disk' => 'local',
 
-    'upload_path' => '/',
+    'upload_path' => '/uploads/',
 
     'route_prefix' => '',
 
