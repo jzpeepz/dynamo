@@ -73,7 +73,7 @@ class Dynamo
 
     public function getRoute($action)
     {
-        return strtolower($this->getBaseClass()) . '.' . $action;
+        return config('dynamo.route_prefix') . strtolower($this->getBaseClass()) . '.' . $action;
     }
 
     private function makeLabel($key)
