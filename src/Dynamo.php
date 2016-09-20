@@ -95,7 +95,7 @@ class Dynamo
 
     public function removeIndex($indexKey)
     {
-        $this->indexes = $this->indexes->filter(function ($field, $key) use ($indexKey) {
+        $this->indexes = $this->indexes->filter(function ($field, $key = null) use ($indexKey) {
             return $field->key != $indexKey;
         });
 
@@ -150,7 +150,7 @@ class Dynamo
 
     public function removeField($fieldKey)
     {
-        $this->fields = $this->fields->filter(function ($field, $key) use ($fieldKey) {
+        $this->fields = $this->fields->filter(function ($field, $key = null) use ($fieldKey) {
             return $field->key != $fieldKey;
         });
 

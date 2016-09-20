@@ -13,7 +13,7 @@ class DynamoMake extends Command
      *
      * @var string
      */
-    protected $signature = 'make:dynamo {model} {--migration=yes} {--model=yes} {--controller=yes}';
+    protected $signature = 'make:dynamo {model} {--migration=yes} {--model=yes} {--controller=yes} {--route=yes}';
 
     /**
      * The console command description.
@@ -47,6 +47,7 @@ class DynamoMake extends Command
         $makeMigration = $this->option('migration');
         $makeModel = $this->option('model');
         $makeController = $this->option('controller');
+        $makeRoute = $this->option('route');
 
         $stubsDirectory = $srcPath.'/Console/stubs/';
 
@@ -100,29 +101,31 @@ class DynamoMake extends Command
         }
 
         // insert routes
-        $resource = strtolower($model);
-		$route = "Route::resource('$resource', '\\App\\Http\\Controllers\\{$model}Controller');";
+        if ($makeRoute == 'yes') {
+            $resource = strtolower($model);
+    		$route = "Route::resource('$resource', '\\App\\Http\\Controllers\\{$model}Controller');";
 
-		// get routes file source
-        $routesPath = base_path('routes/web.php');
-        if (LaravelVersion::is('4.2')) {
-            $routesPath = app_path('routes.php');
-        } elseif (LaravelVersion::is(['5.0', '5.1', '5.2'])) {
-            $routesPath = app_path('Http/routes.php');
+    		// get routes file source
+            $routesPath = base_path('routes/web.php');
+            if (LaravelVersion::is('4.2')) {
+                $routesPath = app_path('routes.php');
+            } elseif (LaravelVersion::is(['5.0', '5.1', '5.2'])) {
+                $routesPath = app_path('Http/routes.php');
+            }
+    		$source = file_get_contents($routesPath);
+
+    		// insert new route
+    		$insertMarker = '/* ---- Dynamo Routes ---- */';
+            $hasMarker = strpos($source, $insertMarker);
+            if ($hasMarker === false) {
+                $source = $source . "\n" . $route;
+            } else {
+    		    $source = str_replace($insertMarker, $insertMarker . "\n    " . $route, $source);
+            }
+
+    		// rewrite routes file
+    		file_put_contents($routesPath, $source);
         }
-		$source = file_get_contents($routesPath);
-
-		// insert new route
-		$insertMarker = '/* ---- Dynamo Routes ---- */';
-        $hasMarker = strpos($source, $insertMarker);
-        if ($hasMarker === false) {
-            $source = $source . "\n" . $route;
-        } else {
-		    $source = str_replace($insertMarker, $insertMarker . "\n    " . $route, $source);
-        }
-
-		// rewrite routes file
-		file_put_contents($routesPath, $source);
 
 		$this->info('Complete the migration and get started by linking to:');
         $this->comment("route('" . strtolower($model) . ".index')");
