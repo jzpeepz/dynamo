@@ -6,4 +6,6 @@ return [
     'upload_path' => '/',
 
     'route_prefix' => '',
+
+    'layout' => 'layouts.app',
 ];

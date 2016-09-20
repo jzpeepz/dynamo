@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(config('dynamo.layout'))
 
 @section('title', $dynamo->getName() . ' Manager')
 
