@@ -14,8 +14,8 @@ class Dynamo
     private $indexOrderBy = null;
     private $paginate = 200;
     private $searchable = null;
-    private $deleteEnabled = true;
-    private $addEnabled = true;
+    private $deleteHidden = true;
+    private $addHidden = true;
 
     public function __construct($class)
     {
@@ -286,28 +286,28 @@ class Dynamo
         return $item->$key;
     }
 
-    public function removeDelete()
+    public function hideDelete()
     {
-        $this->deleteEnabled = false;
+        $this->deleteHidden = false;
 
         return $this;
     }
 
-    public function removeAdd()
+    public function hideAdd()
     {
-        $this->addEnabled = false;
+        $this->addHidden = false;
 
         return $this;
     }
 
-    public function hasDelete()
+    public function deleteVisible()
     {
-        return $this->deleteEnabled;
+        return $this->deleteHidden;
     }
 
-    public function hasAdd()
+    public function addVisible()
     {
-        return $this->addEnabled;
+        return $this->addHidden;
     }
 
 }
