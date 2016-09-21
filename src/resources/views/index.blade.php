@@ -8,7 +8,7 @@
             <div class="col-md-10 col-md-offset-1">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        @if ($dynamo->hasAdd())
+                        @if ($dynamo->addVisible())
                             <a href="{{ route($dynamo->getRoute('create')) }}" class="btn btn-success btn-xs pull-right">Add {{ $dynamo->getName() }}</a>
                         @endif
                         {{ $dynamo->getName() }} Manager
@@ -61,7 +61,7 @@
                                             <td>
                                                 <a href="{{ route($dynamo->getRoute('edit'), $item->id) }}" class="btn btn-default btn-xs">Edit</a>
 
-                                                @if ($dynamo->hasDelete())
+                                                @if ($dynamo->deleteVisible())
                                                     {!! Form::open(['route' => [$dynamo->getRoute('destroy'), $item->id], 'method' => 'delete', 'style' => 'display: inline-block;']) !!}
                                                         <button class="btn btn-default btn-xs btn-delete">Delete</button>
                                                     {!! Form::close() !!}
