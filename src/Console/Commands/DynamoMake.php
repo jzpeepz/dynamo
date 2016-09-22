@@ -81,7 +81,7 @@ class DynamoMake extends Command
 
         // make dynamo controller
         if ($makeController == 'yes') {
-            $controllerDirectory = app_path('/Http/Controllers/');
+            $controllerDirectory = config('dynamo.controller_path') . '/';
             $newControllerFile = $controllerDirectory . $model . 'Controller.php';
     		if (! file_exists($newControllerFile)) {
     			// pull in controller stub
@@ -89,6 +89,8 @@ class DynamoMake extends Command
 
     			// replace values in stub
     			$controllerString = str_replace('$MODEL$', $model, $controllerStub);
+
+    			$controllerString = str_replace('$NAMESPACE$', config('dynamo.controller_namespace'), $controllerString);
 
     			// create controller file
     			file_put_contents($newControllerFile, $controllerString);
@@ -103,7 +105,7 @@ class DynamoMake extends Command
         // insert routes
         if ($makeRoute == 'yes') {
             $resource = strtolower($model);
-    		$route = "Route::resource('$resource', '\\App\\Http\\Controllers\\{$model}Controller');";
+    		$route = "Route::resource('$resource', '" . config('dynamo.controller_namespace') . "\\{$model}Controller');";
 
     		// get routes file source
             $routesPath = base_path('routes/web.php');
@@ -128,6 +130,6 @@ class DynamoMake extends Command
         }
 
 		$this->info('Complete the migration and get started by linking to:');
-        $this->comment("route('" . strtolower($model) . ".index')");
+        $this->comment("route('" . config('dynamo.route_prefix') . strtolower($model) . ".index')");
     }
 }

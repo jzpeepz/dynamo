@@ -8,4 +8,8 @@ return [
     'route_prefix' => '',
 
     'layout' => 'layouts.app',
+
+    'controller_namespace' => 'App\Http\Controllers',
+
+    'controller_path' => app_path('/Http/Controllers'),
 ];
