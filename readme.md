@@ -32,3 +32,10 @@ The following command will create a controller, model, migration, and route for 
 
 `php artisan make:dynamo Employee`
 
+Need to opt out of some of the Dynamo magic?
+
+`php artisan make:dynamo Employee --migration=no --model=no --controller=no --route=no`
+
+## License
+
+Dynamo is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).

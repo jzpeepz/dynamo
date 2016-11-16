@@ -16,6 +16,8 @@ class Dynamo
     private $searchable = null;
     private $deleteHidden = true;
     private $addHidden = true;
+    private $currentGroup = null;
+    private $position = 10;
 
     public function __construct($class)
     {
@@ -132,18 +134,24 @@ class Dynamo
     {
         $this->removeField($key);
 
-        $index = isset($options['index']) ? $options['index'] : false;
+        $onIndex = isset($options['onIndex']) ? $options['onIndex'] : false;
         $label = isset($options['label']) ? $options['label'] : null;
+        $position = isset($options['position']) ? $options['position'] : $this->position;
 
-        if ($index) {
+        // increment the global position
+        $this->position = $this->position + 10;
+
+        if ($onIndex) {
             $this->addIndex($key, $label);
         }
 
         $this->fields->push(DynamoField::make([
             'key' => $key,
             'type' => $type,
-            'index' => $index,
+            'onIndex' => $onIndex,
             'label' => empty($label) ? $this->makeLabel($key) : $label,
+            'group' => $this->currentGroup,
+            'position' => $position,
             'options' => $options,
         ]));
 
@@ -173,6 +181,29 @@ class Dynamo
         return $this->fields;
     }
 
+    public function getFieldGroups()
+    {
+        $groups = [];
+
+        foreach ($this->fields as $field) {
+            $groups[$field->group][] = $field;
+        }
+
+        // sort each group
+        foreach ($groups as $key => $group) {
+            usort($group, function ($a, $b) {
+                if ($a->position == $b->position) {
+                    return 0;
+                }
+                return ($a->position < $b->position) ? -1 : 1;
+            });
+
+            $groups[$key] = $group;
+        }
+
+        return $groups;
+    }
+
     public function auto()
     {
         $item = new $this->class;
@@ -183,7 +214,7 @@ class Dynamo
 
         foreach ($columns as $column) {
             if (! $item->isGuarded($column) || $item->isFillable($column)) {
-                $this->addField($column, 'text', ['index' => true]);
+                $this->addField($column, 'text', ['onIndex' => true]);
             }
         }
 
@@ -310,6 +341,27 @@ class Dynamo
     public function addVisible()
     {
         return $this->addHidden;
+    }
+
+    public function setGroup($name)
+    {
+        $this->currentGroup = $name;
+    }
+
+    public function unsetGroup()
+    {
+        $this->currentGroup = null;
+    }
+
+    public function group($name, $callable)
+    {
+        $this->setGroup($name);
+
+        call_user_func($callable, $this);
+
+        $this->unsetGroup();
+
+        return $this;
     }
 
 }

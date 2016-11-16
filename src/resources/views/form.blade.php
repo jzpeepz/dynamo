@@ -14,8 +14,12 @@
                         @include('dynamo::partials.alerts')
 
                         {!! Form::model($item, $formOptions) !!}
-                            @foreach ($dynamo->getFields() as $field)
-                                {!! $field->render($item) !!}
+                            @foreach ($dynamo->getFieldGroups() as $group => $fields)
+                                <fieldset id="{{ $group }}" class="{{ ! empty($group) ? 'well' : '' }} dynamo-group">
+                                    @foreach ($fields as $field)
+                                        {!! $field->render($item) !!}
+                                    @endforeach
+                                </fieldset>
                             @endforeach
 
                             <button type="submit" class="btn btn-primary">Save {{ $dynamo->getName() }}</button>
