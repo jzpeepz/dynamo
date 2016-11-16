@@ -199,7 +199,9 @@ class Dynamo
 
     public function getIndexItems()
     {
-        $query = $this->class::whereRaw('1=1');
+        $className = $this->class;
+
+        $query = $className::whereRaw('1=1');
 
         // do any searching
         if (! $this->searchable->isEmpty() && request()->has('q')) {

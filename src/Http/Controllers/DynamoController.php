@@ -81,7 +81,9 @@ class DynamoController extends Controller
      */
     public function edit($id)
     {
-        $item = $this->dynamo->class::find($id);
+        $className = $this->dynamo->class;
+
+        $item = $className::find($id);
 
         $formOptions = [
             'route' => [$this->dynamo->getRoute('update'), $id],
@@ -101,7 +103,9 @@ class DynamoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $item = $this->dynamo->class::find($id);
+        $className = $this->dynamo->class;
+
+        $item = $className::find($id);
 
         $this->dynamo->store($item);
 
@@ -118,7 +122,9 @@ class DynamoController extends Controller
      */
     public function destroy($id)
     {
-        $this->dynamo->class::destroy($id);
+        $className = $this->dynamo->class;
+
+        $className::destroy($id);
 
         session(['alert-warning' => $this->dynamo->getName() . ' was deleted successfully!']);
 
