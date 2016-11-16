@@ -32,6 +32,11 @@ class DynamoField
         return view('dynamo::partials.fields.' . $this->type, ['field' => $this, 'item' => $item])->render();
     }
 
+    public function getOption($key)
+    {
+        return isset($this->options[$key]) ? $this->options[$key] : '';
+    }
+
     // public function renderText($item)
     // {
     //     return view('admin.dynamo.partials.fields.text', ['field' => $this, 'item' => $item])->render();
