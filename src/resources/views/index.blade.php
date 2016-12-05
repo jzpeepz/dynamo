@@ -43,7 +43,7 @@
 
                         @else
 
-                            <table class="table">
+                            <table class="table" id="dynamo-index">
                                 <thead>
                                     <tr>
                                         @foreach ($dynamo->getIndexes() as $index)
@@ -52,7 +52,7 @@
                                         <th style="width: 110px;">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="dynamo-index-body">
                                     @foreach ($items as $item)
                                         <tr class="dynamo-index-row" data-id="{{ $item->id }}">
                                             @foreach ($dynamo->getIndexes() as $index)
