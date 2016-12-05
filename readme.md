@@ -36,12 +36,17 @@ Need to opt out of some of the Dynamo magic?
 
 `php artisan make:dynamo Employee --migration=no --model=no --controller=no --route=no`
 
-Creating form groups.
+### Customizing the admin
 
-`->group('groupName', function($dynamo) {
-    $dynamo->text('fieldName')
-           ->text('fieldName');
-});`
+Admin customization happens in your controller inside the `getDynamo()` function. This function returns a Dynamo instance which has lots of chainable methods that customize your Dynamo admin.
+
+### Creating form groups
+
+	return Dynamo::make(\App\Employee::class)
+			->group('groupName', function($dynamo) {
+				$dynamo->text('fieldName')
+			   		   ->text('fieldName');
+			});
 
 ## License
 

@@ -54,7 +54,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($items as $item)
-                                        <tr>
+                                        <tr class="dynamo-index-row" data-id="{{ $item->id }}">
                                             @foreach ($dynamo->getIndexes() as $index)
                                                 <td>{{ $dynamo->getValue($index->key, $item) }}</td>
                                             @endforeach
