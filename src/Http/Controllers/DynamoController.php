@@ -122,7 +122,18 @@ class DynamoController extends Controller
      */
     public function destroy($id)
     {
+
         $className = $this->dynamo->class;
+
+        // Run through and look for fields with type 'multiSelect'
+        foreach($this->dynamo->getFields() as $field) {
+
+            if($field->type == 'multiSelect') {
+                //if 'multiSelect' found then relational data may exist. Detach data from the model
+                $className::find($id)->{$field->key}()->detach();
+            }
+
+        }
 
         $className::destroy($id);
 

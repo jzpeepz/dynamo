@@ -48,6 +48,51 @@ Admin customization happens in your controller inside the `getDynamo()` function
 			   		   ->text('fieldName');
 			});
 
+### Creating many to many relationships between dynamo models
+
+Step 1: Generate the two models you will be using.
+	`php artisan make:dynamo Faq`
+	`php artisan make:dynamo Category`
+
+Step 2: Make sure to create the relationship table in the migrations
+
+	`Schema::create('faqs', function (Blueprint $table) {
+		$table->increments('id');
+		$table->string('question', 255);
+		$table->mediumText('answer');
+		$table->timestamps();
+	});
+
+	Schema::create('categories', function (Blueprint $table) {
+		$table->increments('id');
+		$table->string('name');
+		$table->timestamps();
+	});
+
+	Schema::create('category_faq', function(Blueprint $table)
+	{
+		$table->integer('faq_id')->unsigned()->nullable();
+		$table->foreign('faq_id')->references('id')->on('faqs');
+
+		$table->integer('category_id')->unsigned()->nullable();
+		$table->foreign('category_id')->references('id')->on('categories');
+	});`
+
+Step 3: Add the proper belongsToMany Eloquent function to each model.
+
+	`public function faqs()
+	{
+		return $this->belongsToMany('App\Faq');
+	}
+
+	public function categories()
+	{
+		return $this->belongsToMany('App\Category');
+	}`
+
+Step 4: use the multiSelect option in the controller. Make sure your key is the name of the Eloquent function from you model.
+	`->multiSelect('categories', ['options' => [$categories]])`
+
 ## License
 
 Dynamo is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
