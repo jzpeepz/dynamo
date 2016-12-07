@@ -28,7 +28,6 @@ class DynamoField
 
     public function render($item)
     {
-        // return $this->{'render' . studly_case($this->type)}($item);
         if($this->render){
             return view('dynamo::partials.fields.' . $this->type, ['field' => $this, 'item' => $item])->render();
         }
