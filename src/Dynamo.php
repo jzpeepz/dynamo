@@ -18,6 +18,7 @@ class Dynamo
     private $addHidden = true;
     private $currentGroup = null;
     private $position = 10;
+    private $render = true;
 
     public function __construct($class)
     {
@@ -137,6 +138,7 @@ class Dynamo
         $onIndex = isset($options['onIndex']) ? $options['onIndex'] : false;
         $label = isset($options['label']) ? $options['label'] : null;
         $position = isset($options['position']) ? $options['position'] : $this->position;
+        $render = isset($options['render']) ? $options['render'] : true;
 
         // increment the global position
         $this->position = $this->position + 10;
@@ -152,6 +154,7 @@ class Dynamo
             'label' => empty($label) ? $this->makeLabel($key) : $label,
             'group' => $this->currentGroup,
             'position' => $position,
+            'render' => $render,
             'options' => $options,
         ]));
 

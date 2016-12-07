@@ -29,7 +29,10 @@ class DynamoField
     public function render($item)
     {
         // return $this->{'render' . studly_case($this->type)}($item);
-        return view('dynamo::partials.fields.' . $this->type, ['field' => $this, 'item' => $item])->render();
+        if($this->render){
+            return view('dynamo::partials.fields.' . $this->type, ['field' => $this, 'item' => $item])->render();
+        }
+
     }
 
     public function getOption($key)

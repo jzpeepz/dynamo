@@ -128,7 +128,7 @@ class DynamoController extends Controller
         // Run through and look for fields with type 'multiSelect'
         foreach($this->dynamo->getFields() as $field) {
 
-            if($field->type == 'multiSelect') {
+            if($field->type == 'hasMany') {
                 //if 'multiSelect' found then relational data may exist. Detach data from the model
                 $className::find($id)->{$field->key}()->detach();
             }
