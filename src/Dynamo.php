@@ -86,13 +86,14 @@ class Dynamo
         return ucwords(str_replace(['_','-'], ' ', $key));
     }
 
-    public function addIndex($key, $label = null)
+    public function addIndex($key, $label = null, $formatCallable = null)
     {
         $this->removeIndex($key);
 
         $this->indexes->push(DynamoField::make([
             'key' => $key,
             'label' => empty($label) ? $this->makeLabel($key) : $label,
+            'formatCallable' => $formatCallable,
         ]));
 
         return $this;
@@ -317,6 +318,7 @@ class Dynamo
         return $this;
     }
 
+    // deprecated, use DynamoField::getValue instead
     public function getValue($key, $item)
     {
         // check to see if the key ends with '_id' meaning a refence to another model
@@ -325,6 +327,11 @@ class Dynamo
             $class = '\\App\\'.studly_case(str_replace($lastThree, '', $key));
             $model = $class::find($item->$key);
             return $model;
+        }
+
+        // check to see if the field has a callable for formatting
+        if (! empty($item->formatCallable)) {
+            return call_user_func($formatCallable, $item->$key);
         }
 
         return $item->$key;

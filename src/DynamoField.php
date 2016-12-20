@@ -39,6 +39,26 @@ class DynamoField
         return isset($this->options[$key]) ? $this->options[$key] : '';
     }
 
+    public function getValue($item)
+    {
+        $key = $this->key;
+
+        // check to see if the key ends with '_id' meaning a refence to another model
+        $lastThree = substr($key, strlen($key)-3);
+        if ($lastThree == '_id') {
+            $class = '\\App\\'.studly_case(str_replace($lastThree, '', $key));
+            $model = $class::find($item->$key);
+            return $model;
+        }
+
+        // check to see if the field has a callable for formatting
+        if (is_callable($this->formatCallable)) {
+            return call_user_func($this->formatCallable, $item->$key);
+        }
+
+        return $item->$key;
+    }
+
     // public function renderText($item)
     // {
     //     return view('admin.dynamo.partials.fields.text', ['field' => $this, 'item' => $item])->render();
