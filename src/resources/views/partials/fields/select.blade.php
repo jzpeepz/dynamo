@@ -1,4 +1,4 @@
 <div class="form-group">
     <label for="" title="Position: {{ $field->position }}">{{ $field->label }}</label>
-    {!! Form::select($field->key, $field->options['options'], $item->{$field->key}, ['class' => 'form-control '.$field->getOption('class')]) !!}
+    {!! Form::select($field->key, $field->getSelectOptions(), $item->{$field->key}, ['class' => 'form-control '.$field->getOption('class')]) !!}
 </div>

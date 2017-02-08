@@ -59,23 +59,14 @@ class DynamoField
         return $item->$key;
     }
 
-    // public function renderText($item)
-    // {
-    //     return view('admin.dynamo.partials.fields.text', ['field' => $this, 'item' => $item])->render();
-    // }
-    //
-    // public function renderPassword($item)
-    // {
-    //     return view('admin.dynamo.partials.fields.password', ['field' => $this, 'item' => $item])->render();
-    // }
-    //
-    // public function renderSelect($item)
-    // {
-    //     return view('admin.dynamo.partials.fields.select', ['field' => $this, 'item' => $item])->render();
-    // }
-    //
-    // public function renderFile($item)
-    // {
-    //     return view('admin.dynamo.partials.fields.file', ['field' => $this, 'item' => $item])->render();
-    // }
+    public function getSelectOptions()
+    {
+        $options = collect($this->options['options']);
+
+        if (isset($this->options['includeEmpty']) && $this->options['includeEmpty'] == true) {
+            $options->prepend('', '');
+        }
+
+        return $options->toArray();
+    }
 }
