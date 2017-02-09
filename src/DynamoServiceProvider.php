@@ -8,6 +8,7 @@ class DynamoServiceProvider extends ServiceProvider
 {
     protected $commands = [
         'Jzpeepz\Dynamo\Console\Commands\DynamoMake',
+        'Jzpeepz\Dynamo\Console\Commands\DynamoViews',
     ];
 
     /**

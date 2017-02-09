@@ -31,7 +31,13 @@ class DynamoField
         if($this->render){
             return view('dynamo::partials.fields.' . $this->type, ['field' => $this, 'item' => $item])->render();
         }
+    }
 
+    public function renderStub()
+    {
+        if($this->render){
+            return view('dynamo::stubs.partials.fields.' . $this->type, ['field' => $this])->render();
+        }
     }
 
     public function getOption($key)
