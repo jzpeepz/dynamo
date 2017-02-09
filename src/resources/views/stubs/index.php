@@ -46,9 +46,9 @@
                             <table class="table" id="dynamo-index">
                                 <thead>
                                     <tr>
-                                        @foreach ($dynamo->getIndexes() as $index)
-                                            <th>{{ $index->label }}</th>
-                                        @endforeach
+                                        <?php foreach ($dynamo->getIndexes() as $index): ?>
+                                            <th><?= $index->label ?></th>
+                                        <?php endforeach; ?>
                                         <th style="width: 110px;">Action</th>
                                     </tr>
                                 </thead>
@@ -56,7 +56,7 @@
                                     @foreach ($items as $item)
                                         <tr class="dynamo-index-row" data-id="{{ $item->id }}">
                                             <?php foreach ($dynamo->getIndexes() as $index): ?>
-                                                <td>{{ $item-><?= $index->key ?> }}</td>
+                                                <td>{{ $dynamo->getValue('<?= $index->key ?>', $item) }}</td>
                                             <?php endforeach; ?>
                                             <td>
                                                 <a href="{{ route($dynamo->getRoute('edit'), $item->id) }}" class="btn btn-default btn-xs">Edit</a>

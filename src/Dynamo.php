@@ -320,23 +320,11 @@ class Dynamo
         return $this;
     }
 
-    // deprecated, use DynamoField::getValue instead
     public function getValue($key, $item)
     {
-        // check to see if the key ends with '_id' meaning a refence to another model
-        $lastThree = substr($key, strlen($key)-3);
-        if ($lastThree == '_id') {
-            $class = '\\App\\'.studly_case(str_replace($lastThree, '', $key));
-            $model = $class::find($item->$key);
-            return $model;
-        }
+        $field = $this->getField($key);
 
-        // check to see if the field has a callable for formatting
-        if (! empty($item->formatCallable)) {
-            return call_user_func($formatCallable, $item->$key);
-        }
-
-        return $item->$key;
+        return $field->getValue($item);
     }
 
     public function hideDelete()
