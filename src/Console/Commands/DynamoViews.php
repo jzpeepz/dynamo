@@ -49,23 +49,33 @@ class DynamoViews extends Command
         $controller = new $controllerClass;
         $dynamo = $controller->getDynamo();
 
+        // ensure that folders for generated views exist
+        $viewPathParts = explode('.', config('dynamo.view_prefix') . '.' . $table);
+        $viewPath = base_path('resources/views');
+        foreach ($viewPathParts as $viewPathPart) {
+            $viewPath .= '/' . $viewPathPart;
+            if (! \File::isDirectory($viewPath)) {
+                \File::makeDirectory($viewPath);
+            }
+        }
+
         // generate the index view
         $viewSrc = view('dynamo::stubs.index', compact('dynamo'))->render();
         $viewDestination = str_replace('.', '/', config('dynamo.view_prefix')) . '/' . $table . '/index.blade.php';
-        if (file_exists(base_path('/resources/views/' . $viewDestination))) {
+        if (file_exists(base_path('resources/views/' . $viewDestination))) {
             $this->error('Index view for ' . $table . ' already exists.');
         } else {
-            file_put_contents(base_path('/resources/views/' . $viewDestination), $viewSrc);
+            file_put_contents(base_path('resources/views/' . $viewDestination), $viewSrc);
             $this->info('Index view for ' . $table . ' created.');
         }
 
         // generate the form view
         $viewSrc = view('dynamo::stubs.form', compact('dynamo'))->render();
         $viewDestination = str_replace('.', '/', config('dynamo.view_prefix')) . '/' . $table . '/form.blade.php';
-        if (file_exists(base_path('/resources/views/' . $viewDestination))) {
+        if (file_exists(base_path('resources/views/' . $viewDestination))) {
             $this->error('Form view for ' . $table . ' already exists.');
         } else {
-            file_put_contents(base_path('/resources/views/' . $viewDestination), $viewSrc);
+            file_put_contents(base_path('resources/views/' . $viewDestination), $viewSrc);
             $this->info('Form view for ' . $table . ' created.');
         }
     }
