@@ -12,4 +12,6 @@ return [
     'controller_namespace' => 'App\Http\Controllers',
 
     'controller_path' => app_path('/Http/Controllers'),
+
+    'view_prefix' => 'dynamo',
 ];

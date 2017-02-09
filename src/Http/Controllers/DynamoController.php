@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Jzpeepz\Dynamo\DynamoView;
 
 class DynamoController extends Controller
 {
@@ -25,7 +26,7 @@ class DynamoController extends Controller
     {
         $items = $this->dynamo->getIndexItems();
 
-        return view('dynamo::index', compact('items'));
+        return DynamoView::make($this->dynamo, 'dynamo::index', compact('items'));
     }
 
     /**
@@ -42,7 +43,7 @@ class DynamoController extends Controller
             'files' => true,
         ];
 
-        return view('dynamo::form', compact('item', 'formOptions'));
+        return DynamoView::make($this->dynamo, 'dynamo::form', compact('item', 'formOptions'));
     }
 
     /**
@@ -91,7 +92,7 @@ class DynamoController extends Controller
             'files' => true,
         ];
 
-        return view('dynamo::form', compact('item', 'formOptions'));
+        return DynamoView::make($this->dynamo, 'dynamo::form', compact('item', 'formOptions'));
     }
 
     /**
