@@ -382,4 +382,15 @@ class Dynamo
         return $this;
     }
 
+    public function getField($key)
+    {
+        foreach($this->fields as $field) {
+            if ($field->key == $key) {
+                return $field;
+            }
+        }
+
+        return null;
+    }
+
 }
