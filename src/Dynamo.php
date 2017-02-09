@@ -140,12 +140,13 @@ class Dynamo
         $label = isset($options['label']) ? $options['label'] : null;
         $position = isset($options['position']) ? $options['position'] : $this->position;
         $render = isset($options['render']) ? $options['render'] : true;
+        $formatCallable = isset($options['formatCallable']) ? $options['formatCallable'] : null;
 
         // increment the global position
         $this->position = $this->position + 10;
 
         if ($onIndex) {
-            $this->addIndex($key, $label);
+            $this->addIndex($key, $label, $formatCallable);
         }
 
         $this->fields->push(DynamoField::make([
@@ -157,6 +158,7 @@ class Dynamo
             'position' => $position,
             'render' => $render,
             'options' => $options,
+            'formatCallable' => $formatCallable,
         ]));
 
         return $this;

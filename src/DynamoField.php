@@ -49,17 +49,20 @@ class DynamoField
     {
         $key = $this->key;
 
+        // check to see if the field has a callable for formatting
+        if (is_callable($this->formatCallable)) {
+            return call_user_func($this->formatCallable, $item->$key);
+        }
+
         // check to see if the key ends with '_id' meaning a refence to another model
         $lastThree = substr($key, strlen($key)-3);
         if ($lastThree == '_id') {
             $class = '\\App\\'.studly_case(str_replace($lastThree, '', $key));
-            $model = $class::find($item->$key);
-            return $model;
-        }
 
-        // check to see if the field has a callable for formatting
-        if (is_callable($this->formatCallable)) {
-            return call_user_func($this->formatCallable, $item->$key);
+            if (class_exists($class)) {
+                $model = $class::find($item->$key);
+                return $model;
+            }
         }
 
         return $item->$key;
