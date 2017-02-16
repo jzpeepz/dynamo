@@ -51,7 +51,7 @@ class DynamoField
 
         // check to see if the field has a callable for formatting
         if (is_callable($this->formatCallable)) {
-            return call_user_func($this->formatCallable, $item->$key);
+            return call_user_func($this->formatCallable, $item);
         }
 
         // check to see if the key ends with '_id' meaning a refence to another model
