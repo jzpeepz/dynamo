@@ -54,7 +54,7 @@
                                 <tbody id="dynamo-index-body">
                                     @foreach ($items as $item)
                                         <tr class="dynamo-index-row" data-id="{{ $item->id }}">
-                                            <?php foreach ($dynamo->getIndexes() as $index): ?><td>{!! $dynamo->getValue('<?= $index->key ?>', $item) !!}</td><?php endforeach; ?>
+                                            <?php foreach ($dynamo->getIndexes() as $index): ?><td>{!! $dynamo->getIndexValue('<?= $index->key ?>', $item) !!}</td><?php endforeach; ?>
 
                                             <td>
                                                 <a href="{{ route($dynamo->getRoute('edit'), $item->id) }}" class="btn btn-default btn-xs">Edit</a>

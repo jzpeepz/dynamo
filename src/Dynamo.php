@@ -327,6 +327,13 @@ class Dynamo
         return $field->getValue($item);
     }
 
+    public function getIndexValue($key, $item)
+    {
+        $index = $this->getIndex($key);
+
+        return $index->getValue($item);
+    }
+
     public function hideDelete()
     {
         $this->deleteHidden = false;
@@ -377,6 +384,17 @@ class Dynamo
         foreach($this->fields as $field) {
             if ($field->key == $key) {
                 return $field;
+            }
+        }
+
+        return null;
+    }
+
+    public function getIndex($key)
+    {
+        foreach($this->indexes as $index) {
+            if ($index->key == $key) {
+                return $index;
             }
         }
 
