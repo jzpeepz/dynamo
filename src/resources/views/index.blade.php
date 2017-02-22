@@ -29,7 +29,7 @@
                                             @if (request()->has('q'))
                                                 <a href="{{ route($dynamo->getRoute('index')) }}" class="btn btn-default">Clear</a>
                                             @endif
-                                            <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+                                            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> Search</button>
                                         </span>
                                     </div>
                                 </div>
@@ -72,7 +72,7 @@
                                 </tbody>
                             </table>
 
-                            {{ method_exists($items, 'links') ? $items->links() : null }}
+                            {!! method_exists($items, 'render') ? $items->render() : null !!}
 
                         @endif
                     </div>
