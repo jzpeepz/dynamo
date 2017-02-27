@@ -265,7 +265,7 @@ class Dynamo
             if (is_object($value) && (get_class($value) == "Illuminate\Http\UploadedFile" || get_class($value) == "Symfony\Component\HttpFoundation\File\UploadedFile")) {
                 // handle uploaded files
                 $fileName = str_replace('.'.$value->getClientOriginalExtension(), '', $value->getClientOriginalName());
-                $destinationFileName = str_slug($fileName).'.'.strtolower($value->getClientOriginalExtension());
+                $destinationFileName = str_slug($fileName).'-'.rand(10000, 99999).'.'.strtolower($value->getClientOriginalExtension());
 
                 $disk = Storage::disk(config('dynamo.storage_disk'));
                 $disk->put(config('dynamo.upload_path').$destinationFileName, file_get_contents($value->getRealPath()));
