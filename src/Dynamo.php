@@ -17,6 +17,7 @@ class Dynamo
     private $deleteHidden = true;
     private $addHidden = true;
     private $currentGroup = null;
+    private $groupLabels = [];
     private $position = 10;
     private $render = true;
 
@@ -381,6 +382,21 @@ class Dynamo
         }
 
         return null;
+    }
+
+    public function setGroupLabel($label)
+    {
+        $this->groupLabels[$this->currentGroup] = $label;
+    }
+
+    public function hasGroupLabel($group)
+    {
+        return isset($this->groupLabels[$group]) && ! empty($this->groupLabels[$group]);
+    }
+
+    public function getGroupLabel($group)
+    {
+        return $this->hasGroupLabel($group) ? $this->groupLabels[$group] : null;
     }
 
 }
