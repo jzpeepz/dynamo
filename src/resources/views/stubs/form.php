@@ -15,6 +15,9 @@
 
                         {!! Form::model($item, $formOptions) !!}
                             <?php foreach ($dynamo->getFieldGroups() as $group => $fields): ?><fieldset id="<?= $group ?>" class="<?= ! empty($group) ? 'well' : '' ?> dynamo-group">
+                                @if ($dynamo->hasGroupLabel($group))
+                                    <legend class="dynamo-group-label">{{ $dynamo->getGroupLabel($group) }}</legend>
+                                @endif
 
     <?php foreach ($fields as $field): ?><?= $field->renderStub() . "\n" ?><?php endforeach; ?>
                             </fieldset><?php endforeach; ?>
