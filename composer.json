@@ -8,7 +8,9 @@
         }
     ],
     "license": "MIT",
-    "require": {},
+    "require": {
+        "doctrine/dbal": "^2.5"
+    },
     "autoload": {
         "psr-4": {
             "Jzpeepz\\Dynamo\\": "src/"

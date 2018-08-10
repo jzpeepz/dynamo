@@ -90,7 +90,7 @@ class DynamoMake extends Command
     			// replace values in stub
     			$controllerString = str_replace('$MODEL$', $model, $controllerStub);
 
-    			$controllerString = str_replace('$NAMESPACE$', config('dynamo.controller_namespace'), $controllerString);
+    			$controllerString = str_replace('$NAMESPACE$', trim(config('dynamo.controller_namespace'), '\\'), $controllerString);
 
     			// create controller file
     			file_put_contents($newControllerFile, $controllerString);

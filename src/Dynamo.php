@@ -135,7 +135,8 @@ class Dynamo
 
     public function addField($key, $type, $options = [])
     {
-        $this->removeField($key);
+        // $this->removeField($key);
+        $existingField = $this->getField($key);
 
         $onIndex = isset($options['onIndex']) ? $options['onIndex'] : false;
         $label = isset($options['label']) ? $options['label'] : null;
@@ -150,7 +151,7 @@ class Dynamo
             $this->addIndex($key, $label, $formatCallable);
         }
 
-        $this->fields->push(DynamoField::make([
+        $field = DynamoField::make([
             'key' => $key,
             'type' => $type,
             'onIndex' => $onIndex,
@@ -160,7 +161,18 @@ class Dynamo
             'render' => $render,
             'options' => $options,
             'formatCallable' => $formatCallable,
-        ]));
+        ]);
+
+        $fieldKey = $this->fields->search(function ($item, $index) use ($key) {
+            return $item->key == $key;
+        });
+
+        if ($fieldKey === false) {
+            $this->fields->push($field);
+        } else {
+            $field->position = isset($options['position']) ? $options['position'] : $existingField->position;
+            $this->fields[$fieldKey] = $field;
+        }
 
         return $this;
     }
@@ -219,13 +231,30 @@ class Dynamo
 
         $columns = DB::getSchemaBuilder()->getColumnListing($table);
 
+        $types = collect(array_fill_keys($columns, null));
+
+        $types->transform(function ($value, $column) use ($table) {
+            return \Schema::getColumnType($table, $column);
+        });
+
+        // dd($types);
+
         foreach ($columns as $column) {
             if (! $item->isGuarded($column) || $item->isFillable($column)) {
-                $this->addField($column, 'text', ['onIndex' => true]);
+                $this->addField($column, $this->getFieldFromType($types[$column]), ['onIndex' => true]);
             }
         }
 
         return $this;
+    }
+
+    public function getFieldFromType($type)
+    {
+        if ($type == 'text') {
+            return 'textarea';
+        }
+
+        return 'text';
     }
 
     public function paginate($limit)
@@ -405,6 +434,8 @@ class Dynamo
     public function setGroupLabel($label)
     {
         $this->groupLabels[$this->currentGroup] = $label;
+
+        return $this;
     }
 
     public function hasGroupLabel($group)
@@ -415,6 +446,21 @@ class Dynamo
     public function getGroupLabel($group)
     {
         return $this->hasGroupLabel($group) ? $this->groupLabels[$group] : null;
+    }
+
+    public function hasManySimple($key, $options = [])
+    {
+        $modelClass = '\\App\\' . str_singular(studly_case($key));
+
+        $options['modelClass'] = isset($options['modelClass']) ? $options['modelClass'] : $modelClass;
+
+        $options['nameField'] = isset($options['nameField']) ? $options['nameField'] : 'name';
+
+        $options['options'] = isset($options['options']) ? $options['options'] : $modelClass::all()->pluck($options['nameField'], 'id');
+
+        $options['class'] = isset($options['class']) ? $options['class'] : config('dynamo.default_has_many_class');
+
+        return $this->addField($key, 'hasMany', $options);
     }
 
 }

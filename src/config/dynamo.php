@@ -14,4 +14,6 @@ return [
     'controller_path' => app_path('/Http/Controllers'),
 
     'view_prefix' => 'dynamo',
+
+    'default_has_many_class' => '',
 ];

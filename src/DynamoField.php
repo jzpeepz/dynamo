@@ -16,6 +16,11 @@ class DynamoField
         return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
     }
 
+    public function __set($name, $value)
+    {
+        $this->attributes[$name] = $value;
+    }
+
     public static function make($attributes = [])
     {
         return new DynamoField($attributes);
