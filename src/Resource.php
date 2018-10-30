@@ -4,6 +4,23 @@ namespace Jzpeepz\Dynamo;
 
 class Resource {
 
+    public static function make()
+    {
+        return new static();
+    }
+
+    public function getFields()
+    {
+        return [];
+    }
+
+    public function form()
+    {
+        foreach ($this->getFields() as $field) {
+            echo $field;
+        }
+    }
+
     public function getModelClass()
     {
         $class = get_class($this);

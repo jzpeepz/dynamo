@@ -20,6 +20,7 @@ class Dynamo
     private $groupLabels = [];
     private $position = 10;
     private $render = true;
+    private $handlers = null;
 
     public function __construct($class)
     {
@@ -29,6 +30,7 @@ class Dynamo
         $this->fields = collect();
         $this->indexOrderBy = collect();
         $this->searchable = collect();
+        $this->handlers = collect();
     }
 
     public function __call($name, $arguments)
@@ -290,6 +292,10 @@ class Dynamo
 
     public function handleSpecialFields($item, $data = [])
     {
+        foreach ($this->handlers as $key => $handler) {
+            $handler($item, $data);
+        }
+
         foreach ($data as $key => $value) {
 
             if (is_object($value) && (get_class($value) == "Illuminate\Http\UploadedFile" || get_class($value) == "Symfony\Component\HttpFoundation\File\UploadedFile")) {
@@ -461,6 +467,13 @@ class Dynamo
         $options['class'] = isset($options['class']) ? $options['class'] : config('dynamo.default_has_many_class');
 
         return $this->addField($key, 'hasMany', $options);
+    }
+
+    public function addHandler($field, $closure)
+    {
+        $this->handlers->put($field, $closure);
+
+        return $this;
     }
 
 }
