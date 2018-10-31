@@ -6,6 +6,12 @@ class DynamoField
 {
     private $attributes = [];
 
+    /**
+     * Closure that overrides the form field
+     * @var Closure
+     */
+    private $viewHandler = null;
+
     public function __construct($attributes = [])
     {
         $this->attributes = $attributes;
@@ -33,14 +39,19 @@ class DynamoField
 
     public function render($item)
     {
-        if($this->render){
+        if ($this->render) {
+
+            if ($this->hasViewHandler()) {
+                return call_user_func($this->getViewHandler());
+            }
+
             return view('dynamo::partials.fields.' . $this->type, ['field' => $this, 'item' => $item])->render();
         }
     }
 
     public function renderStub()
     {
-        if($this->render){
+        if ($this->render) {
             return view('dynamo::stubs.partials.fields.' . $this->type, ['field' => $this])->render();
         }
     }
@@ -82,5 +93,22 @@ class DynamoField
         }
 
         return $options->toArray();
+    }
+
+    public function hasViewHandler()
+    {
+        return ! empty($this->viewHandler) && is_callable($this->viewHandler);
+    }
+
+    public function setViewHandler($handler)
+    {
+        $this->viewHandler = $handler;
+
+        return $this;
+    }
+
+    public function getViewHandler()
+    {
+        return $this->viewHandler;;
     }
 }

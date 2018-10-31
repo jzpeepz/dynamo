@@ -38,10 +38,11 @@ class Dynamo
         $type = $name;
         $key = isset($arguments[0]) ? $arguments[0] : null;
         $options = isset($arguments[1]) ? $arguments[1] : [];
+        $viewHandler = isset($arguments[2]) ? $arguments[2] : null;
         // $index = isset($arguments[1]) ? $arguments[1] : true;
         // $label = isset($arguments[2]) ? $arguments[2] : null;
 
-        return $this->addField($key, $type, $options);
+        return $this->addField($key, $type, $options, $viewHandler);
     }
 
     public static function make($class)
@@ -135,7 +136,7 @@ class Dynamo
         return $this->indexOrderBy;
     }
 
-    public function addField($key, $type, $options = [])
+    public function addField($key, $type, $options = [], $customViewHandler = null)
     {
         // $this->removeField($key);
         $existingField = $this->getField($key);
@@ -164,6 +165,8 @@ class Dynamo
             'options' => $options,
             'formatCallable' => $formatCallable,
         ]);
+
+        $field->setViewHandler($customViewHandler);
 
         $fieldKey = $this->fields->search(function ($item, $index) use ($key) {
             return $item->key == $key;
@@ -270,7 +273,7 @@ class Dynamo
     {
         $className = $this->class;
 
-        $query = $className::whereRaw('1=1');
+        $query = $className::withoutGlobalScopes();
 
         // do any searching
         if (! $this->searchable->isEmpty() && request()->has('q')) {

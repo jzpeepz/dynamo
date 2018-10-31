@@ -30,6 +30,10 @@
                             <a href="{{ route($dynamo->getRoute('index')) }}" class="btn">Cancel</a>
                         {!! Form::close() !!}
 
+                        @if (class_exists('\Uploader'))
+                            {!! Uploader::helper() !!}
+                        @endif
+
                     </div>
                 </div>
             </div>

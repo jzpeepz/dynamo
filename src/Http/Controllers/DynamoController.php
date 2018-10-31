@@ -84,7 +84,7 @@ class DynamoController extends Controller
     {
         $className = $this->dynamo->class;
 
-        $item = $className::find($id);
+        $item = $className::withoutGlobalScopes()->find($id);
 
         $formOptions = [
             'route' => [$this->dynamo->getRoute('update'), $id],
@@ -106,7 +106,7 @@ class DynamoController extends Controller
     {
         $className = $this->dynamo->class;
 
-        $item = $className::find($id);
+        $item = $className::withoutGlobalScopes()->find($id);
 
         $this->dynamo->store($item);
 
@@ -136,7 +136,9 @@ class DynamoController extends Controller
 
         }
 
-        $className::destroy($id);
+        $item = $className::withoutGlobalScopes()->findOrFail($id);
+
+        $item->delete();
 
         session(['alert-warning' => $this->dynamo->getName() . ' was deleted successfully!']);
 
