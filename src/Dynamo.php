@@ -295,36 +295,43 @@ class Dynamo
 
     public function handleSpecialFields($item, $data = [])
     {
+        $handled = $this->handlers->keys();
+
         foreach ($this->handlers as $key => $handler) {
             $handler($item, $data);
         }
 
         foreach ($data as $key => $value) {
 
-            if (is_object($value) && (get_class($value) == "Illuminate\Http\UploadedFile" || get_class($value) == "Symfony\Component\HttpFoundation\File\UploadedFile")) {
-                // handle uploaded files
-                $fileName = str_replace('.'.$value->getClientOriginalExtension(), '', $value->getClientOriginalName());
-                $destinationFileName = str_slug($fileName).'-'.rand(10000, 99999).'.'.strtolower($value->getClientOriginalExtension());
+            // ignore any keys that already have handlers assigned
+            if (! $handled->has($key)) {
 
-                $disk = Storage::disk(config('dynamo.storage_disk'));
-                $disk->put(config('dynamo.upload_path').$destinationFileName, file_get_contents($value->getRealPath()));
+                if (is_object($value) && (get_class($value) == "Illuminate\Http\UploadedFile" || get_class($value) == "Symfony\Component\HttpFoundation\File\UploadedFile")) {
+                    // handle uploaded files
+                    $fileName = str_replace('.'.$value->getClientOriginalExtension(), '', $value->getClientOriginalName());
+                    $destinationFileName = str_slug($fileName).'-'.rand(10000, 99999).'.'.strtolower($value->getClientOriginalExtension());
 
-                $data[$key] = config('dynamo.upload_path').$destinationFileName;
-            }
+                    $disk = Storage::disk(config('dynamo.storage_disk'));
+                    $disk->put(config('dynamo.upload_path').$destinationFileName, file_get_contents($value->getRealPath()));
 
-            if ($key == 'password') {
-                // handle password reset
-                if (empty($value)) {
-                    unset($data['password']);
-                } else {
-                    $data['password'] = bcrypt($value);
+                    $data[$key] = config('dynamo.upload_path').$destinationFileName;
                 }
-            }
 
-            if(is_array($value)) {
-                $syncables = $data[$key];
-                $item->{$key}()->sync($syncables);
-                unset($data[$key]);
+                if ($key == 'password') {
+                    // handle password reset
+                    if (empty($value)) {
+                        unset($data['password']);
+                    } else {
+                        $data['password'] = bcrypt($value);
+                    }
+                }
+
+                if(is_array($value)) {
+                    $syncables = $data[$key];
+                    $item->{$key}()->sync($syncables);
+                    unset($data[$key]);
+                }
+
             }
 
         }
