@@ -42,7 +42,7 @@ class DynamoField
         if ($this->render) {
 
             if ($this->hasViewHandler()) {
-                return call_user_func($this->getViewHandler());
+                return call_user_func($this->getViewHandler(), $item);
             }
 
             return view('dynamo::partials.fields.' . $this->type, ['field' => $this, 'item' => $item])->render();
