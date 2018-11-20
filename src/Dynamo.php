@@ -21,6 +21,7 @@ class Dynamo
     private $position = 10;
     private $render = true;
     private $handlers = null;
+    private $filters = null;
 
     public function __construct($class)
     {
@@ -31,6 +32,7 @@ class Dynamo
         $this->indexOrderBy = collect();
         $this->searchable = collect();
         $this->handlers = collect();
+        $this->filters = collect();
     }
 
     public function __call($name, $arguments)
@@ -280,6 +282,11 @@ class Dynamo
             $query = $query->where(DB::raw('CONCAT('.$this->getSearchableKeys()->implode(", ' ', ").')'), 'like', '%'.request()->input('q').'%');
         }
 
+        foreach ($this->filters as $filter) {
+            // apply filters
+            $query = $filter->modifyQuery($query);
+        }
+
         foreach($this->getIndexOrderBy() as $orderBy) {
             $query = $query->orderBy($orderBy['column'], $orderBy['sort']);
         }
@@ -484,6 +491,20 @@ class Dynamo
         $this->handlers->put($field, $closure);
 
         return $this;
+    }
+
+    public function addFilter($key, $options, $closure)
+    {
+        $filter = Filter::make($key, $options, $closure);
+
+        $this->filters->put($key, $filter);
+
+        return $this;
+    }
+
+    public function getFilters()
+    {
+        return $this->filters;
     }
 
 }

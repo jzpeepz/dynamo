@@ -18,11 +18,18 @@
 
                         @include('dynamo::partials.alerts')
 
-                        @if ($dynamo->hasSearchable())
-                            <form action="{{ route($dynamo->getRoute('index')) }}" method="get" class="dynamo-search">
+                        <form action="{{ route($dynamo->getRoute('index')) }}" method="get" class="dynamo-search form-inline">
+
+                            @foreach ($dynamo->getFilters() as $filter)
+
+                                {!! $filter !!}
+
+                            @endforeach
+
+                            @if ($dynamo->hasSearchable())
 
                                 <div class="form-group">
-                                    <label for="" class="sr-only">Search</label>
+                                    <label for="" class="search-label">Search</label>
                                     <div class="input-group">
                                         <input type="text" name="q" class="form-control" placeholder="" value="{{ request()->input('q') }}">
                                         <span class="input-group-btn">
@@ -34,8 +41,9 @@
                                     </div>
                                 </div>
 
-                            </form>
-                        @endif
+                            @endif
+
+                        </form>
 
                         @if ($items->isEmpty())
 
@@ -83,6 +91,8 @@
 
     <style>
     .panel-body .table { margin-bottom: 0; }
+    .dynamo-search label { display: block; }
+    .dynamo-search label.search-label { visibility: hidden; }
     </style>
 @endsection
 
