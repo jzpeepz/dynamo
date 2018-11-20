@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Jzpeepz\Dynamo\DynamoView;
+use Illuminate\Database\QueryException;
 
 class DynamoController extends Controller
 {
@@ -138,7 +139,12 @@ class DynamoController extends Controller
 
         $item = $className::withoutGlobalScopes()->findOrFail($id);
 
-        $item->delete();
+        try {
+            $item->delete();
+        } catch (QueryException $e) {
+            session(['alert-danger' => $this->dynamo->getName() . ' cannot be deleted while in use!']);
+            return redirect()->route($this->dynamo->getRoute('index'));
+        }
 
         session(['alert-warning' => $this->dynamo->getName() . ' was deleted successfully!']);
 
