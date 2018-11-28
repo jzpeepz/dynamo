@@ -15,5 +15,7 @@ return [
 
     'view_prefix' => 'dynamo',
 
+    'target_blade_section' => 'content',
+
     'default_has_many_class' => '',
 ];
