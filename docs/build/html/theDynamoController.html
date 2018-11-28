@@ -1,0 +1,364 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>The Dynamo Controller &mdash; dynamo 1.2.8 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Customizing the admin" href="customizingTheAdmin.html" />
+    <link rel="prev" title="Welcome to Dynamo’s documentation!" href="index.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> dynamo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Dynamo Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The Dynamo Controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customizingTheAdmin.html">Customizing the admin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formGroups.html">Creating Form Groups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="many-to-many.html">Creating Many-to-Many Relationships Between Dynamo Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamoMethods.html">Dynamo Methods</a></li>
+</ul>
+<p class="caption"><span class="caption-text">License</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">dynamo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>The Dynamo Controller</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/theDynamoController.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-dynamo-controller">
+<h1>The Dynamo Controller<a class="headerlink" href="#the-dynamo-controller" title="Permalink to this headline">¶</a></h1>
+<p>The most helpful part about Dynamo is the Dynamo Controller. We highly encourage you to take a look at the DynamoController class and read the comments
+of each function to have a better understanding of what’s going on; however you don’t really need to understand anything that’s going on in this section
+to be able to use Dynamo; in fact the whole point of this package is so you don’t have to do this stuff yourself. If you’d like, skip this section, but its good
+to know whats going on under the hood ;) .</p>
+<a class="reference internal image-reference" href="https://media.giphy.com/media/6PAbFX7jVXWTK/giphy.gif"><img alt="https://media.giphy.com/media/6PAbFX7jVXWTK/giphy.gif" class="align-center" src="https://media.giphy.com/media/6PAbFX7jVXWTK/giphy.gif" style="width: 600px; height: 400px;" /></a>
+<p>Starting off, the Dynamo Controller has an index function that returns an index view of all the resources. So in the Employee
+example, the index function would show a view of all the Employee models saved in the database:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/**
+ * Display a listing of the resource.
+ *
+ * @return \Illuminate\Http\Response
+ */
+public function index()
+{
+    $items = $this-&gt;dynamo-&gt;getIndexItems();
+
+    return DynamoView::make($this-&gt;dynamo, &#39;dynamo::index&#39;, compact(&#39;items&#39;));
+}
+</pre></div>
+</div>
+<p>The next two functions are create() and store(). Create shows the form view that the user will use to create Employee objects:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/**
+ * Show the form for creating a new resource.
+ *
+ * @return \Illuminate\Http\Response
+ */
+public function create()
+{
+    $item = new $this-&gt;dynamo-&gt;class;
+
+    $formOptions = [
+        &#39;route&#39; =&gt; $this-&gt;dynamo-&gt;getRoute(&#39;store&#39;),
+        &#39;files&#39; =&gt; true,
+    ];
+
+    return DynamoView::make($this-&gt;dynamo, &#39;dynamo::form&#39;, compact(&#39;item&#39;, &#39;formOptions&#39;));
+}
+</pre></div>
+</div>
+<p>Store() is the function that gets hit when the user presses the submit button on the Create an Employee form. Store will “store” this new Employee object in your database:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/**
+ * Store a newly created resource in storage.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @return \Illuminate\Http\Response
+ */
+public function store(Request $request)
+{
+    $item = new $this-&gt;dynamo-&gt;class;
+
+    $this-&gt;dynamo-&gt;store($item);
+
+    session([&#39;alert-success&#39; =&gt; $this-&gt;dynamo-&gt;getName() . &#39; was saved successfully!&#39;]);
+
+    return redirect()-&gt;route($this-&gt;dynamo-&gt;getRoute(&#39;edit&#39;), $item-&gt;id);
+}
+</pre></div>
+</div>
+<p>The next two functions are edit() and update() which go hand-in-hand the same way create() and store() go hand-in-hand. When the user clicks the edit button on one of
+the Employee objects in the index view, the form view for that particular employee will be presented to the user so they can make changes to that Employee
+(perhaps update their phone number):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/**
+ * Show the form for editing the specified resource.
+ *
+ * @param  int  $id
+ * @return \Illuminate\Http\Response
+ */
+public function edit($id)
+{
+    $className = $this-&gt;dynamo-&gt;class;
+
+    $item = $className::withoutGlobalScopes()-&gt;find($id);
+
+    $formOptions = [
+        &#39;route&#39; =&gt; [$this-&gt;dynamo-&gt;getRoute(&#39;update&#39;), $id],
+        &#39;method&#39; =&gt; &#39;put&#39;,
+        &#39;files&#39; =&gt; true,
+    ];
+
+    return DynamoView::make($this-&gt;dynamo, &#39;dynamo::form&#39;, compact(&#39;item&#39;, &#39;formOptions&#39;));
+}
+</pre></div>
+</div>
+<p>Update() gets hit when the user presses the Submit button and whatever changes they made will get updated for that particular Employee in the database:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/**
+ * Update the specified resource in storage.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @param  int  $id
+ * @return \Illuminate\Http\Response
+ */
+public function update(Request $request, $id)
+{
+    $className = $this-&gt;dynamo-&gt;class;
+
+    $item = $className::withoutGlobalScopes()-&gt;find($id);
+
+    $this-&gt;dynamo-&gt;store($item);
+
+    session([&#39;alert-success&#39; =&gt; $this-&gt;dynamo-&gt;getName() . &#39; was saved successfully!&#39;]);
+
+    return redirect()-&gt;route($this-&gt;dynamo-&gt;getRoute(&#39;edit&#39;), $id);
+}
+</pre></div>
+</div>
+<p>The final function on the Dynamo Controller is destroy(). This function gets hit when the user clicks the delete button in the index view, and an alert will appear asking
+them if they are sure they want to do this. If they press yes, the item will attempt to be deleted. If the item can’t be deleted due to throwing a QueryException (because
+you can’t add or update a child row if another object in the database is using it for a foreign key), it will redirect and say you can’t do that because this object is in use.
+Otherwise, the item will be deleted and they will be shown a success message, and this Employee no longer exist:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/**
+ * Remove the specified resource from storage.
+ *
+ * @param  int  $id
+ * @return \Illuminate\Http\Response
+ */
+public function destroy($id)
+{
+
+    $className = $this-&gt;dynamo-&gt;class;
+
+    // Run through and look for fields with type &#39;multiSelect&#39;
+    foreach($this-&gt;dynamo-&gt;getFields() as $field) {
+
+        if($field-&gt;type == &#39;hasMany&#39;) {
+            //if &#39;multiSelect&#39; found then relational data may exist. Detach data from the model
+            $className::withoutGlobalScopes()-&gt;find($id)-&gt;{$field-&gt;key}()-&gt;detach();
+        }
+
+    }
+
+    $item = $className::withoutGlobalScopes()-&gt;findOrFail($id);
+
+    try {
+        $item-&gt;delete();
+    } catch (QueryException $e) {
+        session([&#39;alert-danger&#39; =&gt; $this-&gt;dynamo-&gt;getName() . &#39; cannot be deleted while in use!&#39;]);
+        return redirect()-&gt;route($this-&gt;dynamo-&gt;getRoute(&#39;index&#39;));
+    }
+
+    session([&#39;alert-warning&#39; =&gt; $this-&gt;dynamo-&gt;getName() . &#39; was deleted successfully!&#39;]);
+
+    return redirect()-&gt;route($this-&gt;dynamo-&gt;getRoute(&#39;index&#39;));
+}
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="customizingTheAdmin.html" class="btn btn-neutral float-right" title="Customizing the admin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to Dynamo’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Jonathan Peoples, Colton Williams
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

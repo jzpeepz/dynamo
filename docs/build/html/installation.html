@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>License &mdash; dynamo 1.2.8 documentation</title>
+  <title>Installation &mdash; dynamo 1.2.8 documentation</title>
   
 
   
@@ -28,7 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Dynamo Methods" href="dynamoMethods.html" /> 
+    <link rel="next" title="Creating Form Groups" href="formGroups.html" />
+    <link rel="prev" title="Customizing the admin" href="customizingTheAdmin.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -78,20 +79,20 @@
             
             
               <p class="caption"><span class="caption-text">Dynamo Documentation</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="theDynamoController.html">The Dynamo Controller</a></li>
 <li class="toctree-l1"><a class="reference internal" href="customizingTheAdmin.html">Customizing the admin</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="formGroups.html">Creating Form Groups</a></li>
 <li class="toctree-l1"><a class="reference internal" href="many-to-many.html">Creating Many-to-Many Relationships Between Dynamo Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dynamoMethods.html">Dynamo Methods</a></li>
 </ul>
 <p class="caption"><span class="caption-text">License</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">License</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#questions">Questions</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 </ul>
 
             
@@ -137,13 +138,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>License</li>
+      <li>Installation</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/license.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -156,24 +157,35 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="license">
-<h1>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
-<p>The MIT License</p>
-<p>Copyright 2018 Jonathan Peoples/Flex360</p>
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software
-and associated documentation files (the “Software”), to deal in the Software without restriction,
-including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
-and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:</p>
-<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
-<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
-FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-<div class="section" id="questions">
-<h2>Questions<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h2>
-<p>Question? Please contact Jonathan at <a class="reference external" href="mailto:jonathan&#37;&#52;&#48;flex360&#46;com">jonathan<span>&#64;</span>flex360<span>&#46;</span>com</a></p>
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>Install via Composer:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">composer</span> <span class="n">require</span> <span class="n">jzpeepz</span><span class="o">/</span><span class="n">dynamo</span>
+</pre></div>
+</div>
+<p>Include the service provider in your config/app.php:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Jzpeepz</span>\<span class="n">Dynamo</span>\<span class="n">DynamoServiceProvider</span><span class="p">::</span><span class="k">class</span>
+</pre></div>
+</div>
+<p>Publish the Dynamo config file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">php</span> <span class="n">artisan</span> <span class="n">vendor</span><span class="p">:</span><span class="n">publish</span> <span class="o">--</span><span class="n">tag</span><span class="o">=</span><span class="n">dynamo</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">NOTE: If using a local disk for uploading, be sure to symlink it to your public directory and provide the proper path in the config file.</p>
+</div>
+<p>If you’d like, the Github repo for Dynamo is <a href="https://github.com/jzpeepz/dynamo" target="_blank">here</a>.</p>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>You can edit the configuration of Dynamo at:</p>
+<p>vendor-&gt;jzpeepz-&gt;dynamo-&gt;src-&gt;config-&gt;dynamo.php.</p>
+<img alt="_images/Config.png" class="align-center" src="_images/Config.png" />
+<p>Storage disk to use to store uploaded files.</p>
+<p>Path within the storage disk to store the uploaded files. This is also the directory within the public directory to which the storage directory is linked.</p>
+<p>Prefix to add to all Dynamo routes.</p>
+<p>Layout to use with Dynamo views.</p>
+<p>Controller Namespace and path tells Dynamo where you want you’re controllers to be auto-generated. TODO</p>
 </div>
 </div>
 
@@ -185,8 +197,10 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="formGroups.html" class="btn btn-neutral float-right" title="Creating Form Groups" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="dynamoMethods.html" class="btn btn-neutral" title="Dynamo Methods" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="customizingTheAdmin.html" class="btn btn-neutral" title="Customizing the admin" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

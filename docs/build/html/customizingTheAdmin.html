@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>License &mdash; dynamo 1.2.8 documentation</title>
+  <title>Customizing the admin &mdash; dynamo 1.2.8 documentation</title>
   
 
   
@@ -28,7 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Dynamo Methods" href="dynamoMethods.html" /> 
+    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="prev" title="The Dynamo Controller" href="theDynamoController.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -78,20 +79,17 @@
             
             
               <p class="caption"><span class="caption-text">Dynamo Documentation</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="theDynamoController.html">The Dynamo Controller</a></li>
-<li class="toctree-l1"><a class="reference internal" href="customizingTheAdmin.html">Customizing the admin</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Customizing the admin</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="formGroups.html">Creating Form Groups</a></li>
 <li class="toctree-l1"><a class="reference internal" href="many-to-many.html">Creating Many-to-Many Relationships Between Dynamo Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dynamoMethods.html">Dynamo Methods</a></li>
 </ul>
 <p class="caption"><span class="caption-text">License</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">License</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#questions">Questions</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 </ul>
 
             
@@ -137,13 +135,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>License</li>
+      <li>Customizing the admin</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/license.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/customizingTheAdmin.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -156,24 +154,28 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="license">
-<h1>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
-<p>The MIT License</p>
-<p>Copyright 2018 Jonathan Peoples/Flex360</p>
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software
-and associated documentation files (the “Software”), to deal in the Software without restriction,
-including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
-and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:</p>
-<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
-<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
-FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-<div class="section" id="questions">
-<h2>Questions<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h2>
-<p>Question? Please contact Jonathan at <a class="reference external" href="mailto:jonathan&#37;&#52;&#48;flex360&#46;com">jonathan<span>&#64;</span>flex360<span>&#46;</span>com</a></p>
+  <div class="section" id="customizing-the-admin">
+<h1>Customizing the admin<a class="headerlink" href="#customizing-the-admin" title="Permalink to this headline">¶</a></h1>
+<p>Admin customization happens in your controller inside the getDynamo() function of the Dynamo Controller.
+This function returns a Dynamo instance which has lots of chainable methods that customize your Dynamo admin. Lets stick with our Employee example:</p>
+<img alt="_images/EmployeeController1.png" class="align-center" src="_images/EmployeeController1.png" />
+<p>This is what your Dynamo Controller will look like by default right after it is created. It has one function called getDynamo() that returns a Dynamo object.
+By default the auto() function is called which will take all the things your employee object consist of (that you defined in your database migration, say first_name, last_name,
+phone_number) and create fields in the form for them. You can chain on methods to this auto function if you need to do more specific things.
+It’s super easy! Check it out…</p>
+<img alt="_images/ControllerExample.gif" class="align-center" src="_images/ControllerExample.gif" />
+<img alt="_images/EmployeeController2.png" class="align-center" src="_images/EmployeeController2.png" />
+<p>Everything you see before the comment “//ClearIndexes” will appear in the form view when someone is creating an Employee object in the database.
+Everything you see after the comment “//ClearIndexes” will appear in the index view when someone is viewing all the Employees in the database.
+Now, keep in mind, all the function calls you see above happened automatically with the auto() function.
+The only thing the auto function can’t do is stuff like renaming a field like you see happen at “-&gt;file(“photo”, “Headshot”)” where
+you might want it to say Headshot rather than photo. We will go into this in more detail in the Dynamo Methods section.</p>
+<p>This is the basics of Dynamo. You have created an admin on your custom CMS for managing Employees
+on your Laravel application is less than 2 minutes. Isn’t that powerful? You could do this for News Post, Products being sold on the site, Faq’s and
+Faq Categories, and so on.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">NOTE: For the full list of chainable methods on your Dynamo Object, refer to section Dynamo Methods!</p>
 </div>
 </div>
 
@@ -185,8 +187,10 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="dynamoMethods.html" class="btn btn-neutral" title="Dynamo Methods" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="theDynamoController.html" class="btn btn-neutral" title="The Dynamo Controller" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

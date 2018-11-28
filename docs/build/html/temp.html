@@ -1,0 +1,579 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Welcome to Dynamo’s documentation! &mdash; dynamo 1.2.8 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> dynamo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Dynamo Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="theDynamoController.html">The Dynamo Controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customizingTheAdmin.html">Customizing the admin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formGroups.html">Creating Form Groups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="many-to-many.html">Creating Many-to-Many Relationships Between Dynamo Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamoMethods.html">Dynamo Methods</a></li>
+</ul>
+<p class="caption"><span class="caption-text">License</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">dynamo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Welcome to Dynamo’s documentation!</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/temp.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="welcome-to-dynamo-s-documentation">
+<h1><a class="toc-backref" href="#id1">Welcome to Dynamo’s documentation!</a><a class="headerlink" href="#welcome-to-dynamo-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#welcome-to-dynamo-s-documentation" id="id1">Welcome to Dynamo’s documentation!</a><ul>
+<li><a class="reference internal" href="#what-is-dynamo" id="id2">What is Dynamo?</a></li>
+<li><a class="reference internal" href="#quick-start-video" id="id3">Quick-Start Video</a></li>
+<li><a class="reference internal" href="#the-dynamo-controller" id="id4">The Dynamo Controller</a></li>
+<li><a class="reference internal" href="#customizing-the-admin" id="id5">Customizing the admin</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#installation" id="id6">Installation</a></li>
+<li><a class="reference internal" href="#configuration" id="id7">Configuration</a></li>
+<li><a class="reference internal" href="#creating-form-groups" id="id8">Creating Form Groups</a></li>
+<li><a class="reference internal" href="#creating-many-to-many-relationships-between-dynamo-models" id="id9">Creating Many-to-Many Relationships Between Dynamo Models</a><ul>
+<li><a class="reference internal" href="#step-1-generate-the-two-models-you-will-be-using" id="id10">Step 1: Generate the two models you will be using.</a></li>
+<li><a class="reference internal" href="#step-2-complete-the-needed-migrations" id="id11">Step 2: Complete the needed migrations.</a></li>
+<li><a class="reference internal" href="#step-3-add-the-proper-belongstomany-eloquent-function-to-each-model" id="id12">Step 3: Add the proper belongsToMany Eloquent function to each model.</a></li>
+<li><a class="reference internal" href="#step-4-chain-the-hasmany-method-onto-your-dynamo-instance-in-both-controllers-make-sure-your-key-is-the-name-of-the-eloquent-function-from-you-model" id="id13">Step 4: Chain the hasMany() method onto your Dynamo instance in both controllers. Make sure your key is the name of the Eloquent function from you model.</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dynamo-methods" id="id14">Dynamo Methods</a></li>
+</ul>
+</div>
+<a class="reference internal image-reference" href="_images/DynamoLogo.jpg"><img alt="_images/DynamoLogo.jpg" class="align-center" src="_images/DynamoLogo.jpg" style="width: 500px; height: 150px;" /></a>
+<p>When you want to use a package but it doesn’t have good documentation…</p>
+<img alt="https://media.giphy.com/media/kHU8W94VS329y/giphy.gif" class="align-center" src="https://media.giphy.com/media/kHU8W94VS329y/giphy.gif" />
+<div class="section" id="what-is-dynamo">
+<h2><a class="toc-backref" href="#id2">What is Dynamo?</a><a class="headerlink" href="#what-is-dynamo" title="Permalink to this headline">¶</a></h2>
+<p><strong>Dynamo</strong> is a <a href="https://packagist.org/packages/jzpeepz/dynamo" target="_blank">package</a> you can use in your existing PHP <a href="https://laravel.com/docs/5.7" target="_blank">Laravel</a> framework application to build admins. Dynamo is especially useful if
+you want to create your own custom CMS (content management system).</p>
+<p>It allows you to create a controller, model, migration, and route for your admin with one command:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">php artisan make:dynamo Employee</span>
+</pre></div>
+</div>
+<p>After running this you will notice an autogenerated route in your routes-&gt;web.php file. You will notice a new database migration
+has been created in your database-&gt;migrations directory. You will notice a new model made in your app directory.
+You will notice a new Dynamo Controller in your controller directory. This controller is specifically designed for creating
+admins with ease. By default the controller directory is set in your config file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;controller_namespace&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;App\Http\Controllers&#39;</span><span class="p">,</span>
+
+<span class="s1">&#39;controller_path&#39;</span> <span class="o">=&gt;</span> <span class="n">app_path</span><span class="p">(</span><span class="s1">&#39;/Http/Controllers&#39;</span><span class="p">),</span>
+</pre></div>
+</div>
+<p>Need to opt out of some of the Dynamo magic?</p>
+<div class="highlight-PHP notranslate"><div class="highlight"><pre><span></span><span class="x">php artisan make:dynamo Employee --migration=no --model=no --controller=no --route=no</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="quick-start-video">
+<h2><a class="toc-backref" href="#id3">Quick-Start Video</a><a class="headerlink" href="#quick-start-video" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="the-dynamo-controller">
+<h2><a class="toc-backref" href="#id4">The Dynamo Controller</a><a class="headerlink" href="#the-dynamo-controller" title="Permalink to this headline">¶</a></h2>
+<p>The most helpful part about Dynamo is the Dynamo Controller. We highly encourage you to take a look at the DynamoController class and read the comments
+of each function to have a better understanding of what’s going on; however you don’t really need to understand anything that’s going on in this section
+to be able to use Dynamo; in fact the whole point of this package is so you don’t have to do this stuff yourself. If you’d like, skip this section, but its good
+to know whats going on under the hood ;) .</p>
+<p>Starting off, the Dynamo Controller has an index function that returns an index view of all the resources. So in the Employee
+example, the index function would show a view of all the Employee models saved in the database:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/**
+ * Display a listing of the resource.
+ *
+ * @return \Illuminate\Http\Response
+ */
+public function index()
+{
+    $items = $this-&gt;dynamo-&gt;getIndexItems();
+
+    return DynamoView::make($this-&gt;dynamo, &#39;dynamo::index&#39;, compact(&#39;items&#39;));
+}
+</pre></div>
+</div>
+<p>The next two functions are create() and store(). Create shows the form view that the user will use to create Employee objects:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/**
+ * Show the form for creating a new resource.
+ *
+ * @return \Illuminate\Http\Response
+ */
+public function create()
+{
+    $item = new $this-&gt;dynamo-&gt;class;
+
+    $formOptions = [
+        &#39;route&#39; =&gt; $this-&gt;dynamo-&gt;getRoute(&#39;store&#39;),
+        &#39;files&#39; =&gt; true,
+    ];
+
+    return DynamoView::make($this-&gt;dynamo, &#39;dynamo::form&#39;, compact(&#39;item&#39;, &#39;formOptions&#39;));
+}
+</pre></div>
+</div>
+<p>Store() is the function that gets hit when the user presses the submit button on the Create an Employee form. Store will “store” this new Employee object in your database:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/**
+ * Store a newly created resource in storage.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @return \Illuminate\Http\Response
+ */
+public function store(Request $request)
+{
+    $item = new $this-&gt;dynamo-&gt;class;
+
+    $this-&gt;dynamo-&gt;store($item);
+
+    session([&#39;alert-success&#39; =&gt; $this-&gt;dynamo-&gt;getName() . &#39; was saved successfully!&#39;]);
+
+    return redirect()-&gt;route($this-&gt;dynamo-&gt;getRoute(&#39;edit&#39;), $item-&gt;id);
+}
+</pre></div>
+</div>
+<p>The next two functions are edit() and update() which go hand-in-hand the same way create() and store() go hand-in-hand. When the user clicks the edit button on one of
+the Employee objects in the index view, the form view for that particular employee will be presented to the user so they can make changes to that Employee
+(perhaps update their phone number):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/**
+ * Show the form for editing the specified resource.
+ *
+ * @param  int  $id
+ * @return \Illuminate\Http\Response
+ */
+public function edit($id)
+{
+    $className = $this-&gt;dynamo-&gt;class;
+
+    $item = $className::withoutGlobalScopes()-&gt;find($id);
+
+    $formOptions = [
+        &#39;route&#39; =&gt; [$this-&gt;dynamo-&gt;getRoute(&#39;update&#39;), $id],
+        &#39;method&#39; =&gt; &#39;put&#39;,
+        &#39;files&#39; =&gt; true,
+    ];
+
+    return DynamoView::make($this-&gt;dynamo, &#39;dynamo::form&#39;, compact(&#39;item&#39;, &#39;formOptions&#39;));
+}
+</pre></div>
+</div>
+<p>Update() gets hit when the user presses the Submit button and whatever changes they made will get updated for that particular Employee in the database:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/**
+ * Update the specified resource in storage.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @param  int  $id
+ * @return \Illuminate\Http\Response
+ */
+public function update(Request $request, $id)
+{
+    $className = $this-&gt;dynamo-&gt;class;
+
+    $item = $className::withoutGlobalScopes()-&gt;find($id);
+
+    $this-&gt;dynamo-&gt;store($item);
+
+    session([&#39;alert-success&#39; =&gt; $this-&gt;dynamo-&gt;getName() . &#39; was saved successfully!&#39;]);
+
+    return redirect()-&gt;route($this-&gt;dynamo-&gt;getRoute(&#39;edit&#39;), $id);
+}
+</pre></div>
+</div>
+<p>The final function on the Dynamo Controller is destroy(). This function gets hit when the user clicks the delete button in the index view, and an alert will appear asking
+them if they are sure they want to do this. If they press yes, the item will attempt to be deleted. If the item can’t be deleted due to throwing a QueryException (because
+you can’t add or update a child row if another object in the database is using it for a foreign key), it will redirect and say you can’t do that because this object is in use.
+Otherwise, the item will be deleted and they will be shown a success message, and this Employee no longer exist:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/**
+ * Remove the specified resource from storage.
+ *
+ * @param  int  $id
+ * @return \Illuminate\Http\Response
+ */
+public function destroy($id)
+{
+
+    $className = $this-&gt;dynamo-&gt;class;
+
+    // Run through and look for fields with type &#39;multiSelect&#39;
+    foreach($this-&gt;dynamo-&gt;getFields() as $field) {
+
+        if($field-&gt;type == &#39;hasMany&#39;) {
+            //if &#39;multiSelect&#39; found then relational data may exist. Detach data from the model
+            $className::withoutGlobalScopes()-&gt;find($id)-&gt;{$field-&gt;key}()-&gt;detach();
+        }
+
+    }
+
+    $item = $className::withoutGlobalScopes()-&gt;findOrFail($id);
+
+    try {
+        $item-&gt;delete();
+    } catch (QueryException $e) {
+        session([&#39;alert-danger&#39; =&gt; $this-&gt;dynamo-&gt;getName() . &#39; cannot be deleted while in use!&#39;]);
+        return redirect()-&gt;route($this-&gt;dynamo-&gt;getRoute(&#39;index&#39;));
+    }
+
+    session([&#39;alert-warning&#39; =&gt; $this-&gt;dynamo-&gt;getName() . &#39; was deleted successfully!&#39;]);
+
+    return redirect()-&gt;route($this-&gt;dynamo-&gt;getRoute(&#39;index&#39;));
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="customizing-the-admin">
+<h2><a class="toc-backref" href="#id5">Customizing the admin</a><a class="headerlink" href="#customizing-the-admin" title="Permalink to this headline">¶</a></h2>
+<p>Admin customization happens in your controller inside the getDynamo() function of the Dynamo Controller.
+This function returns a Dynamo instance which has lots of chainable methods that customize your Dynamo admin. Lets stick with our Employee example:</p>
+<img alt="_images/EmployeeController1.png" class="align-center" src="_images/EmployeeController1.png" />
+<p>This is what your Dynamo Controller will look like by default right after it is created. It has one function called getDynamo() that returns a Dynamo object.
+By default the auto() function is called which will take all the things your employee object consist of (that you defined in your database migration, say first_name, last_name,
+phone_number) and create fields in the form for them. You can chain on methods to this auto function if you need to do more specific things.
+It’s super easy! Check it out…</p>
+<img alt="_images/ControllerExample.gif" class="align-center" src="_images/ControllerExample.gif" />
+<img alt="_images/EmployeeController2.png" class="align-center" src="_images/EmployeeController2.png" />
+<p>Everything you see before the comment “//ClearIndexes” will appear in the form view when someone is creating an Employee object in the database.
+Everything you see after the comment “//ClearIndexes” will appear in the index view when someone is viewing all the Employees in the database.
+Now, keep in mind, all the function calls you see above happened automatically with the auto() function.
+The only thing the auto function can’t do is stuff like renaming a field like you see happen at “-&gt;file(“photo”, “Headshot”)” where
+you might want it to say Headshot rather than photo. We will go into this in more detail in the Dynamo Methods section.</p>
+<p>This is the basics of Dynamo. You have created an admin on your custom CMS for managing Employees
+on your Laravel application is less than 2 minutes. Isn’t that powerful? You could do this for News Post, Products being sold on the site, Faq’s and
+Faq Categories, and so on.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">NOTE: For the full list of chainable methods on your Dynamo Object, refer to section Dynamo Methods!</p>
+</div>
+</div>
+</div>
+<div class="section" id="installation">
+<h1><a class="toc-backref" href="#id6">Installation</a><a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>Install via Composer:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">composer</span> <span class="n">require</span> <span class="n">jzpeepz</span><span class="o">/</span><span class="n">dynamo</span>
+</pre></div>
+</div>
+<p>Include the service provider in your config/app.php:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Jzpeepz</span>\<span class="n">Dynamo</span>\<span class="n">DynamoServiceProvider</span><span class="p">::</span><span class="k">class</span>
+</pre></div>
+</div>
+<p>Publish the Dynamo config file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">php</span> <span class="n">artisan</span> <span class="n">vendor</span><span class="p">:</span><span class="n">publish</span> <span class="o">--</span><span class="n">tag</span><span class="o">=</span><span class="n">dynamo</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">NOTE: If using a local disk for uploading, be sure to symlink it to your public directory and provide the proper path in the config file.</p>
+</div>
+<p>If you’d like, the Github repo for Dynamo is <a href="https://github.com/jzpeepz/dynamo" target="_blank">here</a>.</p>
+</div>
+<div class="section" id="configuration">
+<h1><a class="toc-backref" href="#id7">Configuration</a><a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<p>You can edit the configuration of Dynamo at:</p>
+<p>vendor-&gt;jzpeepz-&gt;dynamo-&gt;src-&gt;config-&gt;dynamo.php.</p>
+<img alt="_images/Config.png" class="align-center" src="_images/Config.png" />
+<p>Storage disk to use to store uploaded files.</p>
+<p>Path within the storage disk to store the uploaded files. This is also the directory within the public directory to which the storage directory is linked.</p>
+<p>Prefix to add to all Dynamo routes.</p>
+<p>Layout to use with Dynamo views.</p>
+<p>Controller Namespace and path tells Dynamo where you want you’re controllers to be auto-generated. TODO</p>
+</div>
+<div class="section" id="creating-form-groups">
+<h1><a class="toc-backref" href="#id8">Creating Form Groups</a><a class="headerlink" href="#creating-form-groups" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-PHP notranslate"><div class="highlight"><pre><span></span><span class="x">return Dynamo::make(\App\Employee::class)</span>
+<span class="x">            -&gt;group(&#39;groupName&#39;, function($dynamo) {</span>
+<span class="x">                    $dynamo-&gt;text(&#39;fieldName&#39;)</span>
+<span class="x">                               -&gt;text(&#39;fieldName&#39;);</span>
+<span class="x">            });</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-many-to-many-relationships-between-dynamo-models">
+<h1><a class="toc-backref" href="#id9">Creating Many-to-Many Relationships Between Dynamo Models</a><a class="headerlink" href="#creating-many-to-many-relationships-between-dynamo-models" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="step-1-generate-the-two-models-you-will-be-using">
+<h2><a class="toc-backref" href="#id10">Step 1: Generate the two models you will be using.</a><a class="headerlink" href="#step-1-generate-the-two-models-you-will-be-using" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-PHP notranslate"><div class="highlight"><pre><span></span><span class="x">php artisan make:dynamo Faq</span>
+<span class="x">php artisan make:dynamo Category</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-2-complete-the-needed-migrations">
+<h2><a class="toc-backref" href="#id11">Step 2: Complete the needed migrations.</a><a class="headerlink" href="#step-2-complete-the-needed-migrations" title="Permalink to this headline">¶</a></h2>
+<p>Example Faq migration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Schema::create(&#39;faqs&#39;, function (Blueprint $table) {
+    $table-&gt;increments(&#39;id&#39;);
+    $table-&gt;string(&#39;question&#39;, 255);
+    $table-&gt;mediumText(&#39;answer&#39;);
+    $table-&gt;timestamps();
+});
+</pre></div>
+</div>
+<p>Example Category migration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Schema::create(&#39;categories&#39;, function (Blueprint $table) {
+    $table-&gt;increments(&#39;id&#39;);
+    $table-&gt;string(&#39;name&#39;);
+    $table-&gt;timestamps();
+});
+</pre></div>
+</div>
+<p>Example pivot table migration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Schema::create(&#39;category_faq&#39;, function(Blueprint $table) {
+    $table-&gt;integer(&#39;faq_id&#39;)-&gt;unsigned()-&gt;nullable();
+    $table-&gt;foreign(&#39;faq_id&#39;)-&gt;references(&#39;id&#39;)-&gt;on(&#39;faqs&#39;);
+
+    $table-&gt;integer(&#39;category_id&#39;)-&gt;unsigned()-&gt;nullable();
+    $table-&gt;foreign(&#39;category_id&#39;)-&gt;references(&#39;id&#39;)-&gt;on(&#39;categories&#39;);
+});
+</pre></div>
+</div>
+<p>Run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">php</span> <span class="n">artisan</span> <span class="n">migrate</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-3-add-the-proper-belongstomany-eloquent-function-to-each-model">
+<h2><a class="toc-backref" href="#id12">Step 3: Add the proper belongsToMany Eloquent function to each model.</a><a class="headerlink" href="#step-3-add-the-proper-belongstomany-eloquent-function-to-each-model" title="Permalink to this headline">¶</a></h2>
+<p>For the Category model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>public function faqs()
+{
+       return $this-&gt;belongsToMany(&#39;App\Faq&#39;);
+}
+</pre></div>
+</div>
+<p>For the Faq Model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>public function categories()
+{
+    return $this-&gt;belongsToMany(&#39;App\Category&#39;);
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-4-chain-the-hasmany-method-onto-your-dynamo-instance-in-both-controllers-make-sure-your-key-is-the-name-of-the-eloquent-function-from-you-model">
+<h2><a class="toc-backref" href="#id13">Step 4: Chain the hasMany() method onto your Dynamo instance in both controllers. Make sure your key is the name of the Eloquent function from you model.</a><a class="headerlink" href="#step-4-chain-the-hasmany-method-onto-your-dynamo-instance-in-both-controllers-make-sure-your-key-is-the-name-of-the-eloquent-function-from-you-model" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-PHP notranslate"><div class="highlight"><pre><span></span><span class="x">return Dynamo::make(\App\Employee::class)</span>
+<span class="x">                    -&gt;hasMany(&#39;categories&#39;, [&#39;options&#39; =&gt; [$categories]]);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="dynamo-methods">
+<h1><a class="toc-backref" href="#id14">Dynamo Methods</a><a class="headerlink" href="#dynamo-methods" title="Permalink to this headline">¶</a></h1>
+<p>This section will list all available methods that you are able to chain onto your Dynamo object that you create inside your Dynamo Controller. For a very simple admin,
+you might be able to get away with only using that auto() method which is auto-generated for you, and literally have no work to do. But in the case of a database relationship,
+or the case of renaming a field in the form, or sizing a picture a specific way, etc, you need to use the methods below.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="34%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Method</th>
+<th class="head">Header 2</th>
+<th class="head">Header 3</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>auto()</td>
+<td>column 2</td>
+<td>column 3</td>
+</tr>
+<tr class="row-odd"><td>body row 2</td>
+<td colspan="2">Cells may span columns.</td>
+</tr>
+<tr class="row-even"><td>body row 3</td>
+<td rowspan="2">Cells may
+span rows.</td>
+<td rowspan="2"><ul class="first last simple">
+<li>Cells</li>
+<li>contain</li>
+<li>blocks.</li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td>body row 4</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Jonathan Peoples, Colton Williams
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
