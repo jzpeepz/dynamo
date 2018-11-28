@@ -1,3 +1,7 @@
+##Check out our more detailed Documentation
+
+https://dynamo-admin.readthedocs.io/en/latest/index.html
+
 ## Installation
 
 Install via Composer:
@@ -51,7 +55,7 @@ Admin customization happens in your controller inside the `getDynamo()` function
 ### Creating many to many relationships between dynamo models
 
 **Step 1: Generate the two models you will be using.**
-	
+
 	php artisan make:dynamo Faq
 	php artisan make:dynamo Category
 
@@ -65,7 +69,7 @@ Example Faq migration:
 		$table->mediumText('answer');
 		$table->timestamps();
 	});
-	
+
 Example Category migration:
 
 	Schema::create('categories', function (Blueprint $table) {
@@ -73,7 +77,7 @@ Example Category migration:
 		$table->string('name');
 		$table->timestamps();
 	});
-	
+
 Example pivot table migration:
 
 	Schema::create('category_faq', function(Blueprint $table)
@@ -84,7 +88,7 @@ Example pivot table migration:
 		$table->integer('category_id')->unsigned()->nullable();
 		$table->foreign('category_id')->references('id')->on('categories');
 	});
-	
+
 Run `php artisan migrate`.
 
 **Step 3: Add the proper belongsToMany Eloquent function to each model.**
@@ -95,7 +99,7 @@ For the Category model:
 	{
 		return $this->belongsToMany('App\Faq');
 	}
-	
+
 For the Faq Model:
 
 	public function categories()
