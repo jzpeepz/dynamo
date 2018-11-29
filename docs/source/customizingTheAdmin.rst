@@ -4,8 +4,8 @@ Customizing the admin
 Admin customization happens in your controller inside the getDynamo() function of the Dynamo Controller.
 This function returns a Dynamo instance which has lots of chainable methods that customize your Dynamo admin. Lets stick with our Employee example:
 
-.. image:: images/EmployeeController1.png
-    :align: center
+    .. image:: images/EmployeeController1.png
+        :align: center
 
 This is what your Dynamo Controller will look like by default right after it is created. It has one function called getDynamo() that returns a Dynamo object.
 By default the auto() function is called which will take all the things your employee object consist of (that you defined in your database migration, say first_name, last_name,

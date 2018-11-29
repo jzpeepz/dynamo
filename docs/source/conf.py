@@ -44,7 +44,16 @@ release = u'1.2.8'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+'sphinxcontrib.images',
 ]
+
+images_config = {
+    'default_image_width': '350px',
+    'default_image_height': '350px',
+    'default_show_title': True,
+    'show_caption': True,
+
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['ntemplates']
