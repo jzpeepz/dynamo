@@ -32,7 +32,7 @@
                             <input type="text" name="q" class="form-control" placeholder="" value="{{ request()->input('q') }}">
                             <span class="input-group-btn">
                                 @if (request()->has('q'))
-                                    <a href="{{ route($dynamo->getRoute('index')) }}" class="btn btn-default">Clear</a>
+                                    <a href="{{ route($dynamo->getRoute('index')) }}" class="btn btn-light">Clear</a>
                                 @endif
                                 <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Search</button>
                             </span>
@@ -64,12 +64,12 @@
                                 @foreach ($dynamo->getIndexes() as $index)
                                     <td>{!! $index->getValue($item) !!}</td>
                                 @endforeach
-                                <td>
-                                    <a href="{{ route($dynamo->getRoute('edit'), $item->id) }}" class="btn btn-default btn-xs">Edit</a>
+                                <td style="width: 150px;">
+                                    <a href="{{ route($dynamo->getRoute('edit'), $item->id) }}" class="btn btn-light btn-sm">Edit</a>
 
                                     @if ($dynamo->deleteVisible())
                                         {!! Form::open(['route' => [$dynamo->getRoute('destroy'), $item->id], 'method' => 'delete', 'style' => 'display: inline-block;']) !!}
-                                            <button class="btn btn-default btn-xs btn-delete">Delete</button>
+                                            <button class="btn btn-light btn-sm btn-delete">Delete</button>
                                         {!! Form::close() !!}
                                     @endif
                                 </td>
