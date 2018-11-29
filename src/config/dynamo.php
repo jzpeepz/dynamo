@@ -15,6 +15,8 @@ return [
 
     'view_prefix' => 'dynamo',
 
+    'view_theme' => 'bootstrap4',
+
     'target_blade_section' => 'content',
 
     'default_has_many_class' => '',
