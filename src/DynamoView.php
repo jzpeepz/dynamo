@@ -15,6 +15,10 @@ class DynamoView
             return view($viewName, $params);
         }
 
+        if (! empty(config('dynamo.view_theme'))) {
+            $view = str_replace('::', '::' . config('dynamo.view_theme') . '.', $view);
+        }
+
         return view($view, $params);
     }
 }
