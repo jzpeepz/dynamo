@@ -407,8 +407,7 @@ Auto function being called on the newly created Dynamo object.
 
     <p><a name="method-paginate"></a></p>
     <h4><code>paginate()</code></h4>
-    <p>The <code>paginate</code> method is called by default in your DynamoController and will auto-populate the form
-       with text boxes for each field in the database for that object.</p>
+    <p>The <code>paginate</code> method </p>
 
 .. thumbnail:: images/auto3.png
     :align: center
