@@ -302,8 +302,6 @@ class Dynamo
 
     public function handleSpecialFields($item, $data = [])
     {
-        $handled = $this->handlers->keys();
-
         foreach ($this->handlers as $key => $handler) {
             $handler($item, $data);
         }
@@ -311,7 +309,7 @@ class Dynamo
         foreach ($data as $key => $value) {
 
             // ignore any keys that already have handlers assigned
-            if (! $handled->has($key)) {
+            if (! $this->handlers->has($key)) {
 
                 if (is_object($value) && (get_class($value) == "Illuminate\Http\UploadedFile" || get_class($value) == "Symfony\Component\HttpFoundation\File\UploadedFile")) {
                     // handle uploaded files
