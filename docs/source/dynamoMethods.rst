@@ -497,16 +497,31 @@ Auto function being called on the newly created Dynamo object.
 
     <p><a name="method-searchable"></a></p>
     <h4><code>searchable()</code></h4>
-    <p>The <code>searchable</code> method is called by default in your DynamoController and will auto-populate the form
-       with text boxes for each field in the database for that object.</p>
+    <p>The <code>searchable</code> method allows you to define with parts of the model are searchable. The parameter you
+       pass into this function must be the name of the field in the database that you want to be searchable in the search
+       bar. For example, if you have an admin called Representatives, and you want to have a search bar where the user can search
+       for staff members by their first and last name you might chain on the searchable method twice:
+       </p>
 
-.. thumbnail:: images/auto3.png
+.. thumbnail:: images/searchable1.png
     :align: center
 
-Auto function being called on the newly created Dynamo object.
+    Here we call searchable twice for first and last name.
 
-.. thumbnail:: images/auto1.png
+.. thumbnail:: images/searchable2.png
     :align: center
+
+    Here we see you can search by last_name
+
+.. thumbnail:: images/searchable3.png
+    :align: center
+
+    Here we see you can search by first_name
+
+.. thumbnail:: images/searchable4.png
+    :align: center
+
+    Here we see search working for first and last name at the same time.    
 
 .. raw:: html
 
