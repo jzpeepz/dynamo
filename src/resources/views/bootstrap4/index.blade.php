@@ -26,17 +26,22 @@
 
                 @if ($dynamo->hasSearchable())
 
-                    <div class="form-group">
-                        <label for="" class="search-label">Search</label>
+                    <div class="form-group mb-3">
+
+                        <label for="" class="search-label">Keywords</label>
+
                         <div class="input-group">
-                            <input type="text" name="q" class="form-control" placeholder="" value="{{ request()->input('q') }}">
-                            <span class="input-group-btn">
-                                @if (request()->has('q'))
-                                    <a href="{{ route($dynamo->getRoute('index')) }}" class="btn btn-light">Clear</a>
-                                @endif
-                                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Search</button>
-                            </span>
+
+                            <input type="text" name="q" class="form-control" placeholder="" value="{{ request()->input('q') }}" style="border-radius: .25rem;">
+                            
+                            <button class="btn btn-primary ml-2" type="submit"><i class="fa fa-search"></i> Search</button>
+
+                            @if (request()->has('q'))
+                                <a href="{{ route($dynamo->getRoute('index')) }}" class="btn btn-light ml-2">Clear</a>
+                            @endif
+
                         </div>
+
                     </div>
 
                 @endif
@@ -84,11 +89,6 @@
         </div>
     </div>
 
-    <style>
-    .panel-body .table { margin-bottom: 0; }
-    .dynamo-search label { display: block; }
-    .dynamo-search label.search-label { visibility: hidden; }
-    </style>
 @endsection
 
 @section('scripts')
@@ -99,4 +99,17 @@
         });
     });
     </script>
+
+    <style>
+    .dynamo-search .form-group {
+        flex-flow: column wrap;
+        align-items: start;
+    }
+    .dynamo-search .form-group label {
+        align-items: start;
+    }
+    .dynamo-search .form-group .search-label {
+        /* visibility: hidden; */
+    }
+    </style>
 @endsection

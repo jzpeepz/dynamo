@@ -491,9 +491,9 @@ class Dynamo
         return $this;
     }
 
-    public function addFilter($key, $options, $closure)
+    public function addFilter($key, $options, $closure, $parameters = [])
     {
-        $filter = Filter::make($key, $options, $closure);
+        $filter = Filter::make($key, $options, $closure, $parameters);
 
         $this->filters->put($key, $filter);
 

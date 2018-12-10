@@ -12,18 +12,26 @@ class Filter {
 
     private $options;
 
-    public function __construct($key, $options, $closure)
+    private $parameters;
+
+    public function __construct($key, $options, $closure, $parameters = [])
     {
         $this->key = $key;
 
         $this->options = $options;
 
         $this->closure = $closure;
+
+        $defaults = [
+            'class' => 'form-control',
+        ];
+
+        $this->parameters = array_merge($defaults, $parameters);
     }
 
-    public static function make($key, $options, $closure)
+    public static function make($key, $options, $closure, $parameters = [])
     {
-        return new static($key, $options, $closure);
+        return new static($key, $options, $closure, $parameters);
     }
 
     public function __toString()
@@ -38,7 +46,7 @@ class Filter {
 
     public function render()
     {
-        return '<div class="form-group"><label>' . ucwords(str_replace('_', ' ', $this->key)) . '</label> ' . Form::select($this->key, $this->options, null, ['class' => 'form-control']) . '</div>';
+        return '<div class="form-group mb-3 mr-2"><label>' . ucwords(str_replace('_', ' ', $this->key)) . '</label> ' . Form::select($this->key, $this->options, request()->has($this->key) ? request()->input($this->key) : null, $this->parameters) . '</div>';
     }
 
 }
