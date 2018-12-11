@@ -9,6 +9,11 @@
             @if ($dynamo->addVisible())
                 <a href="{{ route($dynamo->getRoute('create')) }}" class="btn btn-success btn-sm float-right">Add {{ $dynamo->getName() }}</a>
             @endif
+
+            @foreach ($dynamo->getIndexButtons() as $button)
+                <div class="mr-2 float-right">{!! call_user_func($button) !!}</div>
+            @endforeach
+
             {{ $dynamo->getName() }} Manager
         </div>
 
@@ -33,7 +38,7 @@
                         <div class="input-group">
 
                             <input type="text" name="q" class="form-control" placeholder="" value="{{ request()->input('q') }}" style="border-radius: .25rem;">
-                            
+
                             <button class="btn btn-primary ml-2" type="submit"><i class="fa fa-search"></i> Search</button>
 
                             @if (request()->has('q'))
@@ -77,6 +82,10 @@
                                             <button class="btn btn-light btn-sm btn-delete">Delete</button>
                                         {!! Form::close() !!}
                                     @endif
+
+                                    @foreach ($dynamo->getActionButtons() as $button)
+                                        {!! call_user_func($button, $item) !!}
+                                    @endforeach
                                 </td>
                             </tr>
                         @endforeach

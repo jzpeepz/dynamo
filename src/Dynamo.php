@@ -22,6 +22,8 @@ class Dynamo
     private $render = true;
     private $handlers = null;
     private $filters = null;
+    private $indexButtons = null;
+    private $actionButtons = null;
 
     public function __construct($class)
     {
@@ -33,6 +35,8 @@ class Dynamo
         $this->searchable = collect();
         $this->handlers = collect();
         $this->filters = collect();
+        $this->indexButtons = collect();
+        $this->actionButtons = collect();
     }
 
     public function __call($name, $arguments)
@@ -523,6 +527,30 @@ class Dynamo
         return $this->fields->filter(function ($field, $key) use ($type){
             return $field->type == $type;
         });
+    }
+
+    public function addIndexButton(\Closure $button)
+    {
+        $this->indexButtons->push($button);
+
+        return $this;
+    }
+
+    public function getIndexButtons()
+    {
+        return $this->indexButtons;
+    }
+
+    public function addActionButton(\Closure $button)
+    {
+        $this->actionButtons->push($button);
+
+        return $this;
+    }
+
+    public function getActionButtons()
+    {
+        return $this->actionButtons;
     }
 
 }
