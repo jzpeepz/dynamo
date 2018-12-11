@@ -306,13 +306,15 @@ class Dynamo
             $handler($item, $data);
         }
 
+        $processedHasMany = [];
+
         foreach ($data as $key => $value) {
 
             // ignore any keys that already have handlers assigned
             if (! $this->handlers->has($key)) {
 
+                // handle uploaded files
                 if (is_object($value) && (get_class($value) == "Illuminate\Http\UploadedFile" || get_class($value) == "Symfony\Component\HttpFoundation\File\UploadedFile")) {
-                    // handle uploaded files
                     $fileName = str_replace('.'.$value->getClientOriginalExtension(), '', $value->getClientOriginalName());
                     $destinationFileName = str_slug($fileName).'-'.rand(10000, 99999).'.'.strtolower($value->getClientOriginalExtension());
 
@@ -322,6 +324,7 @@ class Dynamo
                     $data[$key] = config('dynamo.upload_path').$destinationFileName;
                 }
 
+                // handle password fields
                 if ($key == 'password') {
                     // handle password reset
                     if (empty($value)) {
@@ -331,15 +334,25 @@ class Dynamo
                     }
                 }
 
-                if(is_array($value)) {
+                // handle has many relationships
+                if (is_array($value)) {
                     $syncables = $data[$key];
                     $item->{$key}()->sync($syncables);
                     unset($data[$key]);
+                    $processedHasMany[] = $key;
                 }
 
             }
 
         }
+
+        // handle empty has many fields
+        foreach ($this->getFieldsByType('hasMany') as $field) {
+            var_dump($field);
+            if (! isset($data[$field->key]) && ! in_array($field->key, $processedHasMany)) {
+                $item->{$field->key}()->detach();
+            }
+        };
 
         return $data;
     }
@@ -503,6 +516,13 @@ class Dynamo
     public function getFilters()
     {
         return $this->filters;
+    }
+
+    public function getFieldsByType($type)
+    {
+        return $this->fields->filter(function ($field, $key) use ($type){
+            return $field->type == $type;
+        });
     }
 
 }
