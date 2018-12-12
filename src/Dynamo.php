@@ -352,7 +352,6 @@ class Dynamo
 
         // handle empty has many fields
         foreach ($this->getFieldsByType('hasMany') as $field) {
-            var_dump($field);
             if (! isset($data[$field->key]) && ! in_array($field->key, $processedHasMany)) {
                 $item->{$field->key}()->detach();
             }
