@@ -39,28 +39,28 @@ class DynamoField
 
     public function render($item)
     {
-        $show = true;
+        $display = true;
 
-        $if = $this->getOption('if');
+        $displayClosure = $this->getOption('display');
 
-        if (! empty($if)) {
-            $show = call_user_func($if, $item);
+        if (! empty($displayClosure)) {
+            $display = call_user_func($displayClosure, $item);
         }
 
-        if ($this->render && $show) {
+        if ($this->render) {
 
             if ($this->hasViewHandler()) {
                 return call_user_func($this->getViewHandler(), $item);
             }
 
-            return view('dynamo::partials.fields.' . $this->type, ['field' => $this, 'item' => $item])->render();
+            return view('dynamo::' . $this->getThemePrefix() . 'partials.fields.' . $this->type, ['field' => $this, 'item' => $item, 'display' => $display])->render();
         }
     }
 
     public function renderStub()
     {
         if ($this->render) {
-            return view('dynamo::stubs.partials.fields.' . $this->type, ['field' => $this])->render();
+            return view('dynamo::' . $this->getThemePrefix() . 'stubs.partials.fields.' . $this->type, ['field' => $this])->render();
         }
     }
 
@@ -118,5 +118,12 @@ class DynamoField
     public function getViewHandler()
     {
         return $this->viewHandler;;
+    }
+
+    public function getThemePrefix()
+    {
+        $theme = config('dynamo.view_theme');
+
+        return ! empty($theme) ? $theme . '.' : '';
     }
 }
