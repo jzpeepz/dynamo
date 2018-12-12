@@ -39,7 +39,15 @@ class DynamoField
 
     public function render($item)
     {
-        if ($this->render) {
+        $show = true;
+
+        $if = $this->getOption('if');
+
+        if (! empty($if)) {
+            $show = call_user_func($if, $item);
+        }
+
+        if ($this->render && $show) {
 
             if ($this->hasViewHandler()) {
                 return call_user_func($this->getViewHandler(), $item);
