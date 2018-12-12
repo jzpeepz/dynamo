@@ -1,4 +1,4 @@
-<div class="{{ $display ? 'd-block' : 'd-none' }}">
+<div style="{{ $display ? 'display: block;' : 'display: none;' }}">
 
     <div class="form-group">
         <label for="" title="Position: {{ $field->position }}">{{ $field->label }}</label>
