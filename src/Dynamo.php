@@ -24,6 +24,7 @@ class Dynamo
     private $filters = null;
     private $indexButtons = null;
     private $actionButtons = null;
+    public static $globalHandlers = null;
 
     public function __construct($class)
     {
@@ -306,16 +307,20 @@ class Dynamo
 
     public function handleSpecialFields($item, $data = [])
     {
-        foreach ($this->handlers as $key => $handler) {
-            $handler($item, $data);
+        foreach ($this->getHandlers() as $key => $handler) {
+            call_user_func_array($handler, [&$item, &$data]);
         }
 
         $processedHasMany = [];
 
+        $globalHandlers = static::getGlobalHandlers();
+
         foreach ($data as $key => $value) {
 
+            $fieldType = $this->getFieldTypeByKey($key);
+
             // ignore any keys that already have handlers assigned
-            if (! $this->handlers->has($key)) {
+            if (! $this->getHandlers()->has($key) && ! $globalHandlers->has($fieldType)) {
 
                 // handle uploaded files
                 if (is_object($value) && (get_class($value) == "Illuminate\Http\UploadedFile" || get_class($value) == "Symfony\Component\HttpFoundation\File\UploadedFile")) {
@@ -346,6 +351,13 @@ class Dynamo
                     $processedHasMany[] = $key;
                 }
 
+            }
+
+            // Check to see if there is a global handler
+            // and they are defined within the users application.
+            // These handle all fields of a certain type.
+            if ($globalHandlers->has($fieldType)) {
+                call_user_func_array($globalHandlers->get($fieldType), [&$item, &$data, $key]);
             }
 
         }
@@ -552,4 +564,35 @@ class Dynamo
         return $this->actionButtons;
     }
 
+    public static function addGlobalHandler($type, \Closure $handler)
+    {
+        if (empty(static::$globalHandlers)) {
+            $handlers = collect();
+            $handlers->put($type, $handler);
+            static::$globalHandlers = $handlers;
+        } else {
+            static::$globalHandlers->put($type, $handler);
+        }
+    }
+
+    public static function getGlobalHandlers()
+    {
+        return static::$globalHandlers;
+    }
+
+    public function getHandlers()
+    {
+        return $this->handlers;
+    }
+
+    public function getFieldTypeByKey($key)
+    {
+        foreach ($this->fields as $field) {
+            if ($field->key == $key) {
+                return $field->type;
+            }
+        }
+
+        return null;
+    }
 }
