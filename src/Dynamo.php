@@ -505,7 +505,7 @@ class Dynamo
 
         $options['nameField'] = isset($options['nameField']) ? $options['nameField'] : 'name';
 
-        $options['options'] = isset($options['options']) ? $options['options'] : $modelClass::all()->pluck($options['nameField'], 'id');
+        $options['options'] = isset($options['options']) ? $options['options'] : $modelClass::orderBy($options['nameField'])->pluck($options['nameField'], 'id');
 
         $options['class'] = isset($options['class']) ? $options['class'] : config('dynamo.default_has_many_class');
 
