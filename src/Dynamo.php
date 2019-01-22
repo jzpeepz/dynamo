@@ -577,6 +577,10 @@ class Dynamo
 
     public static function getGlobalHandlers()
     {
+        if (empty(static::$globalHandlers)) {
+            return collect();
+        }
+
         return static::$globalHandlers;
     }
 
