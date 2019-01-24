@@ -276,7 +276,7 @@ class Dynamo
         return $this;
     }
 
-    public function getIndexItems()
+    public function getIndexItemsQueryBuilder()
     {
         $className = $this->class;
 
@@ -295,6 +295,13 @@ class Dynamo
         foreach($this->getIndexOrderBy() as $orderBy) {
             $query = $query->orderBy($orderBy['column'], $orderBy['sort']);
         }
+
+        return $query;
+    }
+
+    public function getIndexItems()
+    {
+        $query = $this->getIndexItemsQueryBuilder();
 
         if (! empty($this->paginate)) {
             $items = $query->paginate($this->paginate);
