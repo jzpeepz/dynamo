@@ -11,6 +11,7 @@ class Dynamo
     public $class;
     private $indexes = null;
     private $fields = null;
+    private $groups = null;
     private $indexOrderBy = null;
     private $paginate = 200;
     private $searchable = null;
@@ -32,6 +33,7 @@ class Dynamo
 
         $this->indexes = collect();
         $this->fields = collect();
+        $this->groups = collect();
         $this->indexOrderBy = collect();
         $this->searchable = collect();
         $this->handlers = collect();
@@ -454,16 +456,16 @@ class Dynamo
         $this->currentGroup = null;
     }
 
-    public function group($name, $callable)
-    {
-        $this->setGroup($name);
-
-        call_user_func($callable, $this);
-
-        $this->unsetGroup();
-
-        return $this;
-    }
+    // public function group($name, $callable)
+    // {
+    //     $this->setGroup($name);
+    //
+    //     call_user_func($callable, $this);
+    //
+    //     $this->unsetGroup();
+    //
+    //     return $this;
+    // }
 
     public function getField($key)
     {
@@ -512,7 +514,7 @@ class Dynamo
 
         $options['nameField'] = isset($options['nameField']) ? $options['nameField'] : 'name';
 
-        $options['options'] = isset($options['options']) ? $options['options'] : $modelClass::orderBy($options['nameField'])->pluck($options['nameField'], 'id');
+        $options['options'] = isset($options['options']) ? $options['options'] : $options['modelClass']::orderBy($options['nameField'])->pluck($options['nameField'], 'id');
 
         $options['class'] = isset($options['class']) ? $options['class'] : config('dynamo.default_has_many_class');
 
@@ -605,5 +607,31 @@ class Dynamo
         }
 
         return null;
+    }
+
+    public function group($group)
+    {
+        $this->addField($group->name, 'group');
+
+        $this->addGroup($group);
+
+        return $this;
+    }
+
+    public function addGroup($group)
+    {
+        $this->groups->put($group->name, $group);
+
+        return $this;
+    }
+
+    public function getGroup($name)
+    {
+        return $this->groups->get($name);
+    }
+
+    public function popField()
+    {
+        return $this->fields->pop();
     }
 }
