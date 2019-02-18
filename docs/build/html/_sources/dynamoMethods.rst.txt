@@ -19,10 +19,12 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
 
     <div id="collection-method-list">
         <p>
+           <a href="#method-addActionButton">addActionButton</a>
            <a href="#method-addField">addField</a>
            <a href="#method-addFilter">addFilter</a>
            <a href="#method-addHandler">addHandler</a>
            <a href="#method-addIndex">addIndex</a>
+           <a href="#method-addIndexButton">addIndexButton</a>
            <a href="#method-auto">auto</a>
            <a href="#method-checkbox">checkbox</a>
            <a href="#method-clearIndexes">clearIndexes</a>
@@ -46,6 +48,26 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
     </div>
 
 .. note:: NOTE: In the examples below, click the pictures to get a description and better view of them!
+
+.. raw:: html
+
+    <hr>
+
+    <p><a name="method-addActionButton"></a></p>
+    <h4><code>addActionButton()</code></h4>
+    <p>The <code>addField</code> method allows you to create a button along-side the other default action butons, Edit and Delete. Keep in mind these default buttons can be
+       remove by calling hideDelete() or removeBoth().</p>
+
+.. thumbnail:: images/addActionButton1.png
+   :align: center
+
+   Here we see the code, simply chain the function onto your Dynamo object in your Dynamo controller. addActionButton() takes one parameter which should be a closure function
+   that return raw html for a link and bootstraps button classes. You can return any raw html you want; it doesn't have to be bootstrap, you could just use the button html tag.
+
+.. thumbnail:: images/addActionButton2.png
+   :align: center
+
+   Here we see the test button alongside the other buttons, Edit and Delete, in the Action index.
 
 .. raw:: html
 
@@ -138,6 +160,31 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
 
 .. thumbnail:: images/addIndex4.png
     :align: center
+
+.. raw:: html
+
+    <hr>
+
+    <p><a name="method-addIndexButton"></a></p>
+    <h4><code>addIndexButton()</code></h4>
+    <p>The <code>addIndexButton</code> method allows you to add a button along side the Add button in your Dynamo Manager. One example of where you would want to use addIndexButton
+       would be if you wanted to minimize the amount of modules in your navigation. Below is an example:</p>
+
+.. thumbnail:: images/addIndexButton1.png
+   :align: center
+
+   Here, in the top right corner, we add a button in the Representatives Manager that says Import Representatives from Spreadsheet that links to
+   another form for uploading Representatives via .csv.
+
+.. thumbnail:: images/addIndexButton2.png
+   :align: center
+
+   This is the page the button links to
+
+.. thumbnail:: images/addIndexButton3.png
+   :align: center
+
+   This is the function in use. It takes one parameter that is a closure function that returns raw html linking to that page.
 
 .. raw:: html
 
