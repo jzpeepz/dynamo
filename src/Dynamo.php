@@ -353,7 +353,7 @@ class Dynamo
                 }
 
                 // handle has many relationships
-                if (is_array($value)) {
+                if (is_array($value) && method_exists($item, $key)) {
                     $syncables = $data[$key];
                     $item->{$key}()->sync($syncables);
                     unset($data[$key]);
