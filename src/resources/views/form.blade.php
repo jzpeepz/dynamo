@@ -7,7 +7,13 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
                 <div class="panel panel-default">
-                    <div class="panel-heading">{{ $item->exists ? 'Edit' : 'Add' }} {{ $dynamo->getName() }}</div>
+                    <div class="panel-heading">
+                        {{ $item->exists ? 'Edit' : 'Add' }} {{ $dynamo->getName() }}
+
+                        @if (method_exists($item, 'url'))
+                            <a href="{{ $item->url() }}" target="_blank" class="btn btn-info btn-xs pull-right">Preview</a>
+                        @endif
+                    </div>
 
                     <div class="panel-body">
 

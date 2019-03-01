@@ -42,6 +42,7 @@ class DynamoController extends Controller
         $formOptions = [
             'route' => $this->dynamo->getRoute('store'),
             'files' => true,
+            'autocomplete' => 'off',
         ];
 
         return DynamoView::make($this->dynamo, 'dynamo::form', compact('item', 'formOptions'));
@@ -91,6 +92,7 @@ class DynamoController extends Controller
             'route' => [$this->dynamo->getRoute('update'), $id],
             'method' => 'put',
             'files' => true,
+            'autocomplete' => 'off',
         ];
 
         return DynamoView::make($this->dynamo, 'dynamo::form', compact('item', 'formOptions'));

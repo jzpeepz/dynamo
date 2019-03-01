@@ -1,3 +1,5 @@
+@if ($display)
+
 <div class="form-group">
     <div class="checkbox">
         <label title="Position: {{ $field->position }}">
@@ -10,3 +12,5 @@
         @endif
     </div>
 </div>
+
+@endif

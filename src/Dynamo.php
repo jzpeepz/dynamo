@@ -11,6 +11,7 @@ class Dynamo
     public $class;
     private $indexes = null;
     private $fields = null;
+    private $groups = null;
     private $indexOrderBy = null;
     private $paginate = 200;
     private $searchable = null;
@@ -25,6 +26,9 @@ class Dynamo
     private $filters = null;
     private $indexTabs = null;
     private $formTabs = null;
+    private $indexButtons = null;
+    private $actionButtons = null;
+    public static $globalHandlers = null;
 
     public function __construct($class)
     {
@@ -32,6 +36,7 @@ class Dynamo
 
         $this->indexes = collect();
         $this->fields = collect();
+        $this->groups = collect();
         $this->indexOrderBy = collect();
         $this->searchable = collect();
         $this->handlers = collect();
@@ -39,6 +44,8 @@ class Dynamo
         $this->searchOptions = collect();
         $this->indexTabs = collect();
         $this->formTabs = collect();
+        $this->indexButtons = collect();
+        $this->actionButtons = collect();
     }
 
     public function __call($name, $arguments)
@@ -277,7 +284,7 @@ class Dynamo
         return $this;
     }
 
-    public function getIndexItems()
+    public function getIndexItemsQueryBuilder()
     {
         $className = $this->class;
 
@@ -298,6 +305,13 @@ class Dynamo
         foreach($this->getIndexOrderBy() as $orderBy) {
             $query = $query->orderBy($orderBy['column'], $orderBy['sort']);
         }
+
+        return $query;
+    }
+
+    public function getIndexItems()
+    {
+        $query = $this->getIndexItemsQueryBuilder();
 
         if (! empty($this->paginate)) {
             $items = $query->paginate($this->paginate);
@@ -323,19 +337,23 @@ class Dynamo
 
     public function handleSpecialFields($item, $data = [])
     {
-        $handled = $this->handlers->keys();
-
-        foreach ($this->handlers as $key => $handler) {
-            $handler($item, $data);
+        foreach ($this->getHandlers() as $key => $handler) {
+            call_user_func_array($handler, [&$item, &$data]);
         }
+
+        $processedHasMany = [];
+
+        $globalHandlers = static::getGlobalHandlers();
 
         foreach ($data as $key => $value) {
 
-            // ignore any keys that already have handlers assigned
-            if (! $handled->has($key)) {
+            $fieldType = $this->getFieldTypeByKey($key);
 
+            // ignore any keys that already have handlers assigned
+            if (! $this->getHandlers()->has($key) && ! $globalHandlers->has($fieldType)) {
+
+                // handle uploaded files
                 if (is_object($value) && (get_class($value) == "Illuminate\Http\UploadedFile" || get_class($value) == "Symfony\Component\HttpFoundation\File\UploadedFile")) {
-                    // handle uploaded files
                     $fileName = str_replace('.'.$value->getClientOriginalExtension(), '', $value->getClientOriginalName());
                     $destinationFileName = str_slug($fileName).'-'.rand(10000, 99999).'.'.strtolower($value->getClientOriginalExtension());
 
@@ -345,6 +363,7 @@ class Dynamo
                     $data[$key] = config('dynamo.upload_path').$destinationFileName;
                 }
 
+                // handle password fields
                 if ($key == 'password') {
                     // handle password reset
                     if (empty($value)) {
@@ -354,15 +373,31 @@ class Dynamo
                     }
                 }
 
-                if(is_array($value)) {
+                // handle has many relationships
+                if (is_array($value) && method_exists($item, $key)) {
                     $syncables = $data[$key];
                     $item->{$key}()->sync($syncables);
                     unset($data[$key]);
+                    $processedHasMany[] = $key;
                 }
 
             }
 
+            // Check to see if there is a global handler
+            // and they are defined within the users application.
+            // These handle all fields of a certain type.
+            if ($globalHandlers->has($fieldType)) {
+                call_user_func_array($globalHandlers->get($fieldType), [&$item, &$data, $key]);
+            }
+
         }
+
+        // handle empty has many fields
+        foreach ($this->getFieldsByType('hasMany') as $field) {
+            if (! isset($data[$field->key]) && ! in_array($field->key, $processedHasMany)) {
+                $item->{$field->key}()->detach();
+            }
+        };
 
         return $data;
     }
@@ -510,16 +545,16 @@ class Dynamo
         $this->currentGroup = null;
     }
 
-    public function group($name, $callable)
-    {
-        $this->setGroup($name);
-
-        call_user_func($callable, $this);
-
-        $this->unsetGroup();
-
-        return $this;
-    }
+    // public function group($name, $callable)
+    // {
+    //     $this->setGroup($name);
+    //
+    //     call_user_func($callable, $this);
+    //
+    //     $this->unsetGroup();
+    //
+    //     return $this;
+    // }
 
     public function getField($key)
     {
@@ -568,7 +603,7 @@ class Dynamo
 
         $options['nameField'] = isset($options['nameField']) ? $options['nameField'] : 'name';
 
-        $options['options'] = isset($options['options']) ? $options['options'] : $modelClass::all()->pluck($options['nameField'], 'id');
+        $options['options'] = isset($options['options']) ? $options['options'] : $options['modelClass']::orderBy($options['nameField'])->pluck($options['nameField'], 'id');
 
         $options['class'] = isset($options['class']) ? $options['class'] : config('dynamo.default_has_many_class');
 
@@ -582,9 +617,9 @@ class Dynamo
         return $this;
     }
 
-    public function addFilter($key, $options, $closure)
+    public function addFilter($key, $options, $closure, $parameters = [])
     {
-        $filter = Filter::make($key, $options, $closure);
+        $filter = Filter::make($key, $options, $closure, $parameters);
 
         $this->filters->put($key, $filter);
 
@@ -596,4 +631,96 @@ class Dynamo
         return $this->filters;
     }
 
+    public function getFieldsByType($type)
+    {
+        return $this->fields->filter(function ($field, $key) use ($type){
+            return $field->type == $type;
+        });
+    }
+
+    public function addIndexButton(\Closure $button)
+    {
+        $this->indexButtons->push($button);
+
+        return $this;
+    }
+
+    public function getIndexButtons()
+    {
+        return $this->indexButtons;
+    }
+
+    public function addActionButton(\Closure $button)
+    {
+        $this->actionButtons->push($button);
+
+        return $this;
+    }
+
+    public function getActionButtons()
+    {
+        return $this->actionButtons;
+    }
+
+    public static function addGlobalHandler($type, \Closure $handler)
+    {
+        if (empty(static::$globalHandlers)) {
+            $handlers = collect();
+            $handlers->put($type, $handler);
+            static::$globalHandlers = $handlers;
+        } else {
+            static::$globalHandlers->put($type, $handler);
+        }
+    }
+
+    public static function getGlobalHandlers()
+    {
+        if (empty(static::$globalHandlers)) {
+            return collect();
+        }
+
+        return static::$globalHandlers;
+    }
+
+    public function getHandlers()
+    {
+        return $this->handlers;
+    }
+
+    public function getFieldTypeByKey($key)
+    {
+        foreach ($this->fields as $field) {
+            if ($field->key == $key) {
+                return $field->type;
+            }
+        }
+
+        return null;
+    }
+
+    public function group($group)
+    {
+        $this->addField($group->name, 'group');
+
+        $this->addGroup($group);
+
+        return $this;
+    }
+
+    public function addGroup($group)
+    {
+        $this->groups->put($group->name, $group);
+
+        return $this;
+    }
+
+    public function getGroup($name)
+    {
+        return $this->groups->get($name);
+    }
+
+    public function popField()
+    {
+        return $this->fields->pop();
+    }
 }

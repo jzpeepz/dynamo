@@ -9,6 +9,11 @@
             @if ($dynamo->addVisible())
                 <a href="{{ route($dynamo->getRoute('create')) }}" class="btn btn-success btn-sm float-right">Add {{ $dynamo->getName() }}</a>
             @endif
+
+            @foreach ($dynamo->getIndexButtons() as $button)
+                <div class="mr-2 float-right">{!! call_user_func($button) !!}</div>
+            @endforeach
+
             {{ $dynamo->getName() }} Manager
         </div>
 
@@ -26,8 +31,10 @@
 
                 @if ($dynamo->hasSearchable())
 
-                    <div class="form-group">
-                        <label for="" class="search-label">Search</label>
+                    <div class="form-group mb-3">
+
+                        <label for="" class="search-label">Keywords</label>
+
                         <div class="input-group">
                             <input type="text" name="q" class="form-control" value="{{ request()->input('q') }}" {!! $dynamo->getSearchOptionsString() !!}>
                             <span class="input-group-btn">
@@ -37,6 +44,7 @@
                                 <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Search</button>
                             </span>
                         </div>
+
                     </div>
 
                 @endif
@@ -112,6 +120,10 @@
                                             <button class="btn btn-light btn-sm btn-delete">Delete</button>
                                         {!! Form::close() !!}
                                     @endif
+
+                                    @foreach ($dynamo->getActionButtons() as $button)
+                                        {!! call_user_func($button, $item) !!}
+                                    @endforeach
                                 </td>
                             </tr>
                         @endforeach
@@ -124,11 +136,6 @@
         </div>
     </div>
 
-    <style>
-    .panel-body .table { margin-bottom: 0; }
-    .dynamo-search label { display: block; }
-    .dynamo-search label.search-label { visibility: hidden; }
-    </style>
 @endsection
 
 @section('scripts')
@@ -139,4 +146,17 @@
         });
     });
     </script>
+
+    <style>
+    .dynamo-search .form-group {
+        flex-flow: column wrap;
+        align-items: start;
+    }
+    .dynamo-search .form-group label {
+        align-items: start;
+    }
+    .dynamo-search .form-group .search-label {
+        /* visibility: hidden; */
+    }
+    </style>
 @endsection

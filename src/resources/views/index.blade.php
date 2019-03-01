@@ -11,6 +11,11 @@
                         @if ($dynamo->addVisible())
                             <a href="{{ route($dynamo->getRoute('create')) }}" class="btn btn-success btn-xs pull-right">Add {{ $dynamo->getName() }}</a>
                         @endif
+
+                        @foreach ($dynamo->getIndexButtons() as $button)
+                            <div class="pull-right" style="margin-right: 5px;">{!! call_user_func($button) !!}</div>
+                        @endforeach
+
                         {{ $dynamo->getName() }} Manager
                     </div>
 
@@ -93,6 +98,10 @@
                                                         <button class="btn btn-default btn-xs btn-delete">Delete</button>
                                                     {!! Form::close() !!}
                                                 @endif
+
+                                                @foreach ($dynamo->getActionButtons() as $button)
+                                                    {!! call_user_func($button, $item) !!}
+                                                @endforeach
                                             </td>
                                         </tr>
                                     @endforeach
