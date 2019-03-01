@@ -14,6 +14,7 @@ class Dynamo
     private $indexOrderBy = null;
     private $paginate = 200;
     private $searchable = null;
+    private $searchOptions = null;
     private $deleteHidden = true;
     private $addHidden = true;
     private $currentGroup = null;
@@ -22,6 +23,8 @@ class Dynamo
     private $render = true;
     private $handlers = null;
     private $filters = null;
+    private $indexTabs = null;
+    private $formTabs = null;
 
     public function __construct($class)
     {
@@ -33,6 +36,9 @@ class Dynamo
         $this->searchable = collect();
         $this->handlers = collect();
         $this->filters = collect();
+        $this->searchOptions = collect();
+        $this->indexTabs = collect();
+        $this->formTabs = collect();
     }
 
     public function __call($name, $arguments)
@@ -277,6 +283,8 @@ class Dynamo
 
         $query = $className::withoutGlobalScopes();
 
+        $query = $this->executeViewFilter($query);
+
         // do any searching
         if (! $this->searchable->isEmpty() && request()->has('q')) {
             $query = $query->where(DB::raw('CONCAT('.$this->getSearchableKeys()->implode(", ' ', ").')'), 'like', '%'.request()->input('q').'%');
@@ -298,6 +306,19 @@ class Dynamo
         }
 
         return $items;
+    }
+
+    public function executeViewFilter($query)
+    {
+        $view = request()->input('view');
+
+        $tab = $this->getIndexTab($view);
+
+        if (! empty($tab)) {
+            $query = call_user_func($tab->queryFilter, $query);
+        }
+
+        return $query;
     }
 
     public function handleSpecialFields($item, $data = [])
@@ -358,10 +379,39 @@ class Dynamo
         });
     }
 
+    public function searchOptions($options = [])
+    {
+        $this->searchOptions = collect($options);
+        return $this;
+    }
+
+    public function getPlaceholder() {
+        return $this->searchPlaceholder;
+    }
+
+    public function getSearchOptions()
+    {
+        return $this->searchOptions;
+    }
+
+    public function getSearchOptionsString()
+    {
+        //take this dynamo's searchOptions array and convert it into a string with spaces inbetween each options
+        $arr = [];
+        $options = $this->searchOptions;
+
+        foreach($options as $key => $value) {
+            $arr[] = "$key = \"$value\"";
+        }
+
+        return implode($arr, ' ');
+    }
+
     public function searchable($key, $type = null, $options = [])
     {
         $label = isset($options['label']) ? $options['label'] : null;
-        $type = ! empty($type) ? $$type : 'text';
+        $type = ! empty($type) ? $type : 'text';
+        $searchPlaceholder = !empty($placeHolder) ? $placeHolder : "";
 
         $this->searchable->push(DynamoField::make([
             'key' => $key,
@@ -369,6 +419,45 @@ class Dynamo
             'label' => empty($label) ? $this->makeLabel($key) : $label,
             'options' => $options,
         ]));
+
+        return $this;
+    }
+
+    public function hasIndexTabs()
+    {
+        return ! $this->indexTabs->isEmpty();
+    }
+
+    public function getIndexTabs()
+    {
+        return $this->indexTabs;
+    }
+
+    public function getIndexTab($key)
+    {
+        return $this->indexTabs->where('key', $key)->first();
+    }
+
+    public function hasFormTabs()
+    {
+        return ! $this->formTabs->isEmpty();
+    }
+
+    public function getFormTabs()
+    {
+        return $this->formTabs;
+    }
+
+    public function indexTab(IndexTab $indexTab)
+    {
+        $this->indexTabs->push($indexTab);
+
+        return $this;
+    }
+
+    public function formTab(FormTab $formTab)
+    {
+        $this->formTabs->push($formTab);
 
         return $this;
     }

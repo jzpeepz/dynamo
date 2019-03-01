@@ -29,7 +29,7 @@
                     <div class="form-group">
                         <label for="" class="search-label">Search</label>
                         <div class="input-group">
-                            <input type="text" name="q" class="form-control" placeholder="" value="{{ request()->input('q') }}">
+                            <input type="text" name="q" class="form-control" value="{{ request()->input('q') }}" {!! $dynamo->getSearchOptionsString() !!}>
                             <span class="input-group-btn">
                                 @if (request()->has('q'))
                                     <a href="{{ route($dynamo->getRoute('index')) }}" class="btn btn-light">Clear</a>
@@ -40,6 +40,46 @@
                     </div>
 
                 @endif
+
+                {{-- BOOTSTRAP TAB IMPLEMENTATION  --}}
+                {{-- @if (! empty($field->getOption('tooltip')))
+                    <i style="font-size: 20px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
+                        title="{!! $field->getOption('tooltip') !!}"></i>
+                @endif --}}
+                @if ($dynamo->hasIndexTabs())
+
+                     <ul class="nav nav-tabs" role="tablist">
+                        @foreach ($dynamo->getIndexTabs() as $index => $tab)
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ ($index == 0 && ! request()->has('view')) || (request()->input('view') == str_slug($tab->getName())) ? 'active' : '' }}"
+                                            href="{{ route($dynamo->getRoute('index'), ['view' => str_slug($tab->getName())]) }}" role="tab">{{ $tab->getName() }}</a>
+                                    </li>
+                                {{-- @if ($thisTabHasTooltip)
+                                    <i style="font-size: 20px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
+                                    title="{!! $field->getOption('tooltip') !!}"></i>
+                                @endif --}}
+                        @endforeach
+                    </ul>
+
+                    {{-- content sections for each indexTab --}}
+
+
+
+                @endif {{-- endif for Index Tabs --}}
+
+                {{-- <ul class="nav nav-tabs" role="tablist"> --}}
+                    {{-- <li class="nav-item">
+                        <a class="nav-link active" href="#">Active</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                      </li> --}}
 
             </form>
 

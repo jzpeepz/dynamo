@@ -61,6 +61,11 @@ class DynamoField
         return isset($this->options[$key]) ? $this->options[$key] : '';
     }
 
+    public function hasOption()
+    {
+        return ! $this->options[$key];
+    }
+
     public function getValue($item)
     {
         $key = $this->key;
