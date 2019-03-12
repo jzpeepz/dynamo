@@ -3,8 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+// use statements
 
-class $MODEL$ extends Model
+class $MODEL$ extends Model // implements
 {
+    // traits
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
+    // methods
 }

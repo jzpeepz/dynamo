@@ -63,14 +63,7 @@ class DynamoMake extends Command
             $modelDirectory = app_path('/');
             $newModelFile = $modelDirectory . $model . '.php';
     		if (! file_exists($newModelFile)) {
-    			// pull in model stub
-    			$modelStub = file_get_contents($stubsDirectory . 'DynamoModel.stub');
-
-    			// replace values in stub
-    			$modelString = str_replace('$MODEL$', $model, $modelStub);
-
-    			// create model file
-    			file_put_contents($newModelFile, $modelString);
+                $this->writeModelFile($model);
 
     			$this->info($model . ' model successfully created.');
     		} else {
@@ -131,5 +124,55 @@ class DynamoMake extends Command
 
 		$this->info('Complete the migration and get started by linking to:');
         $this->comment("route('" . config('dynamo.route_prefix') . strtolower($model) . ".index')");
+    }
+
+    public function getStubsDirectory()
+    {
+        $srcPath = __DIR__.'/../..';
+
+        return $srcPath.'/Console/stubs/';
+    }
+
+    public function writeModelFile($model)
+    {
+        $modelDirectory = app_path('/');
+
+        $newModelFile = $modelDirectory . $model . '.php';
+
+        // pull in model stub
+        $modelStub = file_get_contents($this->getStubsDirectory() . 'DynamoModel.stub');
+
+        // replace values in stub
+        $modelString = str_replace('$MODEL$', $model, $modelStub);
+
+        // insert custom use statements
+        $modelUses = config('dynamo.model_uses', []);
+
+        $modelUses = array_map(function ($value) {
+            return "use $value;";
+        },$modelUses);
+
+        $modelString = str_replace('// use statements', implode("\n", $modelUses), $modelString);
+
+        // insert implements
+        $modelImplements = config('dynamo.model_implements', []);
+
+        if (! empty($modelImplements)) {
+            $modelString = str_replace('// implements', 'implements ' . implode(', ', $modelImplements), $modelString);
+        }
+
+        // insert traits
+        $modelTraits = config('dynamo.model_traits', []);
+
+        if (! empty($modelTraits)) {
+            $modelString = str_replace('// traits', 'use ' . implode(', ', $modelTraits) . ';', $modelString);
+        }
+
+        // insert custom methods
+        $methodsString = view('dynamo::models.methods');
+        $modelString = str_replace('// methods', $methodsString, $modelString);
+
+        // create model file
+        file_put_contents($newModelFile, $modelString);
     }
 }

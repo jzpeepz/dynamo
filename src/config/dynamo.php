@@ -20,4 +20,10 @@ return [
     'target_blade_section' => 'content',
 
     'default_has_many_class' => '',
+
+    'model_uses' => [],
+
+    'model_implements' => [],
+
+    'model_traits' => [],
 ];
