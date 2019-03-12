@@ -13,25 +13,36 @@
 
             @if ($dynamo->hasFormTabs())
 
-                 <ul class="nav nav-tabs">
+                 <ul class="nav nav-tabs" role="tablist">
                     @foreach ($dynamo->getFormTabs() as $index => $tab)
-                        {{-- First, is check to see if the tab is for the admin view or form view, only render the admin view here. --}}
-                                <li class="nav-item">
-                                    <a class="{{ ($index == 0 && ! request()->has('view')) || (request()->input('view') == str_slug($tab->getName())) ? 'active' : '' }}"
-                                        href="{{ route($dynamo->getRoute('index'), ['view' => str_slug($tab->getName())]) }}" role="tab">{{ $tab->getName() }}</a>
-                                </li>
-                            {{-- @if ($thisTabHasTooltip)
-                                <i style="font-size: 20px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
-                                title="{!! $field->getOption('tooltip') !!}"></i>
-                            @endif --}}
+                        <li role="presentation" class="nav-item{{ ($index == 0) ? ' active' : '' }}">
+                            <a class="nav-link" href="#{{ $tab->key }}" role="tab" aria-controls="{{ $tab->key }}" data-toggle="tab">{{ $tab->getName() }}
+                                @if ($tab->hasOption('tooltip'))
+                                    <i style="font-size: 17px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
+                                    title="{!! $tab->getOption('tooltip') !!}"></i>
+                                @endif
+                            </a>
+                        </li>
                     @endforeach
                 </ul>
 
-                {{-- content sections for each indexTab --}}
+            @endif {{-- endif for Form Tabs Nav --}}
 
+            @if ($dynamo->hasFormTabs())
+                <div class="tab-content">
 
+                @foreach ($dynamo->getFormTabs() as $index => $tab)
 
-            @endif {{-- endif for Index Tabs --}}
+                            <div role="tabpanel" class="tab-pane{{ ($index == 0) ? ' active' : '' }}"
+                                 id="{{ $tab->key }}">
+                                @foreach('of the tabs options (the names of the fields it should contain)')
+                                    {{-- Render the form fields here --}}
+                                @endforeach
+                            </div>
+
+                @endforeach
+                </div>
+            @endif {{-- endif for Form Tabs Content --}}
 
             {!! Form::model($item, $formOptions) !!}
                 @foreach ($dynamo->getFieldGroups() as $group => $fields)

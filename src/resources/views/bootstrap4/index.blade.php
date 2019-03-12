@@ -50,44 +50,22 @@
                 @endif
 
                 {{-- BOOTSTRAP TAB IMPLEMENTATION  --}}
-                {{-- @if (! empty($field->getOption('tooltip')))
-                    <i style="font-size: 20px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
-                        title="{!! $field->getOption('tooltip') !!}"></i>
-                @endif --}}
                 @if ($dynamo->hasIndexTabs())
 
                      <ul class="nav nav-tabs" role="tablist">
                         @foreach ($dynamo->getIndexTabs() as $index => $tab)
                                     <li class="nav-item">
                                         <a class="nav-link {{ ($index == 0 && ! request()->has('view')) || (request()->input('view') == str_slug($tab->getName())) ? 'active' : '' }}"
-                                            href="{{ route($dynamo->getRoute('index'), ['view' => str_slug($tab->getName())]) }}" role="tab">{{ $tab->getName() }}</a>
+                                            href="{{ route($dynamo->getRoute('index'), ['view' => str_slug($tab->getName())]) }}" role="tab">{{ $tab->getName() }}
+                                            @if ($tab->hasOption('tooltip'))
+                                                <i style="font-size: 17px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
+                                                title="{!! $tab->getOption('tooltip') !!}"></i>
+                                            @endif
+                                        </a>
                                     </li>
-                                {{-- @if ($thisTabHasTooltip)
-                                    <i style="font-size: 20px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
-                                    title="{!! $field->getOption('tooltip') !!}"></i>
-                                @endif --}}
                         @endforeach
                     </ul>
-
-                    {{-- content sections for each indexTab --}}
-
-
-
                 @endif {{-- endif for Index Tabs --}}
-
-                {{-- <ul class="nav nav-tabs" role="tablist"> --}}
-                    {{-- <li class="nav-item">
-                        <a class="nav-link active" href="#">Active</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Disabled</a>
-                      </li> --}}
 
             </form>
 

@@ -19,68 +19,89 @@
 
                         @include('dynamo::partials.alerts')
 
-                        @if ($dynamo->hasFormTabs())
+                        {{--***************************************
+                            *     If the user uses Formtabs       *
+                            *      Run this block to render       *
+                            *     the tabs                        *
+                            *************************************** --}}
 
-                             <ul class="nav nav-tabs">
+                        @if ($dynamo->hasFormTabs())
+                             <ul class="nav nav-tabs" role="tablist">
                                 @foreach ($dynamo->getFormTabs() as $index => $tab)
-                                    <li class="{{ ($index == 0 && ! request()->has('view')) || (request()->input('view') == str_slug($tab->getName())) ? 'active' : '' }}">
-                                        <a href="{{ route($dynamo->getRoute('index'), ['view' => str_slug($tab->getName())]) }}" role="tab">{{ $tab->getName() }}</a>
+                                    <li role="presentation" class="{{ ($index == 0) ? 'active' : '' }}">
+                                        <a href="#{{ $tab->key }}" role="tab" aria-controls="{{ $tab->key }}" data-toggle="tab">{{ $tab->getName() }}
+                                            @if ($tab->hasOption('tooltip'))
+                                                <i style="font-size: 17px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
+                                                title="{!! $tab->getOption('tooltip') !!}"></i>
+                                            @endif
+                                        </a>
                                     </li>
                                 @endforeach
                             </ul>
+                        @endif
 
-                            {{-- content sections for each indexTab --}}
+                        {{--***************************************
+                            *     If the user uses Formtabs       *
+                            *     Run this block to render        *
+                            *     the form fields in each tab     *
+                            *************************************** --}}
 
+                        @if ($dynamo->hasFormTabs())
+                            {!! Form::model($item, $formOptions) !!}
+                            <div class="tab-content">
+                                @foreach ($dynamo->getFormTabs() as $index => $tab)
+                                    <div role="tabpanel" class="tab-pane{{ ($index == 0) ? ' active' : '' }}"
+                                         id="{{ $tab->key }}">
 
-
-                        @endif {{-- endif for Index Tabs --}}
-
-                        {!! Form::model($item, $formOptions) !!}
-                            @foreach ($dynamo->getFieldGroups() as $group => $fields)
-                                <fieldset id="{{ $group }}" class="{{ ! empty($group) ? 'well' : '' }} dynamo-group">
-                                    @if ($dynamo->hasGroupLabel($group))
-                                        <legend class="dynamo-group-label">{{ $dynamo->getGroupLabel($group) }}</legend>
-                                    @endif
-
-                                    @foreach ($fields as $field)
-                                        {!! $field->render($item) !!}
-                                    @endforeach
-                                </fieldset>
-                            @endforeach
+                                         @foreach ($tab->fields as $field)
+                                             {!! $field->render($item) !!}
+                                         @endforeach
+                                    </div>
+                                @endforeach
+                            </div>
 
                             <button type="submit" class="btn btn-primary">Save {{ $dynamo->getName() }}</button>
                             <a href="{{ route($dynamo->getRoute('index')) }}" class="btn">Cancel</a>
+                            {!! Form::close() !!}
+                        @endif
+
+                        {{--***************************************
+                            *  If the user does not use Formtabs  *
+                            *   Run this default block to render  *
+                            *   the dynamo form as normally would *
+                            *************************************** --}}
+
+                        @if (! $dynamo->hasFormTabs())
+                            {!! Form::model($item, $formOptions) !!}
+                            <div class="tab-content">
+
+                        @foreach ($dynamo->getFieldGroups() as $group => $fields)
+                            <fieldset id="{{ $group }}" class="{{ ! empty($group) ? 'well' : '' }} dynamo-group">
+                                @if ($dynamo->hasGroupLabel($group))
+                                    <legend class="dynamo-group-label">{{ $dynamo->getGroupLabel($group) }}</legend>
+                                @endif
+
+                                @foreach ($fields as $field)
+                                    {!! $field->render($item) !!}
+                                @endforeach
+                            </fieldset>
+                        @endforeach
+
+                            <button type="submit" class="btn btn-primary">Save {{ $dynamo->getName() }}</button>
+                            <a href="{{ route($dynamo->getRoute('index')) }}" class="btn">Cancel</a>
+
                         {!! Form::close() !!}
+
+                        @endif
 
                         @if (class_exists('\Uploader'))
                             {!! Uploader::helper() !!}
                         @endif
-
-                        {{-- @if ($dynamo->hasFormTabs()) --}}
-
-                                  {{-- <ul> --}}
-                                {{-- @foreach ($dynamo->bootstrapTabs as $key => $value) --}}
-                                    {{-- First, is check to see if the tab is for the admin view or form view, only render the admin view here. --}}
-                                        {{-- <li class="{{ $key == 0 ? 'active' : '' }}"><a href="#content" role="tab" data-toggle="tab">{{ $value }}</a></li>
-                                        @if ($thisTabHasTooltip)
-                                            <i style="font-size: 20px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
-                                                title="{!! $field->getOption('tooltip') !!}"></i>
-                                        @endif
-                                @endforeach
-                                    </ul> --}}
-
-
-                            {{-- <ul class="nav nav-tabs" id="myTab">
-                              <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
-                              <li><a href="#profile" data-toggle="tab">Profile</a></li>
-                              <li><a href="#messages" data-toggle="tab">Messages</a></li>
-                            </ul> --}}
-
-                        {{-- @endif --}} {{-- endif for Form Tabs --}}
 
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 @endsection

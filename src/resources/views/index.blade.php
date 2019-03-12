@@ -16,7 +16,7 @@
                             <div class="pull-right" style="margin-right: 5px;">{!! call_user_func($button) !!}</div>
                         @endforeach
 
-                        {{ $dynamo->getName() }} Manager
+                        {{ $dynamo->getName() }} Manager hihi
                     </div>
 
                     <div class="panel-body">
@@ -64,7 +64,7 @@
                                                 </li>
                                     @endforeach
                                 </ul>
-                                
+
                             @endif {{-- endif for Index Tabs --}}
 
                         </form>
@@ -108,7 +108,7 @@
                                 </tbody>
                             </table>
 
-                            {!! method_exists($items, 'render') ? $items->appends(request()->only(['q']))->render() : null !!}
+                            {!! method_exists($items, 'render') ? $items->appends(request()->all())->render() : null !!}
 
                         @endif
                     </div>
