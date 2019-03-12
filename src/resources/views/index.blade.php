@@ -16,7 +16,7 @@
                             <div class="pull-right" style="margin-right: 5px;">{!! call_user_func($button) !!}</div>
                         @endforeach
 
-                        {{ $dynamo->getName() }} Manager hihi
+                        {{ $dynamo->getName() }} Manager
                     </div>
 
                     <div class="panel-body">
