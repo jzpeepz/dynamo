@@ -26,6 +26,7 @@
 
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/sphinxcontrib-images/LightBox2/lightbox2/css/lightbox.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Installation" href="installation.html" />
@@ -158,7 +159,9 @@
 <h1>Customizing the admin<a class="headerlink" href="#customizing-the-admin" title="Permalink to this headline">¶</a></h1>
 <p>Admin customization happens in your controller inside the getDynamo() function of the Dynamo Controller.
 This function returns a Dynamo instance which has lots of chainable methods that customize your Dynamo admin. Lets stick with our Employee example:</p>
-<img alt="_images/EmployeeController1.png" class="align-center" src="_images/EmployeeController1.png" />
+<blockquote>
+<div><img alt="_images/EmployeeController1.png" class="align-center" src="_images/EmployeeController1.png" />
+</div></blockquote>
 <p>This is what your Dynamo Controller will look like by default right after it is created. It has one function called getDynamo() that returns a Dynamo object.
 By default the auto() function is called which will take all the things your employee object consist of (that you defined in your database migration, say first_name, last_name,
 phone_number) and create fields in the form for them. You can chain on methods to this auto function if you need to do more specific things.
@@ -224,6 +227,9 @@ Faq Categories, and so on.</p>
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/sphinxcontrib-images/LightBox2/lightbox2/js/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="_static/sphinxcontrib-images/LightBox2/lightbox2/js/lightbox.min.js"></script>
+        <script type="text/javascript" src="_static/sphinxcontrib-images/LightBox2/lightbox2-customize/jquery-noconflict.js"></script>
     
 
   

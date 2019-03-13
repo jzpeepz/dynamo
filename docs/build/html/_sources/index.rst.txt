@@ -50,6 +50,12 @@ Need to opt out of some of the Dynamo magic?
 Quick-Start Video
 ^^^^^^^^^^^^^^^^^
 
+.. raw:: html
+
+    <center><iframe width="560" height="315" src="https://www.youtube.com/embed/Hf6J2hTrWa0" frameborder="0"
+    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
+    <hr>
+
 
 .. toctree::
    :caption: Dynamo Documentation

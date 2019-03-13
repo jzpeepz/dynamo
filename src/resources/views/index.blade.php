@@ -35,8 +35,8 @@
 
                                 <div class="form-group">
                                     <label for="" class="search-label">Search</label>
-                                    <div class="input-group">
-                                        <input type="text" name="q" class="form-control" placeholder="" value="{{ request()->input('q') }}">
+                                    <div class="input-group" style="margin-top: -20px;">
+                                        <input type="text" name="q" class="form-control" value="{{ request()->input('q') }}" {!! $dynamo->getSearchOptionsString() !!}>
                                         <span class="input-group-btn">
                                             @if (request()->has('q'))
                                                 <a href="{{ route($dynamo->getRoute('index')) }}" class="btn btn-default">Clear</a>
@@ -47,6 +47,25 @@
                                 </div>
 
                             @endif
+                            {{-- BOOTSTRAP TAB IMPLEMENTATION  --}}
+
+                            @if ($dynamo->hasIndexTabs())
+
+                                 <ul class="nav nav-tabs">
+                                    @foreach ($dynamo->getIndexTabs() as $index => $tab)
+                                                <li class="{{ ($index == 0 && ! request()->has('view')) || (request()->input('view') == str_slug($tab->getName())) ? 'active' : '' }}">
+                                                    <a href="{{ route($dynamo->getRoute('index'), ['view' => str_slug($tab->getName())]) }}" role="tab">
+                                                        {{ $tab->getName() }}
+                                                        @if ($tab->hasOption('tooltip'))
+                                                            <i style="font-size: 17px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
+                                                            title="{!! $tab->getOption('tooltip') !!}"></i>
+                                                        @endif
+                                                    </a>
+                                                </li>
+                                    @endforeach
+                                </ul>
+
+                            @endif {{-- endif for Index Tabs --}}
 
                         </form>
 
@@ -89,7 +108,7 @@
                                 </tbody>
                             </table>
 
-                            {!! method_exists($items, 'render') ? $items->appends(request()->only(['q']))->render() : null !!}
+                            {!! method_exists($items, 'render') ? $items->appends(request()->all())->render() : null !!}
 
                         @endif
                     </div>

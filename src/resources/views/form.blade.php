@@ -19,30 +19,78 @@
 
                         @include('dynamo::partials.alerts')
 
-                        {!! Form::model($item, $formOptions) !!}
-                            @foreach ($dynamo->getFieldGroups() as $group => $fields)
-                                <fieldset id="{{ $group }}" class="{{ ! empty($group) ? 'well' : '' }} dynamo-group">
-                                    @if ($dynamo->hasGroupLabel($group))
-                                        <legend class="dynamo-group-label">{{ $dynamo->getGroupLabel($group) }}</legend>
-                                    @endif
+                        {{--***************************************
+                            *     If the user uses Formtabs       *
+                            *      Run this block to render       *
+                            *     the tabs                        *
+                            *************************************** --}}
 
-                                    @foreach ($fields as $field)
-                                        {!! $field->render($item) !!}
+                        @if ($dynamo->hasFormTabs())
+                             <ul class="nav nav-tabs" role="tablist">
+                                @foreach ($dynamo->getFormTabs() as $index => $tab)
+                                    <li role="presentation" class="{{ ($index == 0) ? 'active' : '' }}">
+                                        <a href="#{{ $tab->key }}" role="tab" aria-controls="{{ $tab->key }}" data-toggle="tab">{{ $tab->getName() }}
+                                            @if ($tab->hasOption('tooltip'))
+                                                <i style="font-size: 17px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
+                                                title="{!! $tab->getOption('tooltip') !!}"></i>
+                                            @endif
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+
+                        {!! Form::model($item, $formOptions) !!}
+                            <div class="tab-content">
+                                @if ($dynamo->hasFormTabs())
+
+                                    {{--***************************************
+                                        *     If the user uses Formtabs       *
+                                        *     Run this block to render        *
+                                        *     the form fields in each tab     *
+                                        *************************************** --}}
+
+                                    @foreach ($dynamo->getFormTabs() as $index => $tab)
+                                        <div role="tabpanel" class="tab-pane{{ ($index == 0) ? ' active' : '' }}"
+                                             id="{{ $tab->key }}">
+
+                                             @foreach ($tab->fields as $field)
+                                                 {!! $field->render($item) !!}
+                                             @endforeach
+                                        </div>
                                     @endforeach
-                                </fieldset>
-                            @endforeach
+
+                                @else
+
+                                    {{--***************************************
+                                        *  If the user does not use Formtabs  *
+                                        *   Run this default block to render  *
+                                        *   the dynamo form as normally would *
+                                        *************************************** --}}
+
+                                    @foreach ($dynamo->getFieldGroups() as $group => $fields)
+                                        <fieldset id="{{ $group }}" class="{{ ! empty($group) ? 'well' : '' }} dynamo-group">
+                                            @if ($dynamo->hasGroupLabel($group))
+                                                <legend class="dynamo-group-label">{{ $dynamo->getGroupLabel($group) }}</legend>
+                                            @endif
+
+                                            @foreach ($fields as $field)
+                                                {!! $field->render($item) !!}
+                                            @endforeach
+                                        </fieldset>
+                                    @endforeach
+
+                                @endif
+                            </div>
 
                             <button type="submit" class="btn btn-primary">Save {{ $dynamo->getName() }}</button>
                             <a href="{{ route($dynamo->getRoute('index')) }}" class="btn">Cancel</a>
                         {!! Form::close() !!}
-
-                        @if (class_exists('\Uploader'))
-                            {!! Uploader::helper() !!}
-                        @endif
 
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 @endsection
