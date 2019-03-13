@@ -36,20 +36,36 @@
                         <label for="" class="search-label">Keywords</label>
 
                         <div class="input-group">
-
-                            <input type="text" name="q" class="form-control" placeholder="" value="{{ request()->input('q') }}" style="border-radius: .25rem;">
-
-                            <button class="btn btn-primary ml-2" type="submit"><i class="fa fa-search"></i> Search</button>
-
-                            @if (request()->has('q'))
-                                <a href="{{ route($dynamo->getRoute('index')) }}" class="btn btn-light ml-2">Clear</a>
-                            @endif
-
+                            <input type="text" name="q" class="form-control" value="{{ request()->input('q') }}" {!! $dynamo->getSearchOptionsString() !!}>
+                            <span class="input-group-btn">
+                                @if (request()->has('q'))
+                                    <a href="{{ route($dynamo->getRoute('index')) }}" class="btn btn-light">Clear</a>
+                                @endif
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Search</button>
+                            </span>
                         </div>
 
                     </div>
 
                 @endif
+
+                {{-- BOOTSTRAP TAB IMPLEMENTATION  --}}
+                @if ($dynamo->hasIndexTabs())
+
+                     <ul class="nav nav-tabs" role="tablist">
+                        @foreach ($dynamo->getIndexTabs() as $index => $tab)
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ ($index == 0 && ! request()->has('view')) || (request()->input('view') == str_slug($tab->getName())) ? 'active' : '' }}"
+                                            href="{{ route($dynamo->getRoute('index'), ['view' => str_slug($tab->getName())]) }}" role="tab">{{ $tab->getName() }}
+                                            @if ($tab->hasOption('tooltip'))
+                                                <i style="font-size: 17px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
+                                                title="{!! $tab->getOption('tooltip') !!}"></i>
+                                            @endif
+                                        </a>
+                                    </li>
+                        @endforeach
+                    </ul>
+                @endif {{-- endif for Index Tabs --}}
 
             </form>
 
