@@ -51,17 +51,17 @@
 
                             @if ($dynamo->hasIndexTabs())
 
-                                 <ul class="nav nav-tabs">
+                                 <ul class="nav nav-tabs" style="margin-top: 15px;">
                                     @foreach ($dynamo->getIndexTabs() as $index => $tab)
-                                                <li class="{{ ($index == 0 && ! request()->has('view')) || (request()->input('view') == str_slug($tab->getName())) ? 'active' : '' }}">
-                                                    <a href="{{ route($dynamo->getRoute('index'), ['view' => str_slug($tab->getName())]) }}" role="tab">
-                                                        {{ $tab->getName() }}
-                                                        @if ($tab->hasOption('tooltip'))
-                                                            <i style="font-size: 17px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
-                                                            title="{!! $tab->getOption('tooltip') !!}"></i>
-                                                        @endif
-                                                    </a>
-                                                </li>
+                                        <li class="{{ ($index == 0 && ! request()->has('view')) || (request()->input('view') == str_slug($tab->getName())) ? 'active' : '' }}">
+                                            <a href="{{ route($dynamo->getRoute('index'), ['view' => str_slug($tab->getName())]) }}" role="tab">
+                                                {{ $tab->getName() }}
+                                                @if ($tab->hasOption('tooltip'))
+                                                    <i style="font-size: 17px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
+                                                    title="{!! $tab->getOption('tooltip') !!}"></i>
+                                                @endif
+                                            </a>
+                                        </li>
                                     @endforeach
                                 </ul>
 
