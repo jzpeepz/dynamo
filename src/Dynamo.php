@@ -700,7 +700,9 @@ class Dynamo
 
     public function group($group)
     {
-        $this->addField($group->name, 'group');
+        $this->addField($group->name, 'group', [
+            'group' => $group,
+        ]);
 
         $this->addGroup($group);
 
@@ -716,7 +718,26 @@ class Dynamo
 
     public function getGroup($name)
     {
-        return $this->groups->get($name);
+        $group = $this->groups->get($name);
+
+        if (empty($group)) {
+            $group = $this->findGroupInTabs($name);
+        }
+
+        return $group;
+    }
+    
+    public function findGroupInTabs($name)
+    {
+        foreach ($this->formTabs as $tab) {
+            foreach ($tab->fields as $field) {
+                if ($field->type == 'group' && $field->key == $name) {
+                    return $field->getOption('group');
+                }
+            }
+        }
+
+        return null;
     }
 
     public function popField()
