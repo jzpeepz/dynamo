@@ -117,14 +117,16 @@
         </div>
     </div>
 
+@endsection
+
+@section('scripts')
+
     <style>
     .panel-body .table { margin-bottom: 0; }
     .dynamo-search label { display: block; }
     .dynamo-search label.search-label { visibility: hidden; }
     </style>
-@endsection
 
-@section('scripts')
     <script>
     $(document).ready(function(){
         $('.btn-delete').click(function(){
@@ -132,4 +134,5 @@
         });
     });
     </script>
+    
 @endsection
