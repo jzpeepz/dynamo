@@ -689,10 +689,59 @@ class Dynamo
 
     public function getFieldTypeByKey($key)
     {
+        // look the field in the root Dynamo instance
         foreach ($this->fields as $field) {
             if ($field->key == $key) {
                 return $field->type;
             }
+        }
+
+        // if not found in root Dynamo
+        // instance, look in groups and tabs
+        $field = $this->findFieldByKey($key);
+
+        if (! empty($field)) {
+            return $field->type;
+        }
+
+        return null;
+    }
+
+    public function findFieldByKey($key)
+    {
+        // first look in groups on the root Dynamo instance
+        foreach ($this->groups as $group) {
+            foreach ($group->fields as $field) {
+                if ($field->key == $key) {
+                    return $field;
+                }
+            }
+        }
+
+        // if not found, look within tabs
+        foreach ($this->formTabs as $tab) {
+
+            // within the fields inside of tabs
+            foreach ($tab->fields as $field) {
+                
+                if ($field->key == $key) {
+                    return $field;
+                }
+
+                // if the field is a group
+                if ($field->type == 'group') {
+
+                    // look at each field within the group
+                    foreach ($field->fields as $groupField) {
+                        if ($groupField->key == $key) {
+                            return $groupField;
+                        }
+                    }
+
+                }
+                
+            }
+
         }
 
         return null;

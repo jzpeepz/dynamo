@@ -26,10 +26,11 @@ class EmployeeController extends DynamoController
                     ->addIndex('last_name')
                     ->addIndex('photo', 'Headshot', function($item) {
                         if(empty($item->photo)) {
-                            return ''
+                            return '';
                         }
                         return '<img style="width: 100px  " src="'.$item->photo.'" class="" style="width: 60px;">';
                     })
                     ->indexOrderBy('last_name');
 
     }
+}
