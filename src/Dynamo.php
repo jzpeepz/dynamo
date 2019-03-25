@@ -723,7 +723,7 @@ class Dynamo
 
             // within the fields inside of tabs
             foreach ($tab->fields as $field) {
-                
+
                 if ($field->key == $key) {
                     return $field;
                 }
@@ -732,14 +732,14 @@ class Dynamo
                 if ($field->type == 'group') {
 
                     // look at each field within the group
-                    foreach ($field->fields as $groupField) {
+                    foreach ($field->getOption('group')->fields as $groupField) {
                         if ($groupField->key == $key) {
                             return $groupField;
                         }
                     }
 
                 }
-                
+
             }
 
         }
@@ -775,7 +775,7 @@ class Dynamo
 
         return $group;
     }
-    
+
     public function findGroupInTabs($name)
     {
         foreach ($this->formTabs as $tab) {
