@@ -25,6 +25,8 @@
 
                         <form action="{{ route($dynamo->getRoute('index')) }}" method="get" class="dynamo-search form-inline">
 
+                        <input type="hidden" name="view" class="form-control" value="{{ request()->input('view') }}">
+
                             @foreach ($dynamo->getFilters() as $filter)
 
                                 {!! $filter !!}
@@ -134,5 +136,5 @@
         });
     });
     </script>
-    
+
 @endsection
