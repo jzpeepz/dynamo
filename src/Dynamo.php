@@ -284,13 +284,13 @@ class Dynamo
         return $this;
     }
 
-    public function getIndexItemsQueryBuilder()
+    public function getIndexItemsQueryBuilder($view = null)
     {
         $className = $this->class;
 
         $query = $className::withoutGlobalScopes();
 
-        $query = $this->executeViewFilter($query);
+        $query = $this->executeViewFilter($query, $view);
 
         // do any searching
         if (! $this->searchable->isEmpty() && request()->has('q')) {
@@ -322,9 +322,11 @@ class Dynamo
         return $items;
     }
 
-    public function executeViewFilter($query)
+    public function executeViewFilter($query, $view = null)
     {
-        $view = request()->input('view');
+        if (empty($view)) {
+            $view = request()->input('view');
+        }
 
         $tab = $this->getIndexTab($view);
 
