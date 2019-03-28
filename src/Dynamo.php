@@ -633,9 +633,58 @@ class Dynamo
 
     public function getFieldsByType($type)
     {
-        return $this->fields->filter(function ($field, $key) use ($type){
+        $fields = $this->getAllFields();
+
+        return $fields->filter(function ($field, $key) use ($type) {
             return $field->type == $type;
         });
+    }
+
+    public function getAllFields()
+    {
+        // base object fields
+        $dynamoFields = $this->fields;
+
+        // group fields
+        $groupFields = $this->groups->reduce(function ($allFields = null, $group) {
+            if (is_null($allFields)) {
+                $allFields = collect();
+            }
+
+            return $allFields->merge($group->fields);
+        });
+
+        // handle null collection
+        if (is_null($groupFields)) {
+            $groupFields = collect();
+        }
+
+        // tab fields and groups within tabs
+        $tabFields = $this->formTabs->reduce(function ($allFields = null, $tab) {
+            if (is_null($allFields)) {
+                $allFields = collect();
+            }
+
+            $tabAndGroupFields = collect();
+
+            foreach ($tab->fields as $tabField) {
+                if ($tabField->type == 'group') {
+                    $tabAndGroupFields = $tabAndGroupFields->merge($tabField->getOption('group')->fields);
+                } else {
+                    $tabAndGroupFields = $tabAndGroupFields->merge([$tabField]);
+                }
+            }
+
+            return $allFields->merge($tabAndGroupFields);
+        });
+
+        // handle null collection
+        if (is_null($tabFields)) {
+            $tabFields = collect();
+        }
+
+        // merge all field collections and return
+        return $dynamoFields->merge($groupFields)->merge($tabFields);
     }
 
     public function addIndexButton(\Closure $button)
