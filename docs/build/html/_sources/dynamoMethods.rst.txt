@@ -64,7 +64,7 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
    Here we see the code, simply chain the function onto your Dynamo object in your Dynamo controller. addActionButton() takes one parameter which should be a closure function
    that return raw html for a link and bootstraps button classes. You can return any raw html you want; it doesn't have to be bootstrap, you could just use the button html tag.
 
-.. thumbnail:: images/addActionButton2.png
+.. thumb    nail:: images/addActionButton2.png
    :align: center
 
    Here we see the test button alongside the other buttons, Edit and Delete, in the Action index.

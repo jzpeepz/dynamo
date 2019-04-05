@@ -1,18 +1,31 @@
-The Dynamo Controller
-=====================
+The Dynamo Controller Backend
+=============================
 
-The most helpful part about Dynamo is the Dynamo Controller. We highly encourage you to take a look at the DynamoController class and read the comments
-of each function to have a better understanding of what's going on; however you don't really need to understand anything that's going on in this section
-to be able to use Dynamo; in fact the whole point of this package is so you don't have to do this stuff yourself. If you'd like, skip this section, but its good
-to know whats going on under the hood ;) .
+This section isn't necessary to know in order to use Dynamo. It is explaining encapsulated code within the package that you never actually see,
+but it might be helpful to understand what is going on when you create a model with Dynamo. Again, I would recommend watching the Quick Start video on the homepage
+of the documentation to get a better understanding.
 
-.. image:: https://media.giphy.com/media/6PAbFX7jVXWTK/giphy.gif
+The Dynamo Controller class contains functions similar to the functions of a Resource route in Laravel. A Resource route is
+7 routes all in one. Recall that when you create a Dynamo object with the command,
+
+.. code-block:: php
+
+   php artisan make:dynamo FaqCategory
+
+Dynamo will generate a route in your routes->web.php file,
+
+.. code-block:: php
+
+   Route::resource('faqcategory', '\App\Http\Controllers\Admin\FaqCategoryController');
+
+that links to the Dynamo Controller. The following routes are generated:
+
+.. thumbnail:: images/routesGenerated.png
    :align: center
-   :height: 400
-   :width: 600
 
-Starting off, the Dynamo Controller has an index function that returns an index view of all the resources. So in the Employee
-example, the index function would show a view of all the Employee models saved in the database::
+
+The index function that returns an index view of all the resources. So in the Faq Category
+example, the index function would show a view of all the Faq Categories saved in the database::
 
     /**
      * Display a listing of the resource.
@@ -26,7 +39,13 @@ example, the index function would show a view of all the Employee models saved i
         return DynamoView::make($this->dynamo, 'dynamo::index', compact('items'));
     }
 
-The next two functions are create() and store(). Create shows the form view that the user will use to create Employee objects::
+Resulting DynamoView:
+
+.. thumbnail:: images/indexDynamoView.png
+   :align: center
+
+
+The next two functions are create() and store(). Create shows the form view that the user will use to create Faq Category objects::
 
     /**
      * Show the form for creating a new resource.
@@ -45,7 +64,12 @@ The next two functions are create() and store(). Create shows the form view that
         return DynamoView::make($this->dynamo, 'dynamo::form', compact('item', 'formOptions'));
     }
 
-Store() is the function that gets hit when the user presses the submit button on the Create an Employee form. Store will "store" this new Employee object in your database::
+Resulting DynamoView:
+
+.. thumbnail:: images/createDynamoView.png
+   :align: center
+
+Store() is the function that gets hit when the user presses the submit button on the Create an Faq Category form. Store will "store" this new Faq Category object in your database::
 
     /**
      * Store a newly created resource in storage.
@@ -64,9 +88,14 @@ Store() is the function that gets hit when the user presses the submit button on
         return redirect()->route($this->dynamo->getRoute('edit'), $item->id);
     }
 
+Resulting DynamoView:
+
+.. thumbnail:: images/storeDynamoView.png
+   :align: center
+
 The next two functions are edit() and update() which go hand-in-hand the same way create() and store() go hand-in-hand. When the user clicks the edit button on one of
-the Employee objects in the index view, the form view for that particular employee will be presented to the user so they can make changes to that Employee
-(perhaps update their phone number)::
+the Faq Category objects in the index view, the form view for that particular employee will be presented to the user so they can make changes to that Faq Category
+(perhaps update a phone number, or in this case update the name of the category)::
 
     /**
      * Show the form for editing the specified resource.
@@ -89,7 +118,7 @@ the Employee objects in the index view, the form view for that particular employ
         return DynamoView::make($this->dynamo, 'dynamo::form', compact('item', 'formOptions'));
     }
 
-Update() gets hit when the user presses the Submit button and whatever changes they made will get updated for that particular Employee in the database::
+Update() gets hit when the user presses the Submit button and whatever changes they made will get updated for that particular Faq Category in the database::
 
     /**
      * Update the specified resource in storage.
@@ -150,3 +179,13 @@ Otherwise, the item will be deleted and they will be shown a success message, an
 
         return redirect()->route($this->dynamo->getRoute('index'));
     }
+
+Resulting DynamoView if object can't be deleted because it's connected to other objects in the relational database via pivot tables:
+
+.. thumbnail:: images/deleteFailDynamoView.png
+   :align: center
+
+Resulting DynamoView if object was successfully deleted:
+
+.. thumbnail:: images/deleteDynamoView.png
+  :align: center

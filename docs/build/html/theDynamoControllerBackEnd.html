@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Dynamo Controller &mdash; dynamo 1.2.8 documentation</title>
+  <title>The Dynamo Controller Backend &mdash; dynamo 1.2.8 documentation</title>
   
 
   
@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="_static/sphinxcontrib-images/LightBox2/lightbox2/css/lightbox.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Customizing the admin" href="customizingTheAdmin.html" />
+    <link rel="next" title="The Dynamo Controller Frontend" href="theDynamoControllerFrontEnd.html" />
     <link rel="prev" title="Welcome to Dynamo’s documentation!" href="index.html" /> 
 
   
@@ -81,10 +81,9 @@
             
               <p class="caption"><span class="caption-text">Dynamo Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">The Dynamo Controller</a></li>
-<li class="toctree-l1"><a class="reference internal" href="customizingTheAdmin.html">Customizing the admin</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The Dynamo Controller Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theDynamoControllerFrontEnd.html">The Dynamo Controller Frontend</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="formGroups.html">Creating Form Groups</a></li>
 <li class="toctree-l1"><a class="reference internal" href="many-to-many.html">Creating Many-to-Many Relationships Between Dynamo Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dynamoMethods.html">Dynamo Methods</a></li>
 </ul>
@@ -136,13 +135,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>The Dynamo Controller</li>
+      <li>The Dynamo Controller Backend</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/theDynamoController.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/theDynamoControllerBackEnd.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -155,15 +154,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="the-dynamo-controller">
-<h1>The Dynamo Controller<a class="headerlink" href="#the-dynamo-controller" title="Permalink to this headline">¶</a></h1>
-<p>The most helpful part about Dynamo is the Dynamo Controller. We highly encourage you to take a look at the DynamoController class and read the comments
-of each function to have a better understanding of what’s going on; however you don’t really need to understand anything that’s going on in this section
-to be able to use Dynamo; in fact the whole point of this package is so you don’t have to do this stuff yourself. If you’d like, skip this section, but its good
-to know whats going on under the hood ;) .</p>
-<a class="reference internal image-reference" href="https://media.giphy.com/media/6PAbFX7jVXWTK/giphy.gif"><img alt="https://media.giphy.com/media/6PAbFX7jVXWTK/giphy.gif" class="align-center" src="https://media.giphy.com/media/6PAbFX7jVXWTK/giphy.gif" style="width: 600px; height: 400px;" /></a>
-<p>Starting off, the Dynamo Controller has an index function that returns an index view of all the resources. So in the Employee
-example, the index function would show a view of all the Employee models saved in the database:</p>
+  <div class="section" id="the-dynamo-controller-backend">
+<h1>The Dynamo Controller Backend<a class="headerlink" href="#the-dynamo-controller-backend" title="Permalink to this headline">¶</a></h1>
+<p>This section isn’t necessary to know in order to use Dynamo. It is explaining encapsulated code within the package that you never actually see,
+but it might be helpful to understand what is going on when you create a model with Dynamo. Again, I would recommend watching the Quick Start video on the homepage
+of the documentation to get a better understanding.</p>
+<p>The Dynamo Controller class contains functions similar to the functions of a Resource route in Laravel. A Resource route is
+7 routes all in one. Recall that when you create a Dynamo object with the command,</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">php artisan make:dynamo FaqCategory</span>
+</pre></div>
+</div>
+<p>Dynamo will generate a route in your routes-&gt;web.php file,</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="x">Route::resource(&#39;faqcategory&#39;, &#39;\App\Http\Controllers\Admin\FaqCategoryController&#39;);</span>
+</pre></div>
+</div>
+<p>that links to the Dynamo Controller. The following routes are generated:</p>
+<a class=""
+               data-lightbox="group-f558b6fa-b5d5-42e9-a80c-e10254e8044b"
+               href="_images/routesGenerated.png"
+               title=""
+               data-title=""
+               ><img src="_images/routesGenerated.png"
+                     class="align-center"
+                     width="350px"
+                     height="350px"
+                     alt=""/>
+                </a><p>The index function that returns an index view of all the resources. So in the Faq Category
+example, the index function would show a view of all the Faq Categories saved in the database:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/**
  * Display a listing of the resource.
  *
@@ -177,7 +194,18 @@ public function index()
 }
 </pre></div>
 </div>
-<p>The next two functions are create() and store(). Create shows the form view that the user will use to create Employee objects:</p>
+<p>Resulting DynamoView:</p>
+<a class=""
+               data-lightbox="group-34b9f612-0a8c-47f1-89ea-c372859c5909"
+               href="_images/indexDynamoView.png"
+               title=""
+               data-title=""
+               ><img src="_images/indexDynamoView.png"
+                     class="align-center"
+                     width="350px"
+                     height="350px"
+                     alt=""/>
+                </a><p>The next two functions are create() and store(). Create shows the form view that the user will use to create Faq Category objects:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/**
  * Show the form for creating a new resource.
  *
@@ -196,7 +224,18 @@ public function create()
 }
 </pre></div>
 </div>
-<p>Store() is the function that gets hit when the user presses the submit button on the Create an Employee form. Store will “store” this new Employee object in your database:</p>
+<p>Resulting DynamoView:</p>
+<a class=""
+               data-lightbox="group-7df7e68a-3772-400d-905b-3fdc586d50b2"
+               href="_images/createDynamoView.png"
+               title=""
+               data-title=""
+               ><img src="_images/createDynamoView.png"
+                     class="align-center"
+                     width="350px"
+                     height="350px"
+                     alt=""/>
+                </a><p>Store() is the function that gets hit when the user presses the submit button on the Create an Faq Category form. Store will “store” this new Faq Category object in your database:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/**
  * Store a newly created resource in storage.
  *
@@ -215,9 +254,20 @@ public function store(Request $request)
 }
 </pre></div>
 </div>
-<p>The next two functions are edit() and update() which go hand-in-hand the same way create() and store() go hand-in-hand. When the user clicks the edit button on one of
-the Employee objects in the index view, the form view for that particular employee will be presented to the user so they can make changes to that Employee
-(perhaps update their phone number):</p>
+<p>Resulting DynamoView:</p>
+<a class=""
+               data-lightbox="group-c269b2ee-6fb1-4fc4-8888-93acca454a67"
+               href="_images/storeDynamoView.png"
+               title=""
+               data-title=""
+               ><img src="_images/storeDynamoView.png"
+                     class="align-center"
+                     width="350px"
+                     height="350px"
+                     alt=""/>
+                </a><p>The next two functions are edit() and update() which go hand-in-hand the same way create() and store() go hand-in-hand. When the user clicks the edit button on one of
+the Faq Category objects in the index view, the form view for that particular employee will be presented to the user so they can make changes to that Faq Category
+(perhaps update a phone number, or in this case update the name of the category):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/**
  * Show the form for editing the specified resource.
  *
@@ -240,7 +290,7 @@ public function edit($id)
 }
 </pre></div>
 </div>
-<p>Update() gets hit when the user presses the Submit button and whatever changes they made will get updated for that particular Employee in the database:</p>
+<p>Update() gets hit when the user presses the Submit button and whatever changes they made will get updated for that particular Faq Category in the database:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/**
  * Update the specified resource in storage.
  *
@@ -302,7 +352,29 @@ public function destroy($id)
 }
 </pre></div>
 </div>
-</div>
+<p>Resulting DynamoView if object can’t be deleted because it’s connected to other objects in the relational database via pivot tables:</p>
+<a class=""
+               data-lightbox="group-ce84f07d-5732-4bf9-9fb4-94af4e245af9"
+               href="_images/deleteFailDynamoView.png"
+               title=""
+               data-title=""
+               ><img src="_images/deleteFailDynamoView.png"
+                     class="align-center"
+                     width="350px"
+                     height="350px"
+                     alt=""/>
+                </a><p>Resulting DynamoView if object was successfully deleted:</p>
+<a class=""
+               data-lightbox="group-3fdf5c57-2ae5-493b-9784-55ec74c54cc8"
+               href="_images/deleteDynamoView.png"
+               title=""
+               data-title=""
+               ><img src="_images/deleteDynamoView.png"
+                     class="align-center"
+                     width="350px"
+                     height="350px"
+                     alt=""/>
+                </a></div>
 
 
            </div>
@@ -312,7 +384,7 @@ public function destroy($id)
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="customizingTheAdmin.html" class="btn btn-neutral float-right" title="Customizing the admin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="theDynamoControllerFrontEnd.html" class="btn btn-neutral float-right" title="The Dynamo Controller Frontend" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral" title="Welcome to Dynamo’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

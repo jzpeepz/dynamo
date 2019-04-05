@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Customizing the admin &mdash; dynamo 1.2.8 documentation</title>
+  <title>The Dynamo Controller Frontend &mdash; dynamo 1.2.8 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Installation" href="installation.html" />
-    <link rel="prev" title="The Dynamo Controller" href="theDynamoController.html" /> 
+    <link rel="prev" title="The Dynamo Controller Backend" href="theDynamoControllerBackEnd.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -81,10 +81,9 @@
             
               <p class="caption"><span class="caption-text">Dynamo Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="theDynamoController.html">The Dynamo Controller</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Customizing the admin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theDynamoControllerBackEnd.html">The Dynamo Controller Backend</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The Dynamo Controller Frontend</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="formGroups.html">Creating Form Groups</a></li>
 <li class="toctree-l1"><a class="reference internal" href="many-to-many.html">Creating Many-to-Many Relationships Between Dynamo Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dynamoMethods.html">Dynamo Methods</a></li>
 </ul>
@@ -136,13 +135,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Customizing the admin</li>
+      <li>The Dynamo Controller Frontend</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/customizingTheAdmin.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/theDynamoControllerFrontEnd.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -155,22 +154,79 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="customizing-the-admin">
-<h1>Customizing the admin<a class="headerlink" href="#customizing-the-admin" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="the-dynamo-controller-frontend">
+<h1>The Dynamo Controller Frontend<a class="headerlink" href="#the-dynamo-controller-frontend" title="Permalink to this headline">¶</a></h1>
+<p>At this point in the workflow, you have:</p>
+<ol class="arabic">
+<li><p class="first">Installed Dynamo into your Laravel app by running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">composer</span> <span class="n">require</span> <span class="n">jzpeepz</span><span class="o">/</span><span class="n">dynamo</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Created an Object using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">php</span> <span class="n">artisan</span> <span class="n">make</span><span class="p">:</span><span class="n">dynamo</span> <span class="n">FaqCategory</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>This command created a database migration, a model, and controller. Once you define the migration and run php artisan migrate, you’re now ready for the third step:</p>
+<ol class="arabic simple" start="3">
+<li>Implement the Dynamo Controller!</li>
+</ol>
 <p>Admin customization happens in your controller inside the getDynamo() function of the Dynamo Controller.
-This function returns a Dynamo instance which has lots of chainable methods that customize your Dynamo admin. Lets stick with our Employee example:</p>
+This function returns a Dynamo instance which has lots of chainable methods that customize your Dynamo admin. Lets use an Employee object for an example:</p>
 <blockquote>
 <div><img alt="_images/EmployeeController1.png" class="align-center" src="_images/EmployeeController1.png" />
 </div></blockquote>
-<p>This is what your Dynamo Controller will look like by default right after it is created. It has one function called getDynamo() that returns a Dynamo object.
-By default the auto() function is called which will take all the things your employee object consist of (that you defined in your database migration, say first_name, last_name,
+<p>This is what your Dynamo Controller will look like by default right after it is created. By default the auto() function is called which will
+take all the things your employee object consist of (that you defined in your database migration, say first_name, last_name,
 phone_number) and create fields in the form for them. You can chain on methods to this auto function if you need to do more specific things.
 It’s super easy! Check it out…</p>
-<img alt="_images/ControllerExample.gif" class="align-center" src="_images/ControllerExample.gif" />
-<img alt="_images/EmployeeController2.png" class="align-center" src="_images/EmployeeController2.png" />
-<p>Everything you see before the comment “//ClearIndexes” will appear in the form view when someone is creating an Employee object in the database.
-Everything you see after the comment “//ClearIndexes” will appear in the index view when someone is viewing all the Employees in the database.
-Now, keep in mind, all the function calls you see above happened automatically with the auto() function.
+<a class=""
+               data-lightbox="group-8facb706-e5ff-47c4-be96-fff87e974ae5"
+               href="_images/ControllerExample.gif"
+               title=""
+               data-title=""
+               ><img src="_images/ControllerExample.gif"
+                     class="align-center"
+                     width="350px"
+                     height="350px"
+                     alt=""/>
+                </a><a class=""
+               data-lightbox="group-81f4c44a-5ef3-4df4-8dcc-2896474f2e9d"
+               href="_images/EmployeeController2.png"
+               title=""
+               data-title=""
+               ><img src="_images/EmployeeController2.png"
+                     class="align-center"
+                     width="350px"
+                     height="350px"
+                     alt=""/>
+                </a><p>Everything you see before the comment “//ClearIndexes” will appear in the form view when someone is creating an object in the database.</p>
+<p>Example of Form View of a Dynamo admin/module:</p>
+<a class=""
+               data-lightbox="group-786a9832-ef26-4a3b-bb66-4a267345e71c"
+               href="_images/formOfModuleView.png"
+               title=""
+               data-title=""
+               ><img src="_images/formOfModuleView.png"
+                     class="align-center"
+                     width="350px"
+                     height="350px"
+                     alt=""/>
+                </a><p>Everything you see after the comment “//ClearIndexes” will appear in the index view when someone is viewing all the Objects in the database.</p>
+<p>Example of Index View of a Dynamo admin/module:</p>
+<a class=""
+               data-lightbox="group-6a13489b-602c-4a4a-b395-1bffd7e14031"
+               href="_images/indexOfModuleView.png"
+               title=""
+               data-title=""
+               ><img src="_images/indexOfModuleView.png"
+                     class="align-center"
+                     width="350px"
+                     height="350px"
+                     alt=""/>
+                </a><p>Now, keep in mind, all the function calls you see above happened automatically with the auto() function.
 The only thing the auto function can’t do is stuff like renaming a field like you see happen at “-&gt;file(“photo”, “Headshot”)” where
 you might want it to say Headshot rather than photo. We will go into this in more detail in the Dynamo Methods section.</p>
 <p>This is the basics of Dynamo. You have created an admin on your custom CMS for managing Employees
@@ -193,7 +249,7 @@ Faq Categories, and so on.</p>
         <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="theDynamoController.html" class="btn btn-neutral" title="The Dynamo Controller" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="theDynamoControllerBackEnd.html" class="btn btn-neutral" title="The Dynamo Controller Backend" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

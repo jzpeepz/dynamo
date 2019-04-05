@@ -81,10 +81,9 @@
             
               <p class="caption"><span class="caption-text">Dynamo Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="theDynamoController.html">The Dynamo Controller</a></li>
-<li class="toctree-l1"><a class="reference internal" href="customizingTheAdmin.html">Customizing the admin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theDynamoControllerBackEnd.html">The Dynamo Controller Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theDynamoControllerFrontEnd.html">The Dynamo Controller Frontend</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="formGroups.html">Creating Form Groups</a></li>
 <li class="toctree-l1"><a class="reference internal" href="many-to-many.html">Creating Many-to-Many Relationships Between Dynamo Models</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Dynamo Methods</a></li>
 </ul>
@@ -209,23 +208,13 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
 <h4><code>addActionButton()</code></h4>
 <p>The <code>addField</code> method allows you to create a button along-side the other default action butons, Edit and Delete. Keep in mind these default buttons can be
    remove by calling hideDelete() or removeBoth().</p><a class=""
-               data-lightbox="group-ede5d30e-df13-4fe3-bbe7-4bddf992df93"
+               data-lightbox="group-4b2e428f-cca4-4cdf-8801-98a72dce8071"
                href="_images/addActionButton1.png"
                title="Here we see the code, simply chain the function onto your Dynamo object in your Dynamo controller. addActionButton() takes one parameter which should be a closure function
 that return raw html for a link and bootstraps button classes. You can return any raw html you want; it doesn't have to be bootstrap, you could just use the button html tag."
                data-title="Here we see the code, simply chain the function onto your Dynamo object in your Dynamo controller. addActionButton() takes one parameter which should be a closure function
 that return raw html for a link and bootstraps button classes. You can return any raw html you want; it doesn't have to be bootstrap, you could just use the button html tag."
                ><img src="_images/addActionButton1.png"
-                     class="align-center"
-                     width="350px"
-                     height="350px"
-                     alt=""/>
-                </a><a class=""
-               data-lightbox="group-c382fc50-efaa-469f-99bc-67c56b425564"
-               href="_images/addActionButton2.png"
-               title="Here we see the test button alongside the other buttons, Edit and Delete, in the Action index."
-               data-title="Here we see the test button alongside the other buttons, Edit and Delete, in the Action index."
-               ><img src="_images/addActionButton2.png"
                      class="align-center"
                      width="350px"
                      height="350px"
@@ -238,7 +227,7 @@ that return raw html for a link and bootstraps button classes. You can return an
    that calls addField. In the case where you use methods such as text(), file(), checkbox(), hasMany(), password(), select(), textarea(), you are actually
    just calling __call() in reality, which calls addField(). Now, you are free to create your own methods similar to the ones I just listed. You have to created
    them in the vendor->jzpeepz->dynamo->src->resources->views->partials->fields directory.</p><a class=""
-               data-lightbox="group-fde6b76e-712a-4186-b439-1202b71ede12"
+               data-lightbox="group-e0ea91e8-94b8-49b2-b7c0-a464bac96a40"
                href="_images/addField1.png"
                title="Path to addField() partials."
                data-title="Path to addField() partials."
@@ -254,7 +243,7 @@ that return raw html for a link and bootstraps button classes. You can return an
 <p>The <code>addFilter</code> method is a brand new function in Dynamo that lets you filter the index view of an admin by whatever you want. We needed to implement
    this feature for our House of Representatives project because our client wanted to be able to "Filter" the Representatives by Terms. Terms and Representatives have
    a many-to-many relationship with each other in our database. See how we used addFilter below.</p><a class=""
-               data-lightbox="group-15577ac0-7f34-46f8-8b44-8f63cabee94a"
+               data-lightbox="group-c65b2f17-40ed-46cc-b5a1-34d870a45d86"
                href="_images/addFilter1.png"
                title="Here is where we called addFilter on the DynamoController. The parameters are the database field you want to filter by(in this case terms), a collection
 of the objects(in this case, we grabbed all terms names and sorted them in descending order), then a closure function that actually does the filtering. In
@@ -268,7 +257,7 @@ this case, depending on what term you choose, we will grab all the Representativ
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-bfd9e9b4-94ae-4517-816b-e5de71d4044a"
+               data-lightbox="group-1a76cff6-8d4c-4743-b465-b28309ab3391"
                href="_images/addFilter2.png"
                title="Filtered by Term 2222"
                data-title="Filtered by Term 2222"
@@ -278,7 +267,7 @@ this case, depending on what term you choose, we will grab all the Representativ
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-5da16144-e2e8-431e-907c-d5c37cd3586d"
+               data-lightbox="group-7dc9a40e-fa8f-4cb1-9a9e-bb2f762d88e9"
                href="_images/addFilter3.png"
                title="Filtered by term 2016"
                data-title="Filtered by term 2016"
@@ -293,7 +282,7 @@ this case, depending on what term you choose, we will grab all the Representativ
 <h4><code>addHandler()</code></h4>
 <p>The <code>addHandler</code> method is called by default in your DynamoController and will auto-populate the form
    with text boxes for each field in the database for that object.</p><a class=""
-               data-lightbox="group-ea3113dc-167d-44cc-a165-69b6da3615f4"
+               data-lightbox="group-f6092b5f-b597-4c04-9c2a-a90c4d0d6ad3"
                href="_images/auto3.png"
                title="Auto function being called on the newly created Dynamo object."
                data-title="Auto function being called on the newly created Dynamo object."
@@ -303,7 +292,7 @@ this case, depending on what term you choose, we will grab all the Representativ
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-b2d6f6c3-e1ea-416a-bc5f-1f5f7dcc5e10"
+               data-lightbox="group-d8b51242-790b-4d39-8768-b4df5e0f9618"
                href="_images/auto1.png"
                title=""
                data-title=""
@@ -320,7 +309,7 @@ this case, depending on what term you choose, we will grab all the Representativ
    three parameters, but only passing one is necessary. The first parameter is the name of the field in your database. The second
    is the how you want the name to appear in the index view. The third is a closure function to do something specific. Notice
    in the examples below of cases where addIndex is used with one, two, and three parameters and their outputs on the index view.</p><a class=""
-               data-lightbox="group-b6516f5c-e00c-4214-aa52-ed1f379b2d5b"
+               data-lightbox="group-3475c019-ae5d-40cf-9764-32f801e20583"
                href="_images/addIndex1.png"
                title="In the closure function, we are checking to see if this Representative has a Headshot photo in the database or not. If not, just display an empty string.
 If so, display their image with a certain width."
@@ -332,7 +321,7 @@ If so, display their image with a certain width."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-568b4c81-3519-445b-94c6-ffdd93644f97"
+               data-lightbox="group-86d7735e-e4e3-4ee5-9808-ddd8273adfe4"
                href="_images/addIndex2.png"
                title="The first three Representatives did not have pictures, the fourth did."
                data-title="The first three Representatives did not have pictures, the fourth did."
@@ -342,7 +331,7 @@ If so, display their image with a certain width."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-b79bd287-419b-4970-bf04-868d44d28593"
+               data-lightbox="group-95e5b9bd-ad83-4a5e-9a9d-6803b2ca2a2f"
                href="_images/addIndex3.png"
                title="The third addIndex uses a closure that uses a ternary operation to check if this Alert is activated. If so, a success box is rendered with the word "Yes" in it.
 If not, a danger box is rendered with the word "No" in it."
@@ -354,7 +343,7 @@ If not, a danger box is rendered with the word "No" in it."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-9f60ecc0-7a81-473a-885b-f35d57013999"
+               data-lightbox="group-0201d2af-9e93-403d-ae00-7920661cb5c7"
                href="_images/addIndex4.png"
                title=""
                data-title=""
@@ -369,7 +358,7 @@ If not, a danger box is rendered with the word "No" in it."
 <h4><code>addIndexButton()</code></h4>
 <p>The <code>addIndexButton</code> method allows you to add a button along side the Add button in your Dynamo Manager. One example of where you would want to use addIndexButton
    would be if you wanted to minimize the amount of modules in your navigation. Below is an example:</p><a class=""
-               data-lightbox="group-0cfebde8-f9c2-4fac-ae34-a298101fd5ff"
+               data-lightbox="group-82ac9355-4de6-4681-bf60-1497f20fcb6c"
                href="_images/addIndexButton1.png"
                title="Here, in the top right corner, we add a button in the Representatives Manager that says Import Representatives from Spreadsheet that links to
 another form for uploading Representatives via .csv."
@@ -381,7 +370,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-9b827c16-115c-4979-b24e-0fbb2822a96c"
+               data-lightbox="group-ba9ec2cd-f9c9-4af6-b121-92d1a57fd314"
                href="_images/addIndexButton2.png"
                title="This is the page the button links to"
                data-title="This is the page the button links to"
@@ -391,7 +380,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-b5d96873-a314-429a-a19e-478c553c7436"
+               data-lightbox="group-9d3c5c4f-14d0-407d-a007-9427256baf79"
                href="_images/addIndexButton3.png"
                title="This is the function in use. It takes one parameter that is a closure function that returns raw html linking to that page."
                data-title="This is the function in use. It takes one parameter that is a closure function that returns raw html linking to that page."
@@ -406,7 +395,7 @@ another form for uploading Representatives via .csv."
 <h4><code>auto()</code></h4>
 <p>The <code>auto</code> method is called by default in your DynamoController and will auto-populate the form
    with text boxes for each field in the database for that object, and will automatically set the index view with those same fields.</p><a class=""
-               data-lightbox="group-5621f66f-28a3-4538-8ff6-c0911aaf3860"
+               data-lightbox="group-3ea75f08-87b4-4424-83dc-b7ad2be236a2"
                href="_images/auto3.png"
                title="Auto function being called on the newly created Dynamo object."
                data-title="Auto function being called on the newly created Dynamo object."
@@ -416,7 +405,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-c1d70c9b-8b84-4479-9226-a5be0d4cec4b"
+               data-lightbox="group-80171db2-b788-4e8a-a409-d77cb6a0a860"
                href="_images/auto1.png"
                title="The form that auto() produces for the Faq object."
                data-title="The form that auto() produces for the Faq object."
@@ -426,7 +415,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-9d5226fe-4ec8-4b1e-9f79-e5beb7157e8a"
+               data-lightbox="group-b6fdf1ef-bb48-4fc1-ad6a-a30f60b9a6dc"
                href="_images/auto2.png"
                title="The index view auto() produces for Faqs."
                data-title="The index view auto() produces for Faqs."
@@ -441,7 +430,7 @@ another form for uploading Representatives via .csv."
 <h4><code>checkbox()</code></h4>
 <p>The <code>checkbox</code> method lets you add a checkbox to your form. It is particularly useful if you have a boolean attribute for an object in your database.
    For example, we used checkboxes on our House of Representatives website to allow the user to "Activate" Faq's and Alerts, as seen in the screenshots below.</p><a class=""
-               data-lightbox="group-9dab8469-cffd-4870-9c3b-164d8953ded6"
+               data-lightbox="group-c9cbb88f-d991-4601-a99a-0b26f55f3be8"
                href="_images/checkbox1.png"
                title="A checkbox method is called here, with an array of options containing one option, 'label', so let the user know that they can only activate one Alert at a time."
                data-title="A checkbox method is called here, with an array of options containing one option, 'label', so let the user know that they can only activate one Alert at a time."
@@ -451,7 +440,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-926b5928-4686-4b37-92b0-2460d07fef83"
+               data-lightbox="group-db9e594b-063a-41ac-9da5-d324967e2399"
                href="_images/checkbox2.png"
                title="The result on the form for Alerts."
                data-title="The result on the form for Alerts."
@@ -461,7 +450,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-7ec652b9-42db-406c-9b7e-1516e601dc84"
+               data-lightbox="group-023de83f-4d50-4417-afa6-b1d44d87a193"
                href="_images/checkbox3.png"
                title="The result on the index view for Alerts."
                data-title="The result on the index view for Alerts."
@@ -477,7 +466,7 @@ another form for uploading Representatives via .csv."
 <p>The <code>clearIndexes</code> method will remove all the columns that are generated from the auto() function that is at
    the top of the DynamoController by default. After calling clearIndexes, you will certainly want to call addIndex right after.
    Notice the examples below.</p><a class=""
-               data-lightbox="group-5161a5a3-303a-4781-9982-87abcfb849c4"
+               data-lightbox="group-79337794-0ac6-4cc7-a6f6-e83caae1c3e7"
                href="_images/clearIndexes1.png"
                title="I've commented out my addIndex() calls for the sake of demonstration. The next image shows the result."
                data-title="I've commented out my addIndex() calls for the sake of demonstration. The next image shows the result."
@@ -487,7 +476,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-28d19a5a-ab26-407c-a396-3e0ab54bb712"
+               data-lightbox="group-0eb39798-a21e-45bf-83bd-05f05eb1b5ec"
                href="_images/clearIndexes2.png"
                title=""
                data-title=""
@@ -497,7 +486,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-99c04c4f-3e02-4715-89e3-ad159b2c6a8e"
+               data-lightbox="group-1785a77f-4a8e-46e6-bae3-e416377a44f1"
                href="_images/clearIndexes3.png"
                title="Now I've uncommented my addIndex calls to show the result in the next image."
                data-title="Now I've uncommented my addIndex calls to show the result in the next image."
@@ -507,7 +496,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-7efb8528-4e45-41dd-98d4-2f5273a8961d"
+               data-lightbox="group-394ef01e-41a3-49dd-9d94-07940604d52e"
                href="_images/clearIndexes4.png"
                title=""
                data-title=""
@@ -522,7 +511,7 @@ another form for uploading Representatives via .csv."
 <h4><code>file()</code></h4>
 <p>The <code>file</code> method will allow the user to select a file from their computer when filling out the form for this field. Let's say you have a Staff module
    and you want the user to be able create Staff "objects" with their name, and photo. Check out the example below.</p><a class=""
-               data-lightbox="group-acfdddf5-6087-40ee-a95e-763644c6fd7f"
+               data-lightbox="group-05a2f5da-c525-4c48-aadd-ecc91ed358e0"
                href="_images/file1.png"
                title="Notice the file method call."
                data-title="Notice the file method call."
@@ -532,7 +521,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-45795970-45b2-40f7-a799-53a02b8ce0d2"
+               data-lightbox="group-4926eda4-d087-40c1-8ad2-0cee8bf0a590"
                href="_images/file2.png"
                title="This is the result for the form view. The user can select the photo from their computer."
                data-title="This is the result for the form view. The user can select the photo from their computer."
@@ -542,7 +531,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-aac9fd24-f207-4082-ad06-d4709fa2db6b"
+               data-lightbox="group-faaba955-d3c1-4fd1-9f0a-7e7926ffa8d2"
                href="_images/file3.png"
                title="This is the result of the index view."
                data-title="This is the result of the index view."
@@ -557,7 +546,7 @@ another form for uploading Representatives via .csv."
 <h4><code>group()</code></h4>
 <p>The <code>group</code> method is called by default in your DynamoController and will auto-populate the form
    with text boxes for each field in the database for that object.</p><a class=""
-               data-lightbox="group-e6725710-38f5-43c5-b472-b9d5ee3cf2d0"
+               data-lightbox="group-b691e01e-edc7-4ee0-8aeb-1a6941818fdc"
                href="_images/auto3.png"
                title=""
                data-title=""
@@ -568,7 +557,7 @@ another form for uploading Representatives via .csv."
                      alt=""/>
                 </a><p>Auto function being called on the newly created Dynamo object.</p>
 <a class=""
-               data-lightbox="group-a4027559-1c72-4155-bf20-e6b0f45e6f4d"
+               data-lightbox="group-625af70d-4f97-48a5-8015-0b23e03b6f78"
                href="_images/auto1.png"
                title=""
                data-title=""
@@ -583,7 +572,7 @@ another form for uploading Representatives via .csv."
 <h4><code>hasMany()</code></h4>
 <p>The <code>hasMany</code> method is called by default in your DynamoController and will auto-populate the form
    with text boxes for each field in the database for that object, and will automatically set the index view with those same fields.</p><a class=""
-               data-lightbox="group-41e04e78-f8d4-4c8b-ac10-ab563a5cfc28"
+               data-lightbox="group-fedbdfba-dfc4-4b3e-bac8-7107c6a875e9"
                href="_images/auto3.png"
                title="Auto function being called on the newly created Dynamo object."
                data-title="Auto function being called on the newly created Dynamo object."
@@ -593,7 +582,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-e505737a-4ac9-4072-a354-019ffa08e972"
+               data-lightbox="group-4a3f32c1-4665-4bc9-b87d-c9546971049d"
                href="_images/auto1.png"
                title="The form that auto() produces for the Faq object."
                data-title="The form that auto() produces for the Faq object."
@@ -603,7 +592,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-546a592f-8702-41f0-a04f-2ef904436d1f"
+               data-lightbox="group-32105b6a-9628-4479-968e-f64f5e7c3787"
                href="_images/auto2.png"
                title="The index view auto() produces for Faqs."
                data-title="The index view auto() produces for Faqs."
@@ -621,7 +610,7 @@ another form for uploading Representatives via .csv."
    database using foreign keys and such, then you can use this method. First go to the model of FAQ and add a public function that says FAQs belongToMany FAQ Categories,
    and go to the model of the FAQ Category and do the same. Next, you will be able to chain on the hasManySimple() function on the FAQ DynamoController! Check out the
    example below.</p><a class=""
-               data-lightbox="group-fe7f4e93-6e01-402d-9806-06bbe297c7b4"
+               data-lightbox="group-90d41b92-cfa6-4019-8fca-d591589c6ab9"
                href="_images/hasManySimple1.png"
                title="First, make sure you have created the relationship your in database migrations."
                data-title="First, make sure you have created the relationship your in database migrations."
@@ -631,7 +620,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-936ed955-ae7b-4019-81f7-8b1b373964e2"
+               data-lightbox="group-6fdd1655-f230-46c1-80ac-bb6f4a8dcc89"
                href="_images/hasManySimple2.png"
                title="Next, make sure both your models have a public function that relates the two."
                data-title="Next, make sure both your models have a public function that relates the two."
@@ -641,7 +630,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-c9c1b292-be85-49ae-a7a5-25c3a64f5df0"
+               data-lightbox="group-d17286db-d6f6-4d39-978a-572cca0c916b"
                href="_images/hasManySimple3.png"
                title=""
                data-title=""
@@ -651,7 +640,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-10dfbad9-f9c6-42a7-8c8c-9d0b57878d01"
+               data-lightbox="group-8d8b8c58-36d3-4950-8d85-21cfc56b1fcd"
                href="_images/hasManySimple4.png"
                title="Now, on the controller, you can call hasManySimple() and the first parameter should be named EXACTLY the way you named in on the model in the previous steps."
                data-title="Now, on the controller, you can call hasManySimple() and the first parameter should be named EXACTLY the way you named in on the model in the previous steps."
@@ -661,7 +650,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-6ca9e9f7-b776-4c84-a1fd-d63dfa708934"
+               data-lightbox="group-d7880d6f-7091-41ac-a607-33f458d20ef6"
                href="_images/hasManySimple5.png"
                title="This is the result on the form. The user is able to select many categories for each FAQ they make."
                data-title="This is the result on the form. The user is able to select many categories for each FAQ they make."
@@ -671,7 +660,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-33721d8c-24e7-4dd7-861b-92949fc1ac49"
+               data-lightbox="group-059e2f12-27a1-4c37-94bf-fcfe5e8a4cce"
                href="_images/hasManySimple6.png"
                title="And when they submit the form, your database will create the relationship between this FAQ_id and that FAQ Category_id."
                data-title="And when they submit the form, your database will create the relationship between this FAQ_id and that FAQ Category_id."
@@ -686,7 +675,7 @@ another form for uploading Representatives via .csv."
 <h4><code>hideAdd()</code></h4>
 <p>The <code>hideAdd</code> method simply hides the Add button, so the user isn't able to add new objects/items into the database. You would use this
    if you wanted them to be able to view, edit, and delete the items, but not add new items. You could also use the hideDelete() method in combination with this method.</p><a class=""
-               data-lightbox="group-bf6829d6-4c77-4a07-b28d-c0ae18d3284b"
+               data-lightbox="group-21fdeca2-a4c1-4042-b53e-bae666ff31ed"
                href="_images/hideAdd1.png"
                title="First I comment add hideAdd() to show the default."
                data-title="First I comment add hideAdd() to show the default."
@@ -696,7 +685,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-7fa3bcfe-c70d-43e1-a74b-e37089f483d5"
+               data-lightbox="group-0de26972-8857-40b2-a4e1-759063a5ce98"
                href="_images/hideAdd2.png"
                title="Notice that the add FAQ Category button exist in the top right corner of the container by default."
                data-title="Notice that the add FAQ Category button exist in the top right corner of the container by default."
@@ -706,7 +695,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-6a22e7ff-d7d7-49a7-a6c0-7f4ff4bd7b19"
+               data-lightbox="group-6547022d-90c9-4a08-9248-0db301592e08"
                href="_images/hideAdd3.png"
                title="Now I uncomment hideAdd(), ..."
                data-title="Now I uncomment hideAdd(), ..."
@@ -716,7 +705,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-8a61eaf5-0fa8-42e0-b84e-5c6f71c9327d"
+               data-lightbox="group-ecb61b41-988e-4f09-a4e7-97e21ff78a7d"
                href="_images/hideAdd4.png"
                title="Now the FAQ Category button isn't available to the user so they can't create new FAQ Categories."
                data-title="Now the FAQ Category button isn't available to the user so they can't create new FAQ Categories."
@@ -731,7 +720,7 @@ another form for uploading Representatives via .csv."
 <h4><code>hideDelete()</code></h4>
 <p>The <code>hideDelete</code> method simply hides the delete button on the index view, so the user will not be able to delete the
    object/item from the database.</p><a class=""
-               data-lightbox="group-ad8de434-fc64-4817-93b0-4605a27e20b8"
+               data-lightbox="group-d5435714-ec96-47df-bc11-a9a3c424e7e2"
                href="_images/hideDelete1.png"
                title="First I just took a basic DynamoController and commented out the hideDelete() function to show the default."
                data-title="First I just took a basic DynamoController and commented out the hideDelete() function to show the default."
@@ -741,7 +730,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-1b087a69-055a-41d6-b824-bbe3294a0310"
+               data-lightbox="group-d1d97c06-b70a-4c6f-9ccb-925180f0eb18"
                href="_images/hideDelete2.png"
                title="Notice you have an Edit/Delete button by default under your Action index"
                data-title="Notice you have an Edit/Delete button by default under your Action index"
@@ -751,7 +740,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-92cd8fb7-5cff-4654-8b95-f07bc36ee9cc"
+               data-lightbox="group-382fec15-9f4f-40ba-9997-c99bba6471d4"
                href="_images/hideDelete3.png"
                title="Now I uncomment hideDelete(), ..."
                data-title="Now I uncomment hideDelete(), ..."
@@ -761,7 +750,7 @@ another form for uploading Representatives via .csv."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-54fed3fc-6715-4867-9b38-850fb73a999f"
+               data-lightbox="group-1dc0ed5b-490a-4ce0-b140-e6259a3f1c9e"
                href="_images/hideDelete4.png"
                title="And the delete button is hidden. Magical isn't it?"
                data-title="And the delete button is hidden. Magical isn't it?"
@@ -776,7 +765,7 @@ another form for uploading Representatives via .csv."
 <h4><code>indexOrderBy()</code></h4>
 <p>The <code>indexOrderBy</code> method is how you order all the objects in the index view. Commonly, you might order by last name or by date created.
    By default, it orders in ascending order, you can pass a second parameter of 'desc' if you'd like to reverse it.</p><a class=""
-               data-lightbox="group-9f8506dc-b42d-4e83-86bd-591d8b2e6f6e"
+               data-lightbox="group-037e9842-a5ec-4fce-992e-20ecb39bffc1"
                href="_images/indexOrderBy1.png"
                title="In this case, rather than indexOrderBy('last_name'), we made it where the user could drag-and-drop the staff members in the order they would like in the index view.
 Wherever they dropped the Staff member, it would update that staff members position in the database. Then we can just indexOrderBy('position')."
@@ -788,7 +777,7 @@ Wherever they dropped the Staff member, it would update that staff members posit
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-9deef3e3-c385-43a0-8abe-ff71286e6043"
+               data-lightbox="group-eec0c231-c981-4a43-b393-46b57b948aa1"
                href="_images/indexOrderBy2.png"
                title=""
                data-title=""
@@ -802,7 +791,7 @@ Wherever they dropped the Staff member, it would update that staff members posit
 <p><a name="method-paginate"></a></p>
 <h4><code>paginate()</code></h4>
 <p>The <code>paginate</code> method </p><a class=""
-               data-lightbox="group-e6805464-b034-4e1a-a22d-f43fc8eb3f6d"
+               data-lightbox="group-df2c9591-8382-4918-9c5f-c74a402ee27b"
                href="_images/auto3.png"
                title=""
                data-title=""
@@ -813,7 +802,7 @@ Wherever they dropped the Staff member, it would update that staff members posit
                      alt=""/>
                 </a><p>Auto function being called on the newly created Dynamo object.</p>
 <a class=""
-               data-lightbox="group-af6da1f1-8c05-4738-921e-7b85b11491d4"
+               data-lightbox="group-350cab36-7a5b-4d3f-8fa0-70f5cc3b74e5"
                href="_images/auto1.png"
                title=""
                data-title=""
@@ -829,7 +818,7 @@ Wherever they dropped the Staff member, it would update that staff members posit
 <p>The <code>password</code> method will remove all the columns that are generated from the auto() function that is at
    the top of the DynamoController by default. After calling clearIndexes, you will certainly want to call addIndex right after.
    Notice the examples below.</p><a class=""
-               data-lightbox="group-af3e55d0-6aab-4c8e-9aa9-82aa753323fd"
+               data-lightbox="group-3f29ea41-788a-4904-ba33-c2a123f86df8"
                href="_images/clearIndexes1.png"
                title="I've commented out my addIndex() calls for the sake of demonstration. The next image shows the result."
                data-title="I've commented out my addIndex() calls for the sake of demonstration. The next image shows the result."
@@ -839,7 +828,7 @@ Wherever they dropped the Staff member, it would update that staff members posit
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-ea5b418e-a1db-4772-aeca-360af88bacc9"
+               data-lightbox="group-f185ba9e-e939-46e1-a57d-6da56f41e4ce"
                href="_images/clearIndexes2.png"
                title=""
                data-title=""
@@ -849,7 +838,7 @@ Wherever they dropped the Staff member, it would update that staff members posit
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-9a2bdc23-0b69-468c-9316-75ea7a5b6982"
+               data-lightbox="group-e388df89-21f9-4367-a1e6-d2af905dd591"
                href="_images/clearIndexes3.png"
                title="Now I've uncommented my addIndex calls to show the result in the next image."
                data-title="Now I've uncommented my addIndex calls to show the result in the next image."
@@ -859,7 +848,7 @@ Wherever they dropped the Staff member, it would update that staff members posit
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-29a514f7-f0c8-4a7b-a97e-146d3af7253c"
+               data-lightbox="group-8d03a297-01b3-4ef1-98eb-43e6e6afe639"
                href="_images/clearIndexes4.png"
                title=""
                data-title=""
@@ -874,7 +863,7 @@ Wherever they dropped the Staff member, it would update that staff members posit
 <h4><code>removeBoth()</code></h4>
 <p>The <code>removeBoth</code> method is called by default in your DynamoController and will auto-populate the form
    with text boxes for each field in the database for that object.</p><a class=""
-               data-lightbox="group-4171ea1c-95fe-4c2b-a815-1301d524c9ba"
+               data-lightbox="group-4dc64072-cc10-4326-bc67-3dd73f9ad173"
                href="_images/auto3.png"
                title=""
                data-title=""
@@ -885,7 +874,7 @@ Wherever they dropped the Staff member, it would update that staff members posit
                      alt=""/>
                 </a><p>Auto function being called on the newly created Dynamo object.</p>
 <a class=""
-               data-lightbox="group-ce25bfad-c25c-4837-b7c6-0e63adebf79a"
+               data-lightbox="group-c85ca810-bc9c-4f88-812b-ef2364bfe1ed"
                href="_images/auto1.png"
                title=""
                data-title=""
@@ -902,7 +891,7 @@ Wherever they dropped the Staff member, it would update that staff members posit
    adds a field you don't want the user to see. A common case of using removeField would be like in the indexOrderBy example, where we order staff members
    by position. But we don't actually want the user to be able to set the position manaully within the form. So we removeField('position'). They update the
    position by drag-and-drag in that case. Check it out below</p><a class=""
-               data-lightbox="group-e67d6810-00e8-43fb-a211-a5c3957b8d64"
+               data-lightbox="group-aa46ca3d-39fc-4e45-b348-8e82b91f15f9"
                href="_images/indexOrderBy1.png"
                title="See how we remove the position field in the form. We don't want the user to have to fill that out in the form because they are able to drag-and-drop staff members
 to set the position in the index view."
@@ -914,7 +903,7 @@ to set the position in the index view."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-4d2b3d8e-7a0d-4917-86e0-aba311cd6e7a"
+               data-lightbox="group-23daf7e6-ecba-4dff-8065-fa464cf95fdf"
                href="_images/indexOrderBy2.png"
                title=""
                data-title=""
@@ -939,7 +928,7 @@ to set the position in the index view."
    bar. For example, if you have an admin called Representatives, and you want to have a search bar where the user can search
    for staff members by their first and last name you might chain on the searchable method twice:
    </p><a class=""
-               data-lightbox="group-25252d1d-308c-48f5-98f2-410ec055a82c"
+               data-lightbox="group-0815dc70-c03f-48eb-862f-0f4694357e03"
                href="_images/searchable1.png"
                title="Here we call searchable twice for first and last name."
                data-title="Here we call searchable twice for first and last name."
@@ -949,7 +938,7 @@ to set the position in the index view."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-a0969a06-104a-4cde-abd1-83a033418eab"
+               data-lightbox="group-bac16888-558c-4156-9089-ef6410a64095"
                href="_images/searchable2.png"
                title="Here we see you can search by last_name"
                data-title="Here we see you can search by last_name"
@@ -959,7 +948,7 @@ to set the position in the index view."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-bad7bd34-b99a-4b67-87ce-60d240c3cc1a"
+               data-lightbox="group-d1f1e782-7cfa-4a3c-b48d-4c128e5a12cd"
                href="_images/searchable3.png"
                title="Here we see you can search by first_name"
                data-title="Here we see you can search by first_name"
@@ -969,7 +958,7 @@ to set the position in the index view."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-259e49ec-76ff-46a5-a0be-9aa162a80f62"
+               data-lightbox="group-a59b2961-8c09-45e5-b224-4e125383b7bc"
                href="_images/searchable4.png"
                title="Here we see search working for first and last name at the same time."
                data-title="Here we see search working for first and last name at the same time."
@@ -984,7 +973,7 @@ to set the position in the index view."
 <h4><code>select()</code></h4>
 <p>The <code>select</code> method will allow the user to use a select box and select a single item. When you use the select method, your second parameter
    will be an array all the options they have to select from.</p><a class=""
-               data-lightbox="group-b8facdf2-6487-4dc4-97e0-912928917896"
+               data-lightbox="group-78aeaefd-ea10-4f2e-937d-27a161057a11"
                href="_images/select1.png"
                title="Notice that we have three selects on this Program DynamoController. The user may optionally select categories to connect to this program they are creating.
 This way, on the front-end of the website, they will see FAQ's related to this program in a sidebar when they are on this programs page."
@@ -996,7 +985,7 @@ This way, on the front-end of the website, they will see FAQ's related to this p
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-0ef556b3-bb68-49f5-9b11-4666d65d4edf"
+               data-lightbox="group-322a9454-0590-45b0-8a3f-05acd71caf29"
                href="_images/select2.png"
                title="This is the form view that the user will interact with."
                data-title="This is the form view that the user will interact with."
@@ -1006,7 +995,7 @@ This way, on the front-end of the website, they will see FAQ's related to this p
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-9430679b-22a8-495e-a179-bdb4c53db86d"
+               data-lightbox="group-078df825-9cc8-468f-83e6-8361962ca936"
                href="_images/select3.png"
                title="How the select boxes options look. (little bug here with the blank spaces, don't worry about that)"
                data-title="How the select boxes options look. (little bug here with the blank spaces, don't worry about that)"
@@ -1021,7 +1010,7 @@ This way, on the front-end of the website, they will see FAQ's related to this p
 <h4><code>text()</code></h4>
 <p>The <code>text</code> method is probably the simplest Dynamo method. It makes a textbox on the form for the given database field. Now, you can of course pass
    in other parameters as you can with all Dynamo methods. Check out some of the examples below.</p><a class=""
-               data-lightbox="group-96da5cbc-c28e-44ce-a3bb-eef5e8a7f07c"
+               data-lightbox="group-5c4c039a-7deb-410a-b178-d161229c3724"
                href="_images/text1.png"
                title="The simplest example."
                data-title="The simplest example."
@@ -1031,7 +1020,7 @@ This way, on the front-end of the website, they will see FAQ's related to this p
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-792e386b-9a3a-415d-9389-dd320f1b430a"
+               data-lightbox="group-0fc369c2-5491-4c7e-aba9-249e089c4514"
                href="_images/text2.png"
                title="The result on the form."
                data-title="The result on the form."
@@ -1041,7 +1030,7 @@ This way, on the front-end of the website, they will see FAQ's related to this p
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-3b8391da-7bb6-427d-9dfc-d40e8d06cf9e"
+               data-lightbox="group-7741a67b-4b04-441a-8a9a-9a2c5d6c4c1e"
                href="_images/text3.png"
                title="In this example, we pass in an array of options with only one option, that being 'position'. The position option is there so you can manually set the order
 of the fields in the form if needed. The auto() function usually handles this, but in some cases you may want to reorder."
@@ -1053,7 +1042,7 @@ of the fields in the form if needed. The auto() function usually handles this, b
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-8d033130-4918-47ab-8604-14e5d360dbfa"
+               data-lightbox="group-284612b8-53b1-4a30-a381-26467713c6d2"
                href="_images/text4.png"
                title="The result."
                data-title="The result."
@@ -1063,7 +1052,7 @@ of the fields in the form if needed. The auto() function usually handles this, b
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-17c11989-2ee6-4e22-9992-526646069b91"
+               data-lightbox="group-96da520a-094b-46d2-9540-dbaa70dbb84e"
                href="_images/text5.png"
                title="A more complicated example. Here we pass in an option to the top two text fields. This option is 'class' => 'dateTimePicker' which lets a little calendar pop
 up to aid the user in selected the dates for the these fields. And I'm not even going to explain what's going on in the third text field. It was a super weird case,
@@ -1077,7 +1066,7 @@ usually things don't look that messy."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-647648ed-96e3-4b09-b74c-fe2488dc2446"
+               data-lightbox="group-16154c1f-8c7f-45dc-a740-3ec35978beda"
                href="_images/text7.png"
                title="Here we see the dateTimePicker"
                data-title="Here we see the dateTimePicker"
@@ -1087,7 +1076,7 @@ usually things don't look that messy."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-cdd77828-7845-4083-8264-809705cb7772"
+               data-lightbox="group-5d038789-2cf1-407d-adfa-359df1cb7323"
                href="_images/text6.png"
                title=""
                data-title=""
@@ -1103,7 +1092,7 @@ usually things don't look that messy."
 <p>The <code>textarea</code> method is just like the text() method, except it's a bigger text box on the form. In many of our websites, we pass in a class
    called "wysiwyg editor" which stands for "What You See Is What You Get", and it allows the user to make html code without having to actually code. Check it
    out.</p><a class=""
-               data-lightbox="group-21e0c01f-b6b9-4a4c-a033-501f3afd2cd9"
+               data-lightbox="group-5d69d701-eaab-452c-b9c3-941b88967dfb"
                href="_images/textarea1.png"
                title=""
                data-title=""
@@ -1113,7 +1102,7 @@ usually things don't look that messy."
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-66746515-e48f-4256-9785-c25a3431a110"
+               data-lightbox="group-8803e95a-85fc-48a8-b4e9-70541b16b0b6"
                href="_images/textarea2.png"
                title=""
                data-title=""
