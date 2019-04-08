@@ -20,6 +20,10 @@ sys.path.append('src/Http/Controllers')
 sys.path.append('src/Console/Commands')
 sys.path.append('src/config')
 sys.path.append('docs/images')
+try:
+    from sphinx.util.compat import Directive
+except ImportError:
+    from docutils.parsers.rst import Directive
 
 
 # -- Project information -----------------------------------------------------
