@@ -12,10 +12,6 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-
-from docutils.parsers.rst.directives.admonitions import BaseAdmonition
-from sphinx.util import compat
-compat.make_admonition = BaseAdmonition
 import os
 import sys
 sys.path.insert(0, os.path.abspath('.'))
@@ -33,9 +29,9 @@ copyright = u'2018, Jonathan Peoples, Colton Williams'
 author = u'Jonathan Peoples, Colton Williams'
 
 # The short X.Y version
-version = '1.3.5'
+#version = '1.3.5'
 # The full version, including alpha/beta/rc tags
-release = '1.3.5'
+#release = '1.3.5'
 
 
 # -- General configuration ---------------------------------------------------

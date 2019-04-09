@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Creating Many-to-Many Relationships Between Dynamo Models &mdash; dynamo 1.3.5 documentation</title>
+  <title>Creating Many-to-Many Relationships Between Dynamo Models &mdash; dynamo  documentation</title>
   
 
   
@@ -58,10 +58,6 @@
           
             
             
-              <div class="version">
-                1.3.5
-              </div>
-            
           
 
           
@@ -88,13 +84,7 @@
 <li class="toctree-l1"><a class="reference internal" href="theDynamoControllerBackEnd.html">The Dynamo Controller Backend</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theDynamoControllerFrontEnd.html">The Dynamo Controller Frontend</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Creating Many-to-Many Relationships Between Dynamo Models</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#step-1-generate-the-two-models-you-will-be-using">Step 1: Generate the two models you will be using.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#step-2-complete-the-needed-migrations">Step 2: Complete the needed migrations.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#step-3-add-the-proper-belongstomany-eloquent-function-to-each-model">Step 3: Add the proper belongsToMany Eloquent function to each model.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#step-4-chain-the-hasmany-method-onto-your-dynamo-instance-in-both-controllers-make-sure-your-key-is-the-name-of-the-eloquent-function-from-you-model">Step 4: Chain the hasMany() method onto your Dynamo instance in both controllers. Make sure your key is the name of the Eloquent function from you model.</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Creating Many-to-Many Relationships Between Dynamo Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dynamoMethods.html">Dynamo Methods</a></li>
 </ul>
 <p class="caption"><span class="caption-text">License</span></p>
@@ -166,16 +156,11 @@
             
   <div class="section" id="creating-many-to-many-relationships-between-dynamo-models">
 <h1>Creating Many-to-Many Relationships Between Dynamo Models<a class="headerlink" href="#creating-many-to-many-relationships-between-dynamo-models" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="step-1-generate-the-two-models-you-will-be-using">
-<h2>Step 1: Generate the two models you will be using.<a class="headerlink" href="#step-1-generate-the-two-models-you-will-be-using" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-PHP notranslate"><div class="highlight"><pre><span></span><span class="x">php artisan make:dynamo Faq</span>
+<strong style="font-size: 20px;">Step 1: Generate the two models you will be using.</strong><br><br><div class="highlight-PHP notranslate"><div class="highlight"><pre><span></span><span class="x">php artisan make:dynamo Faq</span>
 <span class="x">php artisan make:dynamo Category</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="step-2-complete-the-needed-migrations">
-<h2>Step 2: Complete the needed migrations.<a class="headerlink" href="#step-2-complete-the-needed-migrations" title="Permalink to this headline">¶</a></h2>
-<p>Example Faq migration:</p>
+<strong style="font-size: 20px;">Step 2: Complete the needed migrations.</strong><br><br><p>Example Faq migration:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Schema::create(&#39;faqs&#39;, function (Blueprint $table) {
     $table-&gt;increments(&#39;id&#39;);
     $table-&gt;string(&#39;question&#39;, 255);
@@ -206,10 +191,7 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">php</span> <span class="n">artisan</span> <span class="n">migrate</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="step-3-add-the-proper-belongstomany-eloquent-function-to-each-model">
-<h2>Step 3: Add the proper belongsToMany Eloquent function to each model.<a class="headerlink" href="#step-3-add-the-proper-belongstomany-eloquent-function-to-each-model" title="Permalink to this headline">¶</a></h2>
-<p>For the Category model:</p>
+<strong style="font-size: 20px;">Step 3: Add the proper belongsToMany Eloquent function to each model.</strong><br><br><p>For the Category model:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>public function faqs()
 {
        return $this-&gt;belongsToMany(&#39;App\Faq&#39;);
@@ -223,13 +205,13 @@
 }
 </pre></div>
 </div>
-</div>
-<div class="section" id="step-4-chain-the-hasmany-method-onto-your-dynamo-instance-in-both-controllers-make-sure-your-key-is-the-name-of-the-eloquent-function-from-you-model">
-<h2>Step 4: Chain the hasMany() method onto your Dynamo instance in both controllers. Make sure your key is the name of the Eloquent function from you model.<a class="headerlink" href="#step-4-chain-the-hasmany-method-onto-your-dynamo-instance-in-both-controllers-make-sure-your-key-is-the-name-of-the-eloquent-function-from-you-model" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-PHP notranslate"><div class="highlight"><pre><span></span><span class="x">return Dynamo::make(\App\Employee::class)</span>
+<strong style="font-size: 20px;">Step 4: Chain the hasMany() method onto your Dynamo instance in both controllers. Make sure your key is the name of the Eloquent function from you model.</strong><br><br><div class="highlight-PHP notranslate"><div class="highlight"><pre><span></span><span class="x">return Dynamo::make(\App\Employee::class)</span>
 <span class="x">                    -&gt;hasMany(&#39;categories&#39;, [&#39;options&#39; =&gt; [$categories]]);</span>
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">NOTE: You can see a full example of this process in the next section, Dynamo Methods, on the hasManySimple function</p>
 </div>
 </div>
 

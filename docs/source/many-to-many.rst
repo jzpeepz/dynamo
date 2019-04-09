@@ -1,16 +1,21 @@
 Creating Many-to-Many Relationships Between Dynamo Models
 =========================================================
 
-Step 1: Generate the two models you will be using.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. raw:: html
+
+    <strong style="font-size: 20px;">Step 1: Generate the two models you will be using.</strong><br><br>
+
 
 .. code-block:: PHP
 
     php artisan make:dynamo Faq
     php artisan make:dynamo Category
 
-Step 2: Complete the needed migrations.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. raw:: html
+
+    <strong style="font-size: 20px;">Step 2: Complete the needed migrations.</strong><br><br>
 
 Example Faq migration::
 
@@ -43,8 +48,10 @@ Run::
 
     php artisan migrate
 
-Step 3: Add the proper belongsToMany Eloquent function to each model.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. raw:: html
+
+    <strong style="font-size: 20px;">Step 3: Add the proper belongsToMany Eloquent function to each model.</strong><br><br>
+
 
 For the Category model::
 
@@ -60,9 +67,14 @@ For the Faq Model::
 	return $this->belongsToMany('App\Category');
     }
 
-Step 4: Chain the hasMany() method onto your Dynamo instance in both controllers. Make sure your key is the name of the Eloquent function from you model.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. raw:: html
+
+    <strong style="font-size: 20px;">Step 4: Chain the hasMany() method onto your Dynamo instance in both controllers. Make sure your key is the name of the Eloquent function from you model.</strong><br><br>
+
 .. code-block:: PHP
 
     return Dynamo::make(\App\Employee::class)
 			->hasMany('categories', ['options' => [$categories]]);
+
+.. note:: NOTE: You can see a full example of this process in the next section, Dynamo Methods, on the hasManySimple function

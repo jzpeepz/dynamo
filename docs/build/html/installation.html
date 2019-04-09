@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation &mdash; dynamo 1.3.5 documentation</title>
+  <title>Installation &mdash; dynamo  documentation</title>
   
 
   
@@ -58,10 +58,6 @@
           
             
             
-              <div class="version">
-                1.3.5
-              </div>
-            
           
 
           
@@ -87,10 +83,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="theDynamoControllerBackEnd.html">The Dynamo Controller Backend</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theDynamoControllerFrontEnd.html">The Dynamo Controller Frontend</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="many-to-many.html">Creating Many-to-Many Relationships Between Dynamo Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dynamoMethods.html">Dynamo Methods</a></li>
 </ul>
@@ -180,17 +173,24 @@
 <p class="last">NOTE: If using a local disk for uploading, be sure to symlink it to your public directory and provide the proper path in the config file.</p>
 </div>
 <p>If you’d like, the Github repo for Dynamo is <a href="https://github.com/jzpeepz/dynamo" target="_blank">here</a>.</p>
-<div class="section" id="configuration">
-<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
-<p>You can edit the configuration of Dynamo at:</p>
+<strong style="font-size: 20px;">Configuration</strong><br><br><p>You can edit the configuration of Dynamo at:</p>
 <p>vendor-&gt;jzpeepz-&gt;dynamo-&gt;src-&gt;config-&gt;dynamo.php.</p>
-<img alt="_images/Config.png" class="align-center" src="_images/Config.png" />
+<p>The vendor folder is a hidden folder, so much sure your text editor is letting you see it. jzpeeps is the root folder for the Dynamo package.</p>
+<img alt="_images/config.png" class="align-center" src="_images/config.png" />
 <p>Storage disk to use to store uploaded files.</p>
-<p>Path within the storage disk to store the uploaded files. This is also the directory within the public directory to which the storage directory is linked.</p>
-<p>Prefix to add to all Dynamo routes.</p>
-<p>Layout to use with Dynamo views.</p>
-<p>Controller Namespace and path tells Dynamo where you want you’re controllers to be auto-generated. TODO</p>
-</div>
+<p>Upload_path is the path within the storage disk to store the uploaded files. This is also the directory within the public directory to which the storage directory is linked.</p>
+<p>route_prefix is a prefix to add to all Dynamo routes.</p>
+<p>layout is the layout to use with Dynamo views.</p>
+<p>controller_namespace and controller_path is the path that tells Dynamo where you want you’re controllers to be auto-generated.</p>
+<p>view_prefix does this… TODO</p>
+<p>view_theme is the HTML / CSS framework you are using. Dynamo is build to run on either ‘bootstrap3’ or ‘bootstrap4’.</p>
+<p>target_blade_section does this… TODO</p>
+<p>default_has_many_class does this … TODO</p>
+<hr><p>model_uses, just like the comment says, is used to generate use statements automatically into the Model class that is generated when you make a Dynamo object.</p>
+<p>model_implements, similar to model_uses, tells Dynamo what interfaces you want your Dynamo objects to implement.</p>
+<p>Finally, model_traits tells Dynamo what traits the object should use.</p>
+<p>See an example of a auto generated Dynamo object below that uses these last three configurations to generate models that use a Media Manager package from Spatie.</p>
+<img alt="_images/config2.png" class="align-center" src="_images/config2.png" />
 </div>
 
 
