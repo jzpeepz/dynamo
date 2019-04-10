@@ -141,43 +141,11 @@
 
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 
-                    <h4 class="modal-title">Manage Category</h4><br>
+                    <h4 class="modal-title">Delete Category</h4><br>
 
                 </div>
 
                 <div class="modal-body">
-
-                    {{--***************************************
-                        *          Relationships Code         *
-                        *************************************** --}}
-                        {{-- @foreach($relatedObject as $object) {
-
-                        } --}}
-
-                        @php
-                            $objectName = $dynamo->getName();
-                            $objectName = str_replace("Category", "", $objectName);
-                            $objectName = str_replace(" ", "", $objectName);
-                        @endphp
-
-                        <table id="relationships_table">
-                          <tr>
-                            <th class="relationship_header">{{ $objectName }} Name</th>
-                            <th class="relationship_header">Detach From Category</th>
-                          </tr>
-                          <tr class="relationship_row">
-                            <td class="relationship_data">This is a question my friend? And Lorem ipsum dolor sit amet, consectetur adipisicing elit?</td>
-                            <td class="relationship_data"><button class="btn-xsm btn-primary">Quick Remove</button></td>
-                          </tr>
-                          <tr class="relationship_row">
-                            <td class="relationship_data">What are apples?</td>
-                            <td class="relationship_data"><button class="btn-xsm btn-primary">Quick Remove</button></td>
-                          </tr>
-                        </table>
-
-
-
-                        <br><hr><br>
                         {{--***************************************
                             *          DANGER ZONE CODE           *
                             *************************************** --}}
@@ -186,6 +154,8 @@
 
                             If you delete this {{ $dynamo->getName() }}, every single object will be detached from it. <br><br>The objects themselves will not be deleted but they will all be removed
                             from this category, and then this category will be deleted. This will change pages on your website.<br><br>
+
+                            If you want to remove only a few objects from this category, click the Edit button instead.<br><br>
 
                             If you are sure, type the name of the category below, check the box, and click Permanatly Delete.<br><br>
 
@@ -199,6 +169,10 @@
                                 <br>
                                 <button type="submit" class="btn btn-danger disabled" id="perma-delete-btn" style="width: 100%;">Permanatly Delete This {{ $dynamo->getName() }}</button>
                         </div>
+
+                        {{--***************************************
+                            *          DANGER ZONE CODE END       *
+                            *************************************** --}}
 
                 </div>
 
@@ -216,45 +190,6 @@
 
 </div> <!--END DYNAMO CONTAINER -->
 
-
-<style>
-
-#relationships_table {
-    width: 100%;
-    text-align: center;
-    /* border-spacing: 40px; */
-}
-
-.relationship_header {
-    text-align: left;
-}
-
-#relationships_table, .relationship_header, .relationship_data {
-    border: 1px solid #000;
-    border-collapse: collapse;
-}
-
-.relationship_header, .relationship_data {
-    padding: 10px;
-}
-
- .relationship_row:nth-child(odd) {
-     background-color: #fff;
- }
-
- .relationship_row:nth-child(even: ;) {
-     background-color: #ddd;
- }
-
- #relationships_table th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #E68504;
-  color: white;
-
-
-</style>
 
 @endsection
 
@@ -295,8 +230,6 @@
         const categoryCheckbox = document.getElementById("areYouSureCheckbox");
 
         var realcatname = $('.panel-heading');
-        // console.log(realcatname);
-        // console.log(realcatname.innerText);
 
         var path = window.location.pathname;
 
@@ -311,9 +244,6 @@
             //Get the name in lowercase format with no spaces to use in the ajax call
             var categoryNameLower = categoryName.toLowerCase();
             categoryNameLower = categoryNameLower.replace(" ", "");
-
-
-
 
             //If the input's value is the same string as the categoryName AND checkbox is true,
             //then remove the disabled class of perma delete btn so user can press it
@@ -332,7 +262,7 @@
 
             //On click on perma delete button
             //Send ajax request to delete the category from the database
-            $('#perma-delete-btn').on('click', function (e) {
+            $('#perma-delete-btn').unbind('click').on('click', function (e) {
                 $.post('/pilot/' + categoryNameForAjax + '/' + categoryDataId, { _method: 'delete' }, function(result) {
                     var thisCatsDynamoRow = document.getElementsByClassName('dynamo-index-row');
                     for(i = 0; i < thisCatsDynamoRow.length; i++){
