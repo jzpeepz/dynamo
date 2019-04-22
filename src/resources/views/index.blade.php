@@ -103,7 +103,7 @@
                                                 <a href="{{ route($dynamo->getRoute('edit'), $item->id) }}" class="btn btn-default btn-xs">Edit</a>
 
                                                 @if ($dynamo->deleteVisible())
-                                                    {!! Form::open(['route' => [$dynamo->getRoute('destroy'), $item->id], 'method' => 'delete', 'style' => 'display: inline-block;']) !!}
+                                                    {!! Form::open(['route' => [$dynamo->getRoute('destroy'), $item->id], 'method' => 'delete', 'style' => 'display: inline-block;', 'onsubmit' => 'return confirm(\'Are you sure?\');']) !!}
                                                         <button class="btn btn-default btn-xs btn-delete">Delete</button>
                                                     {!! Form::close() !!}
                                                 @endif
@@ -199,17 +199,6 @@
     .dynamo-search label { display: block; }
     .dynamo-search label.search-label { visibility: hidden; }
     </style>
-
-    <script>
-    $(document).ready(function(){
-        $('.btn-delete').click(function(){
-            return confirm('Are you sure?');
-        });
-    });
-    </script>
-
-
-
 
     {{--***************************************
         *  Script deals with Relationships    *
