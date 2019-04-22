@@ -49,7 +49,11 @@
 
                 @endif
 
-                {{-- BOOTSTRAP TAB IMPLEMENTATION  --}}
+                {{--***************************************
+                    *     If the user uses IndexTabs       *
+                    *      Run this block to render       *
+                    *     the tabs                        *
+                    *************************************** --}}
                 @if ($dynamo->hasIndexTabs())
 
                      <ul class="nav nav-tabs" role="tablist">
@@ -113,6 +117,69 @@
             @endif
         </div>
     </div>
+    {{--***************************************
+        *  If the user uses manage            *
+        *   relationships,                    *
+        *   run this block to include modal   *
+        *************************************** --}}
+        <div class="modal fade" id="relationships-manager-modal" tabindex="-1" role="dialog">
+
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                        <h4 class="modal-title">Delete Category</h4><br>
+
+                    </div>
+
+                    <div class="modal-body">
+                            {{--***************************************
+                                *          DANGER ZONE CODE           *
+                                *************************************** --}}
+                            <div style="border-style: solid; border-color: #cc0000; padding: 20px;">
+                                <h1 style="text-align: center; margin-bottom: 50px;">Danger Zone!</h1>
+
+                                If you delete this {{ $dynamo->getName() }}, every single object will be detached from it. <br><br>The objects themselves will not be deleted but they will all be removed
+                                from this category, and then this category will be deleted. This will change pages on your website.<br><br>
+
+                                If you want to remove only a few objects from this category, click the Edit button instead.<br><br>
+
+                                If you are sure, type the name of the category below, check the box, and click Permanatly Delete.<br><br>
+
+
+                                    <input class="form-control" id="categoryInputField" type="text" name="areYouSure" placeholder="Type the name of the {{ $dynamo->getName() }} to confirm">
+                                    <br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="areYouSureCheckbox">
+                                        <label class="form-check-label" for="exampleCheck1">Are you sure?</label>
+                                    </div>
+                                    <br>
+                                    <button type="submit" class="btn btn-danger disabled" id="perma-delete-btn" style="width: 100%;">Permanatly Delete This {{ $dynamo->getName() }}</button>
+                            </div>
+
+                            {{--***************************************
+                                *          DANGER ZONE CODE END       *
+                                *************************************** --}}
+
+                    </div>
+
+                    <?php /* <div class="modal-footer">
+
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                    </div> */ ;?>
+
+                </div><!-- /.modal-content -->
+
+            </div><!-- /.modal-dialog -->
+
+        </div><!-- /.modal -->
+
+    </div> <!--END DYNAMO CONTAINER -->
 
 @endsection
 
@@ -137,4 +204,80 @@
         /* visibility: hidden; */
     }
     </style>
+
+    {{--***************************************
+        *  Script deals with Relationships    *
+        *   Manager popup                     *
+        *************************************** --}}
+
+    <script>
+
+    $(document).ready(function() {
+
+        //Global variables
+        //Get Button
+        const permaDeleteBtn = document.getElementById("perma-delete-btn");
+        //Get input field
+        const categoryInputField = document.getElementById("categoryInputField");
+        //Get checkbox
+        const categoryCheckbox = document.getElementById("areYouSureCheckbox");
+
+        var realcatname = $('.panel-heading');
+
+        var path = window.location.pathname;
+
+        categoryNameForAjax = path.replace('/pilot/', '');
+
+        //Show modal if the Manage Button is pressed and set the Category name and it's Id that it was pressed on to a variable
+        $('#relationships-manager-modal').on('show.bs.modal', function (e) {
+            //Get string of category name, and its data-id attribute value
+            var categoryName = e.relatedTarget.closest('.dynamo-index-row').firstChild.nextElementSibling.innerText;
+            var categoryDataId = e.relatedTarget.closest('.dynamo-index-row').getAttribute('data-id');
+
+            //Get the name in lowercase format with no spaces to use in the ajax call
+            var categoryNameLower = categoryName.toLowerCase();
+            categoryNameLower = categoryNameLower.replace(" ", "");
+
+            //If the input's value is the same string as the categoryName AND checkbox is true,
+            //then remove the disabled class of perma delete btn so user can press it
+            $('#areYouSureCheckbox').change(function(){
+                if(categoryInputField.value == categoryName && categoryCheckbox.checked == true)
+                {
+                        permaDeleteBtn.classList.remove('disabled');
+                        permaDeleteBtn.removeAttribute("disabled")
+                }
+                else
+                {
+                    permaDeleteBtn.classList.add('disabled');
+                    permaDeleteBtn.disabled = true;
+                }
+            });
+
+            //On click on perma delete button
+            //Send ajax request to delete the category from the database
+            $('#perma-delete-btn').unbind('click').on('click', function (e) {
+                $.post('/pilot/' + categoryNameForAjax + '/' + categoryDataId, { _method: 'delete' }, function(result) {
+                    var thisCatsDynamoRow = document.getElementsByClassName('dynamo-index-row');
+                    for(i = 0; i < thisCatsDynamoRow.length; i++){
+                        if(thisCatsDynamoRow[i].getAttribute('data-id') == categoryDataId)
+                        {
+                            thisCatsDynamoRow[i].parentNode.removeChild(thisCatsDynamoRow[i])
+                        }
+                    }
+                    $('#relationships-manager-modal').modal('hide');
+                });
+            })
+
+        });
+
+        //If user clicks out of the modal, remove any text from input field
+        //and uncheck the "I Am Sure" checkbox
+        $('#relationships-manager-modal').on('hidden.bs.modal', function (e) {
+            permaDeleteBtn.classList.add('disabled');
+            permaDeleteBtn.disabled = true;
+            categoryInputField.value = '';
+            categoryCheckbox.checked = false;
+        })
+    })
+    </script>
 @endsection

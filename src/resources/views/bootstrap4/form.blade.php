@@ -11,6 +11,12 @@
 
             @include('dynamo::partials.alerts')
 
+            {{--***************************************
+                *     If the user uses Formtabs       *
+                *      Run this block to render       *
+                *     the tabs                        *
+                *************************************** --}}
+
             @if ($dynamo->hasFormTabs())
 
                  <ul class="nav nav-tabs" role="tablist">
@@ -28,6 +34,12 @@
 
             @endif {{-- endif for Form Tabs Nav --}}
 
+            {{--***************************************
+                *     If the user uses Formtabs       *
+                *     Run this block to render        *
+                *     the form fields in each tab     *
+                *************************************** --}}
+
             @if ($dynamo->hasFormTabs())
                 <div class="tab-content">
 
@@ -43,6 +55,12 @@
                 @endforeach
                 </div>
             @endif {{-- endif for Form Tabs Content --}}
+
+            {{--***************************************
+                *  If the user does not use Formtabs  *
+                *   Run this default block to render  *
+                *   the dynamo form as normally would *
+                *************************************** --}}
 
             {!! Form::model($item, $formOptions) !!}
                 @foreach ($dynamo->getFieldGroups() as $group => $fields)
