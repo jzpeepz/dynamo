@@ -29,21 +29,18 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
            <a href="#method-checkbox">checkbox</a>
            <a href="#method-clearIndexes">clearIndexes</a>
            <a href="#method-file">file</a>
-           <a href="#method-formTab">formTab</a>
            <a href="#method-group">group</a>
            <a href="#method-hasMany">hasMany</a>
            <a href="#method-hasManySimple">hasManySimple</a>
            <a href="#method-hideAdd">hideAdd</a>
            <a href="#method-hideDelete">hideDelete</a>
            <a href="#method-indexOrderBy">indexOrderBy</a>
-           <a href="#method-indexTab">indexTab</a>
            <a href="#method-paginate">paginate</a>
            <a href="#method-password">password</a>
            <a href="#method-removeBoth">removeBoth</a>
            <a href="#method-removeField">removeField</a>
            <a href="#method-removeIndex">removeIndex</a>
            <a href="#method-searchable">searchable</a>
-           <a href="#method-searchOptions">searchOption</a>
            <a href="#method-select">select</a>
            <a href="#method-text">text</a>
            <a href="#method-textarea">textarea</a>
@@ -59,7 +56,7 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
     <p><a name="method-addActionButton"></a></p>
     <h4><code>addActionButton()</code></h4>
     <p>The <code>addField</code> method allows you to create a button along-side the other default action butons, Edit and Delete. Keep in mind these default buttons can be
-       remove by calling hideDelete() or removeBoth().</p>
+       remove by calling hideDelete()</p>
 
 .. thumbnail:: images/addActionButton1.png
    :align: center
@@ -255,9 +252,7 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
 .. thumbnail:: images/clearIndexes1.png
     :align: center
 
-    I've commented out my addIndex() calls for the sake
-    of demonstration.
-    The next image shows the result.
+    I've commented out my addIndex() calls for the sake of demonstration. The next image shows the result.
 
 .. thumbnail:: images/clearIndexes2.png
     :align: center
@@ -265,8 +260,7 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
 .. thumbnail:: images/clearIndexes3.png
     :align: center
 
-    Now I've uncommented my addIndex calls to show the result
-    in the next image.
+    Now I've uncommented my addIndex calls to show the result in the next image.
 
 .. thumbnail:: images/clearIndexes4.png
     :align: center
@@ -299,72 +293,18 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
 
     <hr>
 
-    <p><a name="method-formTab"></a></p>
-    <h4><code>formTab()</code></h4>
-    <p>The <code>formTab</code> method allows you to create tabs in the form view while creating or editing an object. Inside the formTab function you chain on any other functions including group functions.
-       In the first and second screenshot below we see the code for two formTabs. The first formTab contains a ton of groups with methods chained on inside the groups. The second formTab has only one group inside of it.</p>
-
-.. thumbnail:: images/formTab1.png
-    :align: center
-
-    Don't be overwhelmed with this code. The point is that you can create a formTab function with with groups inside of it, and inside those groups you can chain on functions. You don't have to use groups at all. You can just
-    chain on functions like you normally do.
-
-.. thumbnail:: images/formTab2.png
-    :align: center
-
-    Here we see one that is a bit simpler. The formTab function takes only one parameter which is the FormTab models make() function.
-    The make function has one parameter which is the title of the tab. Then inside you can chain on functions. Here I've chosen to make a group with 3 fields in it, and my final field I place outside the group.
-    The result is in the last screenshot.
-
-.. thumbnail:: images/formTab3.png
-    :align: center
-
-    This is the result of that first formTab code that contained a ton of groups inside of it. In each group we see the methods that we chained on.
-
-.. thumbnail:: images/formTab4.png
-    :align: center
-
-.. thumbnail:: images/formTab5.png
-    :align: center
-
-    This is the second formTab we saw in the code.
-
-.. raw:: html
-
-    It's important to note that you must add <code>'use Jzpeepz\Dynamo\FormTab;'</code> and <code>'use Jzpeepz\Dynamo\FieldGroup as Group;'</code> at the top of you're controller to make these functions work.
-
-.. raw:: html
-
-    <hr>
-
     <p><a name="method-group"></a></p>
     <h4><code>group()</code></h4>
-    <p>The <code>group</code> method allows you to place a block of fields in a off-color container to make it look better and condense the fields in the form.
-       Groups can also be used inside of formTabs to further condense the form.</p>
+    <p>The <code>group</code> method is called by default in your DynamoController and will auto-populate the form
+       with text boxes for each field in the database for that object.</p>
 
-.. thumbnail:: images/group1.png
+.. thumbnail:: images/auto3.png
     :align: center
 
-    Here we see a group implemented inside of a formTab. A Group has two parameters. One is the make() function being called on the Group object which takes the title of the group,
-    and the other is an array of options you can pass into the group, in this case we pass a label in, and a bootstrap class to tell the group to take up all 12 rows in the container.
-    Then we see functions ->rowStart() and ->rowEnd() with the fields we want in the group in-between.
+Auto function being called on the newly created Dynamo object.
 
-.. thumbnail:: images/group2.png
+.. thumbnail:: images/auto1.png
     :align: center
-
-    Here we see the result from the code in the first screenshot.
-
-.. thumbnail:: images/group3.png
-    :align: center
-
-    Now, if you want two groups to be side-by-side, you need to pass in a 6 in the bootstrap class to tell the group to only take up 6 rows out of 12. And only pass in ->rowStart() in the first group.
-    In the second group (the one you want on the right side of the first group), also pass in a 6 to the bootstrap class, and call ->rowEnd().
-
-.. thumbnail:: images/group4.png
-    :align: center
-
-    Here we see the result from the code in the third screenshot.
 
 .. raw:: html
 
@@ -512,52 +452,17 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
 
     <hr>
 
-    <p><a name="method-indexTab"></a></p>
-    <h4><code>indexTab()</code></h4>
-    <p>REQUIRED: 'use Jzpeepz\Dynamo\IndexTab;' in your DynamoController</p>
-    <p>The <code>indexTab</code> method lets you create a scoped tab on the index view of a module. In The first
-       screenshot you will see the two indexTabs implemented; one is Published and only shows Resources that are
-       published in that tab. It also uses the tooltip() function to show a tooltip on that tab.</p>
-
-.. thumbnail:: images/indexTab1.png
-    :align: center
-
-    The function takes two parameters. One is the IndexTab's make function, and the second parameter is a closure function
-    that returns a query so you can scope the entries. You can also chain on other functions inside this function; as you
-    can see, I chain on ->tooltip() and ->showCount() on these two. Status is just the variable in the database that
-    corresponds to the database. But it were a boolean, it would be ->where('published', true).
-
-In the next screenshot you can see the Published tab in conjunction with the tooltip() method showing
-the total number of Published Resources within that scope.
-
-.. thumbnail:: images/indexTab2.png
-    :align: center
-
-In the last screenshot you can see the Drafts tab in conjunction with the showCount() method showing
-the total number of Drafts Resources within that scope.
-
-.. thumbnail:: images/indexTab3.png
-    :align: center
-
-.. raw:: html
-
-    <hr>
-
     <p><a name="method-paginate"></a></p>
     <h4><code>paginate()</code></h4>
-    <p>The <code>paginate</code> method does exactly what you would expect it to do; You pass in a number like ->paginate(10) and the dynamo index view will only show
-       10 items per page and provide links to the next pages</p>
+    <p>The <code>paginate</code> method </p>
 
-.. thumbnail:: images/paginate1.png
+.. thumbnail:: images/auto3.png
     :align: center
 
-    Here we clear indexes on the index/admin view and call some ->addIndexes to customize what we want it to look like. Notice how I call paginate(10) because I want
-    there to be 10 Resources per page.
+Auto function being called on the newly created Dynamo object.
 
-.. thumbnail:: images/paginate2.png
+.. thumbnail:: images/auto1.png
     :align: center
-
-    Now we have 10 Resources on the page and pagination links at the bottom on the admin/index view.
 
 .. raw:: html
 
@@ -591,16 +496,9 @@ the total number of Drafts Resources within that scope.
 
     <p><a name="method-removeBoth"></a></p>
     <h4><code>removeBoth()</code></h4>
-    <p>The <code>removeBoth</code> method is called by default in your DynamoController and will auto-populate the form
-       with text boxes for each field in the database for that object.</p>
+    <p>The <code>removeBoth</code> method removes the field from the index AND the form. It is basically removeField() and removeIndex() both in one function.
+       please read those two functions directly below this one.</p>
 
-.. thumbnail:: images/auto3.png
-    :align: center
-
-Auto function being called on the newly created Dynamo object.
-
-.. thumbnail:: images/auto1.png
-    :align: center
 
 .. raw:: html
 
@@ -610,7 +508,7 @@ Auto function being called on the newly created Dynamo object.
     <h4><code>removeField()</code></h4>
     <p>The <code>removeField</code> method removes any field that you pass it from the index view. This method is needed when the auto() function
        adds a field you don't want the user to see. A common case of using removeField would be like in the indexOrderBy example, where we order staff members
-       by position. But we don't actually want the user to be able to set the position manaully within the form. So we removeField('position'). They update the
+       by position. But we don't actually want the user to be able to set the position manually within the form. So we removeField('position'). They update the
        position by drag-and-drag in that case. Check it out below</p>
 
 .. thumbnail:: images/indexOrderBy1.png
@@ -664,28 +562,6 @@ Auto function being called on the newly created Dynamo object.
     :align: center
 
     Here we see search working for first and last name at the same time.
-
-.. raw:: html
-
-    <hr>
-
-    <p><a name="method-searchOptions"></a></p>
-    <h4><code>searchOptions()</code></h4>
-    <p>The <code>searchOptions</code> method allows you to pass in options to the search form on in the index view of the module. This function takes one parameter, which is an
-       array of "options". You can pass options like <code>'placeholder' => 'Search By Name'</code> or <code>'disabled' => true</code> to the function.
-       </p>
-
-.. thumbnail:: images/searchOptions1.png
-    :align: center
-
-    Here I chain on searchOptions() right after searchable() to tell dynamo to add placeholder text inside the search input
-    field to get the user a hint on what to do.
-
-.. thumbnail:: images/searchOptions2.png
-    :align: center
-
-    Here we can see the placeholder.
-
 
 .. raw:: html
 

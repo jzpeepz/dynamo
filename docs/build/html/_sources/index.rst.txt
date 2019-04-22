@@ -79,6 +79,7 @@ Quick-Start Video
    installation
    many-to-many
    dynamoMethods
+   relationshipDeleteModal
 
 .. toctree::
    :caption: License

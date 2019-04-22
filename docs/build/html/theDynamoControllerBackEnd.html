@@ -86,6 +86,7 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="many-to-many.html">Creating Many-to-Many Relationships Between Dynamo Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dynamoMethods.html">Dynamo Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="relationshipDeleteModal.html">Deleting Categories</a></li>
 </ul>
 <p class="caption"><span class="caption-text">License</span></p>
 <ul>
@@ -170,7 +171,7 @@ of the documentation to get a better understanding.</p>
 </div>
 <p>that links to the Dynamo Controller. The following routes are generated:</p>
 <a class=""
-               data-lightbox="group-0edb7c7f-036d-45bb-a110-2f6f1ec25013"
+               data-lightbox="group-58a73484-b3b8-4674-9fce-e86977dc90f5"
                href="_images/routesGenerated.png"
                title=""
                data-title=""
@@ -196,7 +197,7 @@ public function index()
 </div>
 <p>Resulting DynamoView:</p>
 <a class=""
-               data-lightbox="group-dcf878c8-f023-4c97-bfdc-01d298b732a7"
+               data-lightbox="group-41e9a724-2e1f-4616-a367-11c5d0078b9f"
                href="_images/indexDynamoView.png"
                title=""
                data-title=""
@@ -226,7 +227,7 @@ public function create()
 </div>
 <p>Resulting DynamoView:</p>
 <a class=""
-               data-lightbox="group-986d79e2-3624-422f-98ab-64b00deb4209"
+               data-lightbox="group-9986be18-3f16-45e8-83d6-76bf0310b7b8"
                href="_images/createDynamoView.png"
                title=""
                data-title=""
@@ -256,7 +257,7 @@ public function store(Request $request)
 </div>
 <p>Resulting DynamoView:</p>
 <a class=""
-               data-lightbox="group-784c64b5-a0e2-44bf-a8ae-53e85982890a"
+               data-lightbox="group-c09e6d42-49bb-409f-9e41-f50079983121"
                href="_images/storeDynamoView.png"
                title=""
                data-title=""
@@ -354,7 +355,7 @@ public function destroy($id)
 </div>
 <p>Resulting DynamoView if object can’t be deleted because it’s connected to other objects in the relational database via pivot tables:</p>
 <a class=""
-               data-lightbox="group-8e997ef3-0c16-4512-bb8b-6d622ba34b53"
+               data-lightbox="group-fcf9b6e0-fb95-4c8d-8bc4-9ae23a844c5d"
                href="_images/deleteFailDynamoView.png"
                title=""
                data-title=""
@@ -365,7 +366,7 @@ public function destroy($id)
                      alt=""/>
                 </a><p>Resulting DynamoView if object was successfully deleted:</p>
 <a class=""
-               data-lightbox="group-4d572307-5f05-4d8d-b05c-05cd137f5b89"
+               data-lightbox="group-edd037d0-2cf0-4ad5-8dce-fddd72e80c43"
                href="_images/deleteDynamoView.png"
                title=""
                data-title=""
