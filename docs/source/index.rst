@@ -80,6 +80,7 @@ Quick-Start Video
    many-to-many
    dynamoMethods
    relationshipDeleteModal
+   relatingModelsToThemselves
 
 .. toctree::
    :caption: License
