@@ -28,6 +28,7 @@ class Dynamo
     private $formTabs = null;
     private $indexButtons = null;
     private $actionButtons = null;
+    private $ignoredScopes = null;
     public static $globalHandlers = null;
 
     public function __construct($class)
@@ -288,7 +289,7 @@ class Dynamo
     {
         $className = $this->class;
 
-        $query = $className::withoutGlobalScopes();
+        $query = $className::withoutGlobalScopes($this->getIgnoredScopes());
 
         $query = $this->executeViewFilter($query, $view);
 
@@ -843,5 +844,26 @@ class Dynamo
     public function popField()
     {
         return $this->fields->pop();
+    }
+
+    public function ignoredScopes(array $scopes = [])
+    {
+        if (! is_array($scopes)) {
+            $scopes = [$scopes];
+        }
+        
+        $this->ignoredScopes = $scopes;
+
+        return $this;
+    }
+
+    public function applyScopes()
+    {
+        return $this->ignoredScopes();
+    }
+
+    public function getIgnoredScopes()
+    {
+        return $this->ignoredScopes;
     }
 }

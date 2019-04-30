@@ -86,7 +86,7 @@ class DynamoController extends Controller
     {
         $className = $this->dynamo->class;
 
-        $item = $className::withoutGlobalScopes()->find($id);
+        $item = $className::withoutGlobalScopes($this->dynamo->getIgnoredScopes())->findOrFail($id);
 
         $formOptions = [
             'route' => [$this->dynamo->getRoute('update'), $id],
