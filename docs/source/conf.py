@@ -14,12 +14,12 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('.'))
-sys.path.append('src')
-sys.path.append('src/Http/Controllers')
-sys.path.append('src/Console/Commands')
-sys.path.append('src/config')
-sys.path.append('docs/images')
+# sys.path.insert(0, os.path.abspath('.'))
+# sys.path.append('src')
+# sys.path.append('src/Http/Controllers')
+# sys.path.append('src/Console/Commands')
+# sys.path.append('src/config')
+# sys.path.append('docs/images')
 
 
 # -- Project information -----------------------------------------------------
@@ -38,7 +38,7 @@ author = u'Jonathan Peoples, Colton Williams'
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #
-needs_sphinx = '1.3.5'
+# needs_sphinx = '1.3.5'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
