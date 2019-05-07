@@ -3,124 +3,177 @@
 @section('title', $dynamo->getName() . ' Manager')
 
 @section(config('dynamo.target_blade_section', 'content'))
-
-    <div class="card">
-        <div class="card-header">
-            @if ($dynamo->addVisible())
-                <a href="{{ route($dynamo->getRoute('create')) }}" class="btn btn-success btn-sm float-right">Add {{ $dynamo->getName() }}</a>
-            @endif
-
-            @foreach ($dynamo->getIndexButtons() as $button)
-                <div class="mr-2 float-right">{!! call_user_func($button) !!}</div>
-            @endforeach
-
-            {{ $dynamo->getName() }} Manager
-        </div>
-
-        <div class="card-body">
-
-            @include('dynamo::partials.alerts')
-
-            <form action="{{ route($dynamo->getRoute('index')) }}" method="get" class="dynamo-search form-inline">
-
-                @foreach ($dynamo->getFilters() as $filter)
-
-                    {!! $filter !!}
-
-                @endforeach
-
-                @if ($dynamo->hasSearchable())
-
-                    <div class="form-group mb-3">
-
-                        <label for="" class="search-label">Keywords</label>
-
-                        <div class="input-group">
-                            <input type="text" name="q" class="form-control" value="{{ request()->input('q') }}" {!! $dynamo->getSearchOptionsString() !!}>
-                            <span class="input-group-btn">
-                                @if (request()->has('q'))
-                                    <a href="{{ route($dynamo->getRoute('index')) }}" class="btn btn-light">Clear</a>
-                                @endif
-                                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Search</button>
-                            </span>
-                        </div>
-
+    <div class="container-fluid pt-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-11 col-xl-10">
+                <div class="card">
+                    {{--*****************************************************************
+                        *                         START HEADER BLOCK                    *
+                        *            This block is the header of the dynamo card        *
+                        *    Includes name of manager, index buttons, and create button *
+                        ***************************************************************** --}}
+                    <div class="card-header">
+                        @if ($dynamo->addVisible())
+                            <a href="{{ route($dynamo->getRoute('create')) }}" class="btn btn-success btn-sm float-right">Add {{ $dynamo->getName() }}</a>
+                        @endif
+                        @foreach ($dynamo->getIndexButtons() as $button)
+                            <div class="mr-2 float-right">{!! call_user_func($button) !!}</div>
+                        @endforeach
+                        {{ $dynamo->getName() }} Manager
                     </div>
+                    {{--***************************
+                        *     END HEADER BLOCK    *
+                        *************************** --}}
 
-                @endif
 
-                {{--***************************************
-                    *     If the user uses IndexTabs       *
-                    *      Run this block to render       *
-                    *     the tabs                        *
-                    *************************************** --}}
-                @if ($dynamo->hasIndexTabs())
+                    {{--**************************************
+                        *       START SEARCH BAR BLOCK       *
+                        *  This block begins the card-body   *
+                        *     Includes search bar form       *
+                        ************************************** --}}
+                    <div class="card-body">
 
-                     <ul class="nav nav-tabs" role="tablist">
-                        @foreach ($dynamo->getIndexTabs() as $index => $tab)
-                                    <li class="nav-item">
-                                        <a class="nav-link {{ ($index == 0 && ! request()->has('view')) || (request()->input('view') == str_slug($tab->getName())) ? 'active' : '' }}"
-                                            href="{{ route($dynamo->getRoute('index'), ['view' => str_slug($tab->getName())]) }}" role="tab">{{ $tab->getName() }}
-                                            @if ($tab->hasOption('tooltip'))
-                                                <i style="font-size: 17px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
-                                                title="{!! $tab->getOption('tooltip') !!}"></i>
-                                            @endif
-                                        </a>
-                                    </li>
-                        @endforeach
-                    </ul>
-                @endif {{-- endif for Index Tabs --}}
+                        @include('dynamo::partials.alerts')
 
-            </form>
+                        @if ($dynamo->hasSearchable())
 
-            @if ($items->isEmpty())
+                            <form action="{{ route($dynamo->getRoute('index')) }}" method="get" class="dynamo-search form-inline">
 
-                <div>No items found. <a href="{{ route($dynamo->getRoute('create')) }}">Add one.</a></div>
+                                <input type="hidden" name="view" class="form-control" value="{{ request()->input('view') }}">
 
-            @else
+                                @foreach ($dynamo->getFilters() as $filter)
 
-                <table class="table" id="dynamo-index">
-                    <thead>
-                        <tr>
-                            @foreach ($dynamo->getIndexes() as $index)
-                                <th>{{ $index->label }}</th>
-                            @endforeach
-                            <th style="width: 110px;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="dynamo-index-body">
-                        @foreach ($items as $item)
-                            <tr class="dynamo-index-row" data-id="{{ $item->id }}">
-                                @foreach ($dynamo->getIndexes() as $index)
-                                    <td>{!! $index->getValue($item) !!}</td>
+                                    {!! $filter !!}
+
                                 @endforeach
-                                <td style="width: 150px;">
-                                    <a href="{{ route($dynamo->getRoute('edit'), $item->id) }}" class="btn btn-light btn-sm">Edit</a>
 
-                                    @if ($dynamo->deleteVisible())
-                                        {!! Form::open(['route' => [$dynamo->getRoute('destroy'), $item->id], 'method' => 'delete', 'style' => 'display: inline-block;']) !!}
-                                            <button class="btn btn-light btn-sm btn-delete">Delete</button>
-                                        {!! Form::close() !!}
-                                    @endif
+                                    <div class="form-group mb-3">
+                                        <label for="" class="search-label">Search</label>
+                                        <div class="input-group" style="margin-top: -20px; margin-bottom: -20px;">
+                                            <input type="text" name="q" class="form-control" value="{{ request()->input('q') }}" {!! $dynamo->getSearchOptionsString() !!}>
+                                            <span class="input-group-btn">
+                                                @if (request()->has('q'))
+                                                    <a href="{{ route($dynamo->getRoute('index')) }}" class="btn btn-light">Clear</a>
+                                                @endif
+                                                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Search</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                            </form>
+                        @endif
 
-                                    @foreach ($dynamo->getActionButtons() as $button)
-                                        {!! call_user_func($button, $item) !!}
-                                    @endforeach
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        {{--*******************************
+                            *     END SEARCH BAR BLOCK    *
+                            ******************************* --}}
 
-                {!! method_exists($items, 'render') ? $items->appends(request()->only(['q']))->render() : null !!}
+                            {{--*********************************************************
+                                *                 START INDEXTAB BLOCK                  *
+                                *             This block renders indexTabs              *
+                                *   Includes indexTabs, count of members in that tab,   *
+                                *                and tooltps for each tab               *
+                                ********************************************************* --}}
 
-            @endif
+                            @if ($dynamo->hasIndexTabs())
+                                <div class="card-header">
+                                     <ul class="nav nav-tabs card-header-tabs" id="index-nav-tabs" style="margin-top: 15px; width: 100%; flex-wrap: nowrap;" role="tablist">
+                                        @foreach ($dynamo->getIndexTabs() as $index => $tab)
+                                            <li class="nav-item">
+                                                <a class="nav-link {{ ($index == 0 && ! request()->has('view')) || (request()->input('view') == str_slug($tab->getName())) ? 'active' : '' }}"
+                                                    href="{{ route($dynamo->getRoute('index'), ['view' => str_slug($tab->getViewName())]) }}" role="tab">{{ $tab->getName() }}
+                                                    @if ($tab->shouldShowCount())
+                                                        <span class="round-badge">{{ $dynamo->getIndexItemsQueryBuilder($tab->getViewName())->count() }}</span>
+                                                    @endif
+                                                    @if ($tab->hasOption('tooltip'))
+                                                        <i style="font-size: 17px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
+                                                        title="{!! $tab->getOption('tooltip') !!}"></i>
+                                                    @endif
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            {{--*****************************
+                                *     END INDEXTAB BLOCK    *
+                                ***************************** --}}
+
+
+                        {{--**********************************************
+                            *               START ITEMS EMPTY BLOCK      *
+                            *   If no items, say no items found and link *
+                            *        to create a new dynamo item         *
+                            ********************************************** --}}
+                        @if ($items->isEmpty())
+
+                            <div style="margin-top: 20px; margin-left: 5px;">No items found. <a href="{{ route($dynamo->getRoute('create')) }}">Add one.</a></div>
+
+                        @else
+
+                        {{--********************************
+                            *     END ITEMS EMPTY BLOCK    *
+                            ******************************** --}}
+
+                            {{--*******************************************************
+                                *               START TABLE BLOCK                           *
+                                *   Render the dynamo table of objects                *
+                                *   Includes table head which is the getIndexes()     *
+                                *   Includes table body which renders rows of each    *
+                                *   dynamo item with their values in each column      *
+                                *   and with an edit button linking to the formView   *
+                                *   of each dynamo object.                            *
+                                ******************************************************* --}}
+
+                            <div class="table-responsive" style="margin-top: -1px;">
+                                <table class="table" id="dynamo-index">
+                                    <thead>
+                                        <tr>
+                                            @foreach ($dynamo->getIndexes() as $index)
+                                                <th>{{ $index->label }}</th>
+                                            @endforeach
+                                            <th style="width: 110px;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dynamo-index-body">
+                                        @foreach ($items as $item)
+                                            <tr class="dynamo-index-row" data-id="{{ $item->id }}">
+                                                @foreach ($dynamo->getIndexes() as $index)
+                                                    <td>{!! $index->getValue($item) !!}</td>
+                                                @endforeach
+                                                <td style="width: 150px;">
+                                                    <a href="{{ route($dynamo->getRoute('edit'), $item->id) }}" class="btn btn-link btn-sm">Edit</a>
+
+                                                    {{-- @if ($dynamo->deleteVisible())
+                                                        {!! Form::open(['route' => [$dynamo->getRoute('destroy'), $item->id], 'method' => 'delete', 'style' => 'display: inline-block;', 'onsubmit' => 'return confirm(\'Are you sure?\');']) !!}
+                                                            <button class="btn btn-link btn-sm btn-delete">Delete</button>
+                                                        {!! Form::close() !!}
+                                                    @endif --}}
+
+                                                    @foreach ($dynamo->getActionButtons() as $button)
+                                                        {!! call_user_func($button, $item) !!}
+                                                    @endforeach
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            {!! method_exists($items, 'render') ? $items->appends(request()->all())->render() : null !!}
+
+                            {{--**************************
+                                *     END TABLE BLOCK    *
+                                ************************** --}}
+                        @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    {{--***************************************
-        *  If the user uses manage            *
-        *   relationships,                    *
-        *   run this block to include modal   *
+    {{--*********************************************
+        *      START RELATIONSHIPS MODAL BLOCK      *
+        *   If the user uses manage relationships,  *
+        *      run this block to include modal      *
         *************************************** --}}
         <div class="modal fade" id="relationships-manager-modal" tabindex="-1" role="dialog">
 
@@ -179,18 +232,14 @@
 
         </div><!-- /.modal -->
 
+        {{--****************************************
+            *     END RELATIONSHIPS MODAL BLOCK    *
+            **************************************** --}}
     </div> <!--END DYNAMO CONTAINER -->
 
 @endsection
 
 @section('scripts')
-    <script>
-    $(document).ready(function(){
-        $('.btn-delete').click(function(){
-            return confirm('Are you sure?');
-        });
-    });
-    </script>
 
     <style>
     .dynamo-search .form-group {
@@ -222,7 +271,7 @@
         //Get checkbox
         const categoryCheckbox = document.getElementById("areYouSureCheckbox");
 
-        var realcatname = $('.panel-heading');
+        var realcatname = $('.card-heading');
 
         var path = window.location.pathname;
 
