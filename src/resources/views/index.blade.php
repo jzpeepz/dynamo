@@ -43,7 +43,7 @@
                                         <input type="text" name="q" class="form-control" value="{{ request()->input('q') }}" {!! $dynamo->getSearchOptionsString() !!}>
                                         <span class="input-group-btn">
                                             @if (request()->has('q'))
-                                                <a href="{{ route($dynamo->getRoute('index')) }}" class="btn btn-default">Clear</a>
+                                                <a href="{{ route($dynamo->getRoute('index'), request()->only('view')) }}" class="btn btn-default">Clear</a>
                                             @endif
                                             <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Search</button>
                                         </span>
