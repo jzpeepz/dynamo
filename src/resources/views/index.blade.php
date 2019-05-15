@@ -228,9 +228,8 @@
         //Show modal if the Manage Button is pressed and set the Category name and it's Id that it was pressed on to a variable
         $('#relationships-manager-modal').on('show.bs.modal', function (e) {
             //Get string of category name, and its data-id attribute value
-            var categoryName = e.relatedTarget.closest('.dynamo-index-row').firstChild.nextElementSibling.innerText;
+            var categoryName = e.relatedTarget.closest('.dynamo-index-row').firstChild.innerText;
             var categoryDataId = e.relatedTarget.closest('.dynamo-index-row').getAttribute('data-id');
-
             //Get the name in lowercase format with no spaces to use in the ajax call
             var categoryNameLower = categoryName.toLowerCase();
             categoryNameLower = categoryNameLower.replace(" ", "");
