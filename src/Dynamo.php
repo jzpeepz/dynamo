@@ -207,6 +207,15 @@ class Dynamo
         return $this;
     }
 
+    public function removeFields($fieldKeys = [])
+    {
+        foreach ($fieldKeys as $key) {
+            $this->removeField($key);
+        }
+
+        return $this;
+    }
+
     public function removeBoth($key)
     {
         $this->removeIndex($key);
@@ -265,6 +274,9 @@ class Dynamo
                 $this->addField($column, $this->getFieldFromType($types[$column]), ['onIndex' => true]);
             }
         }
+
+        // apply all scopes by default
+        $this->applyScopes();
 
         return $this;
     }
