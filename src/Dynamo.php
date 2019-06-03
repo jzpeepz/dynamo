@@ -16,8 +16,9 @@ class Dynamo
     private $paginate = 200;
     private $searchable = null;
     private $searchOptions = null;
-    private $deleteHidden = true;
     private $addHidden = true;
+    private $editHidden = true;
+    private $deleteHidden = true;
     private $currentGroup = null;
     private $groupLabels = [];
     private $position = 10;
@@ -514,13 +515,6 @@ class Dynamo
         return $index->getValue($item);
     }
 
-    public function hideDelete()
-    {
-        $this->deleteHidden = false;
-
-        return $this;
-    }
-
     public function hideAdd()
     {
         $this->addHidden = false;
@@ -528,14 +522,33 @@ class Dynamo
         return $this;
     }
 
-    public function deleteVisible()
+    public function hideEdit()
     {
-        return $this->deleteHidden;
+        $this->editHidden = false;
+
+        return $this;
+    }
+
+    public function hideDelete()
+    {
+        $this->deleteHidden = false;
+
+        return $this;
     }
 
     public function addVisible()
     {
         return $this->addHidden;
+    }
+
+    public function editVisible()
+    {
+        return $this->editHidden;
+    }
+
+    public function deleteVisible()
+    {
+        return $this->deleteHidden;
     }
 
     public function setGroup($name)
@@ -851,7 +864,7 @@ class Dynamo
         if (! is_array($scopes)) {
             $scopes = [$scopes];
         }
-        
+
         $this->ignoredScopes = $scopes;
 
         return $this;
