@@ -6,7 +6,7 @@
     <div class="container-fluid pt-4">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-11 col-xl-10">
-                <div class="card">
+                <div class="card mb-4">
                     <div class="card-header">
                         {{ $item->exists ? 'Edit' : 'Add' }} {{ $dynamo->getName() }}
 
@@ -28,10 +28,11 @@
                         @if ($dynamo->hasFormTabs())
                              <ul class="nav nav-tabs" role="tablist">
                                 @foreach ($dynamo->getFormTabs() as $index => $tab)
-                                    <li role="presentation" class="nav-item{{ ($index == 0) ? ' active' : '' }}">
-                                        <a class="nav-link" href="#{{ $tab->key }}" role="tab" aria-controls="{{ $tab->key }}" data-toggle="tab">{{ $tab->getName() }}
+
+                                    <li role="presentation" class="nav-item">
+                                        <a class="nav-link{{ ($index == 0) ? ' active' : '' }}" href="#{{ $tab->key }}" role="tab" aria-controls="{{ $tab->key }}" data-toggle="tab">{{ $tab->getName() }}
                                             @if ($tab->hasOption('tooltip'))
-                                                <i style="font-size: 17px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
+                                                <i class="fas fa-question-circle dynamo-tooltip" data-toggle="tooltip" data-html="true"
                                                 title="{!! $tab->getOption('tooltip') !!}"></i>
                                             @endif
                                         </a>
@@ -86,22 +87,21 @@
                             <button type="submit" class="btn btn-primary">Save {{ $dynamo->getName() }}</button>
                             <a href="{{ route($dynamo->getRoute('index')) }}" class="btn">Cancel</a>
 
-
-                            @if (method_exists($item, 'url'))
+                            {!! Form::close() !!}
+                            @if ($item->exists)
                                 @if ($dynamo->deleteVisible())
-                                    {!! Form::open(['route' => [$dynamo->getRoute('destroy'), $item->id], 'method' => 'delete', 'class' => 'delete-form pull-right', 'style' => 'display: inline-block;', 'onsubmit' => 'return confirm(\'Are you sure?\');']) !!}
-                                        <button class="btn btn-danger btn-delete" style="float: right;">Delete</button>
+                                    {!! Form::open(['route' => [$dynamo->getRoute('destroy'), $item->id], 'method' => 'delete', 'class' => 'delete-form dynamo-delete-form float-right d-inline mb-0', 'style' => 'display: inline-block;', 'onsubmit' => 'return confirm(\'Are you sure?\');']) !!}
+                                        <button type="submit" class="btn btn-danger btn-delete dynamo-delete-btn " style="float: right;">Delete</button>
                                     {!! Form::close() !!}
-
                                 @endif
                             @endif
-                        {!! Form::close() !!}
 
 
 
-                        @if (class_exists('\Uploader'))
+
+                        {{-- @if (class_exists('\Uploader'))
                             {!! Uploader::helper() !!}
-                        @endif
+                        @endif --}}
                     </div>
                 </div>
             </div>

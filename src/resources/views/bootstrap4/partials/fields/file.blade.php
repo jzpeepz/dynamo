@@ -11,7 +11,7 @@
                     title="{!! $field->getOption('tooltip') !!}"></i>
             @endif
         </label>
-        {!! Form::file($field->key, ['class' => 'form-control '.$field->getOption('class')]) !!}
+        {!! Form::file($field->key, ['class' => 'form-control dynamo-file '.$field->getOption('class')]) !!}
         @if (! empty($item->{$field->key}))
             <p class="help-block">Current: <a href="{{ $item->{$field->key} }}" target="_blank">{{ $item->{$field->key} }}</a></p>
         @endif

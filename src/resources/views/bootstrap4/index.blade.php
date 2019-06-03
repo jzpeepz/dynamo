@@ -49,14 +49,14 @@
 
                                     <div class="form-group mb-3">
                                         <label for="" class="search-label">Search</label>
-                                        <div class="input-group" style="margin-top: -20px; margin-bottom: -20px;">
+                                        <div class="input-group dynamo-input-group">
                                             <input type="text" name="q" class="form-control" value="{{ request()->input('q') }}" {!! $dynamo->getSearchOptionsString() !!}>
-                                            <span class="input-group-btn">
+                                            <div class="input-group-append">
                                                 @if (request()->has('q'))
-                                                    <a href="{{ route($dynamo->getRoute('index')) }}" class="btn btn-light">Clear</a>
+                                                    <a href="{{ route($dynamo->getRoute('index')) }}" class="btn btn-secondary">Clear</a>
                                                 @endif
-                                                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Search</button>
-                                            </span>
+                                                <button class="btn btn-primary" type="submit" id="button-addon2"><i class="fa fa-search"></i> Search</button>
+                                            </div>
                                         </div>
                                     </div>
                             </form>
@@ -75,16 +75,16 @@
 
                             @if ($dynamo->hasIndexTabs())
                                 <div class="card-header">
-                                     <ul class="nav nav-tabs card-header-tabs" id="index-nav-tabs" style="margin-top: 15px; width: 100%; flex-wrap: nowrap;" role="tablist">
+                                     <ul class="nav nav-tabs card-header-tabs" id="dynamo-index-nav-tabs" role="tablist">
                                         @foreach ($dynamo->getIndexTabs() as $index => $tab)
-                                            <li class="nav-item">
+                                            <li class="nav-item" id="dynamo-index-tab-margin-bottom">
                                                 <a class="nav-link {{ ($index == 0 && ! request()->has('view')) || (request()->input('view') == str_slug($tab->getName())) ? 'active' : '' }}"
                                                     href="{{ route($dynamo->getRoute('index'), ['view' => str_slug($tab->getViewName())]) }}" role="tab">{{ $tab->getName() }}
                                                     @if ($tab->shouldShowCount())
                                                         <span class="round-badge">{{ $dynamo->getIndexItemsQueryBuilder($tab->getViewName())->count() }}</span>
                                                     @endif
                                                     @if ($tab->hasOption('tooltip'))
-                                                        <i style="font-size: 17px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
+                                                        <i id="dont-show-on-mobile-tooltip" class="fas fa-question-circle dynamo-tooltip" data-toggle="tooltip" data-html="true"
                                                         title="{!! $tab->getOption('tooltip') !!}"></i>
                                                     @endif
                                                 </a>
@@ -106,7 +106,7 @@
                             ********************************************** --}}
                         @if ($items->isEmpty())
 
-                            <div style="margin-top: 20px; margin-left: 5px;">No items found. <a href="{{ route($dynamo->getRoute('create')) }}">Add one.</a></div>
+                            <div class="dynamo-index-table-empty">No items found. <a href="{{ route($dynamo->getRoute('create')) }}">Add one.</a></div>
 
                         @else
 
@@ -124,14 +124,14 @@
                                 *   of each dynamo object.                            *
                                 ******************************************************* --}}
 
-                            <div class="table-responsive" style="margin-top: -1px;">
+                            <div class="table-responsive dynamo-table-responsive">
                                 <table class="table" id="dynamo-index">
                                     <thead>
                                         <tr>
                                             @foreach ($dynamo->getIndexes() as $index)
                                                 <th>{{ $index->label }}</th>
                                             @endforeach
-                                            <th style="width: 110px;">Action</th>
+                                            <th class="dynamo-width-of-action-column">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="dynamo-index-body">
@@ -140,15 +140,8 @@
                                                 @foreach ($dynamo->getIndexes() as $index)
                                                     <td>{!! $index->getValue($item) !!}</td>
                                                 @endforeach
-                                                <td style="width: 150px;">
+                                                <td class="dynamo-width-of-action-row">
                                                     <a href="{{ route($dynamo->getRoute('edit'), $item->id) }}" class="btn btn-link btn-sm">Edit</a>
-
-                                                    {{-- @if ($dynamo->deleteVisible())
-                                                        {!! Form::open(['route' => [$dynamo->getRoute('destroy'), $item->id], 'method' => 'delete', 'style' => 'display: inline-block;', 'onsubmit' => 'return confirm(\'Are you sure?\');']) !!}
-                                                            <button class="btn btn-link btn-sm btn-delete">Delete</button>
-                                                        {!! Form::close() !!}
-                                                    @endif --}}
-
                                                     @foreach ($dynamo->getActionButtons() as $button)
                                                         {!! call_user_func($button, $item) !!}
                                                     @endforeach
@@ -169,7 +162,6 @@
                 </div>
             </div>
         </div>
-    </div>
     {{--*********************************************
         *      START RELATIONSHIPS MODAL BLOCK      *
         *   If the user uses manage relationships,  *
@@ -177,24 +169,26 @@
         *************************************** --}}
         <div class="modal fade" id="relationships-manager-modal" tabindex="-1" role="dialog">
 
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg" role="document">
 
                 <div class="modal-content">
 
                     <div class="modal-header">
 
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Delete Category</h4>
 
-                        <h4 class="modal-title">Delete Category</h4><br>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
 
                     </div>
 
-                    <div class="modal-body">
+                    <div class="modal-body dynamo-modal-body">
                             {{--***************************************
                                 *          DANGER ZONE CODE           *
                                 *************************************** --}}
-                            <div style="border-style: solid; border-color: #cc0000; padding: 20px;">
-                                <h1 style="text-align: center; margin-bottom: 50px;">Danger Zone!</h1>
+                            <div class="dynamo-danger-zone-modal-body">
+                                <h1>Danger Zone!</h1>
 
                                 If you delete this {{ $dynamo->getName() }}, every single object will be detached from it. <br><br>The objects themselves will not be deleted but they will all be removed
                                 from this category, and then this category will be deleted. This will change pages on your website.<br><br>
@@ -211,13 +205,16 @@
                                         <label class="form-check-label" for="exampleCheck1">Are you sure?</label>
                                     </div>
                                     <br>
-                                    <button type="submit" class="btn btn-danger disabled" id="perma-delete-btn" style="width: 100%;">Permanatly Delete This {{ $dynamo->getName() }}</button>
+                                    <button type="submit" class="btn btn-danger disabled" id="perma-delete-btn">Permanatly Delete This {{ $dynamo->getName() }}</button>
                             </div>
 
                             {{--***************************************
                                 *          DANGER ZONE CODE END       *
                                 *************************************** --}}
 
+                    </div>
+                    <div class="modal-footer dynamo-modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
 
                     <?php /* <div class="modal-footer">
@@ -235,30 +232,14 @@
         {{--****************************************
             *     END RELATIONSHIPS MODAL BLOCK    *
             **************************************** --}}
-    </div> <!--END DYNAMO CONTAINER -->
 
 @endsection
 
 @section('scripts')
-
-    <style>
-    .dynamo-search .form-group {
-        flex-flow: column wrap;
-        align-items: start;
-    }
-    .dynamo-search .form-group label {
-        align-items: start;
-    }
-    .dynamo-search .form-group .search-label {
-        /* visibility: hidden; */
-    }
-    </style>
-
     {{--***************************************
         *  Script deals with Relationships    *
         *   Manager popup                     *
         *************************************** --}}
-
     <script>
 
     $(document).ready(function() {
