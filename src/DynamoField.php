@@ -69,6 +69,11 @@ class DynamoField
         return isset($this->options[$key]) ? $this->options[$key] : '';
     }
 
+    public function setOption($key, $value)
+    {
+        $this->attributes['options'][$key] = $value;
+    }
+
     public function hasOption()
     {
         return ! $this->options[$key];
@@ -106,6 +111,13 @@ class DynamoField
         }
 
         return $options->toArray();
+    }
+
+    public function getSelectOption($index)
+    {
+        $options = $this->getSelectOptions();
+
+        return isset($options[$index]) ? $options[$index] : null;
     }
 
     public function hasViewHandler()

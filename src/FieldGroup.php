@@ -83,4 +83,26 @@ class FieldGroup
         return $this->rowStart()
                     ->rowEnd();
     }
+
+    public function removeField($fieldKey)
+    {
+        $this->fields = $this->fields->reject(function ($field, $key) use ($fieldKey) {
+            return $field->key == $fieldKey;
+        });
+    }
+
+    public function getOption($key)
+    {
+        $this->options->get($key);
+    }
+
+    public function setOption($key, $value)
+    {
+        $this->options->set($key, $value);
+    }
+
+    public function isEmpty()
+    {
+        return $this->fields->isEmpty();
+    }
 }

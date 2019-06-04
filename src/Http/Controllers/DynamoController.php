@@ -27,6 +27,10 @@ class DynamoController extends Controller
     {
         $items = $this->dynamo->getIndexItems();
 
+        if (function_exists('mimic')) {
+            mimic($this->dynamo->getName() . ' Manager');
+        }
+
         return DynamoView::make($this->dynamo, 'dynamo::index', compact('items'));
     }
 
@@ -38,6 +42,10 @@ class DynamoController extends Controller
     public function create()
     {
         $item = new $this->dynamo->class;
+
+        if (function_exists('mimic')) {
+            mimic('Create ' . $this->dynamo->getName());
+        }
 
         $formOptions = [
             'route' => $this->dynamo->getRoute('store'),
@@ -86,7 +94,13 @@ class DynamoController extends Controller
     {
         $className = $this->dynamo->class;
 
-        $item = $className::withoutGlobalScopes($this->dynamo->getIgnoredScopes())->findOrFail($id);
+        $item = $className::withoutGlobalScopes()->findOrFail($id);
+
+        $this->dynamo = $this->dynamo->getModified($item);
+
+        if (function_exists('mimic')) {
+            mimic('Edit ' . $this->dynamo->getName());
+        }
 
         $formOptions = [
             'route' => [$this->dynamo->getRoute('update'), $id],
