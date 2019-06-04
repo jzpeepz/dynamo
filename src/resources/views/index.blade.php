@@ -92,7 +92,9 @@
                                         @foreach ($dynamo->getIndexes() as $index)
                                             <th>{{ $index->label }}</th>
                                         @endforeach
-                                        <th style="width: 110px;">Action</th>
+                                        @if($dynamo->editVisible() || $dynamo->deleteVisible())
+                                            <th style="width: 110px;">Action</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody id="dynamo-index-body">
