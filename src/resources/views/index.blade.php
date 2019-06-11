@@ -36,7 +36,6 @@
 
                             @if ($dynamo->hasSearchable())
 
-
                                 <div class="form-group">
                                     <label for="" class="search-label">Search</label>
                                     <div class="input-group" style="margin-top: -20px;">

@@ -11,7 +11,7 @@ $group = $dynamo->getGroup($field->key);
         <div class="card-body">
 
             @if ($group->options->has('label'))
-                <div class="card-header">{!! $group->options->get('label') !!}</div>
+                <h4 style="margin-top: 0px;">{!! $group->options->get('label') !!}</h4>
             @endif
 
             {!! $group->render($item) !!}
