@@ -265,7 +265,7 @@
         //Show modal if the Manage Button is pressed and set the Category name and it's Id that it was pressed on to a variable
         $('#relationships-manager-modal').on('show.bs.modal', function (e) {
             //Get string of category name, and its data-id attribute value
-            var categoryName = e.relatedTarget.closest('.dynamo-index-row').firstChild.nextElementSibling.innerText;
+            var categoryName = e.relatedTarget.closest('.dynamo-index-row').firstChild.innerText;
             console.log(categoryName);
             var categoryDataId = e.relatedTarget.closest('.dynamo-index-row').getAttribute('data-id');
             console.log(categoryDataId);
