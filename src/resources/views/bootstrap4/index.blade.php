@@ -247,10 +247,14 @@
         //Global variables
         //Get Button
         const permaDeleteBtn = document.getElementById("perma-delete-btn");
+        console.log(permaDeleteBtn);
         //Get input field
         const categoryInputField = document.getElementById("categoryInputField");
+        console.log(categoryInputField);
         //Get checkbox
         const categoryCheckbox = document.getElementById("areYouSureCheckbox");
+        console.log(categoryCheckbox);
+
 
         var realcatname = $('.card-header');
 
@@ -262,7 +266,9 @@
         $('#relationships-manager-modal').on('show.bs.modal', function (e) {
             //Get string of category name, and its data-id attribute value
             var categoryName = e.relatedTarget.closest('.dynamo-index-row').firstChild.nextElementSibling.innerText;
+            console.log(categoryName);
             var categoryDataId = e.relatedTarget.closest('.dynamo-index-row').getAttribute('data-id');
+            console.log(categoryDataId);
 
             //Get the name in lowercase format with no spaces to use in the ajax call
             var categoryNameLower = categoryName.toLowerCase();
@@ -273,11 +279,13 @@
             $('#areYouSureCheckbox').change(function(){
                 if(categoryInputField.value == categoryName && categoryCheckbox.checked == true)
                 {
+                        console.log('made it');
                         permaDeleteBtn.classList.remove('disabled');
                         permaDeleteBtn.removeAttribute("disabled")
                 }
                 else
                 {
+                    console.log('disabled bro');
                     permaDeleteBtn.classList.add('disabled');
                     permaDeleteBtn.disabled = true;
                 }
