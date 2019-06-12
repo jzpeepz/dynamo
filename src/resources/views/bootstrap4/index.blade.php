@@ -95,7 +95,7 @@
                                     <td>{!! $index->getValue($item) !!}</td>
                                 @endforeach
                                 <td style="width: 150px;">
-                                    <a href="{{ route($dynamo->getRoute('edit'), $item->id) }}" class="btn btn-light btn-sm">Edit</a>
+                                    <a href="{{ route($dynamo->getRoute('edit'), $item->id) }}" style="padding: 0px !important;" class="btn btn-light btn-sm">Edit</a>
 
                                     @if ($dynamo->deleteVisible())
                                         {!! Form::open(['route' => [$dynamo->getRoute('destroy'), $item->id], 'method' => 'delete', 'style' => 'display: inline-block;']) !!}
