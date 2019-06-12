@@ -12,7 +12,7 @@
                         *            This block is the header of the dynamo card        *
                         *    Includes name of manager, index buttons, and create button *
                         ***************************************************************** --}}
-                    <div class="card-header">
+                    <div class="card-header" id="dynamo-card-header-name">
                         @if ($dynamo->addVisible())
                             <a href="{{ route($dynamo->getRoute('create')) }}" class="btn btn-success btn-sm float-right">Add {{ $dynamo->getName() }}</a>
                         @endif
@@ -252,7 +252,7 @@
         //Get checkbox
         const categoryCheckbox = document.getElementById("areYouSureCheckbox");
 
-        var realcatname = $('.card-heading');
+        var realcatname = $('.card-header');
 
         var path = window.location.pathname;
 
