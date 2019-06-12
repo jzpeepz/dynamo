@@ -11,7 +11,7 @@
                         {{ $item->exists ? 'Edit' : 'Add' }} {{ $dynamo->getName() }}
 
                         @if (method_exists($item, 'url'))
-                            <a href="{{ $item->url() }}" target="_blank" class="btn btn-info btn-sm pull-right">Preview</a>
+                            <a href="{{ $item->url() }}" target="_blank" class="btn btn-info btn-sm float-right">Preview</a>
                         @endif
                     </div>
 
