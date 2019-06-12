@@ -12,4 +12,4 @@
         @endif
     </div>
 
-<div>
+</div>
