@@ -190,8 +190,11 @@
                             <div class="dynamo-danger-zone-modal-body">
                                 <h1>Danger Zone!</h1>
 
-                                If you delete this {{ $dynamo->getName() }}, every single object will be detached from it. <br><br>The objects themselves will not be deleted but they will all be removed
-                                from this category, and then this category will be deleted. This will change pages on your website.<br><br>
+                                If you delete this {{ $dynamo->getName() }}, every single object will be detached from it. <br><br>
+
+                                For example, the page https://www.mywebsite.org/category/14/dog will no longer exist on your website because there is not a category called Dog in the system anymore.
+                                Actually the category gets "soft deleted", which means that FLEX360 can bring it back, but if you are unsure of what things will change on your website,
+                                we recommended getting in touch with us so we can help you. <br><br>
 
                                 If you want to remove only a few objects from this category, click the Edit button instead.<br><br>
 
@@ -247,13 +250,10 @@
         //Global variables
         //Get Button
         const permaDeleteBtn = document.getElementById("perma-delete-btn");
-        console.log(permaDeleteBtn);
         //Get input field
         const categoryInputField = document.getElementById("categoryInputField");
-        console.log(categoryInputField);
         //Get checkbox
         const categoryCheckbox = document.getElementById("areYouSureCheckbox");
-        console.log(categoryCheckbox);
 
 
         var realcatname = $('.card-header');
@@ -265,10 +265,8 @@
         //Show modal if the Manage Button is pressed and set the Category name and it's Id that it was pressed on to a variable
         $('#relationships-manager-modal').on('show.bs.modal', function (e) {
             //Get string of category name, and its data-id attribute value
-            var categoryName = e.relatedTarget.closest('.dynamo-index-row').firstChild.innerText;
-            console.log(categoryName);
+            var categoryName = e.relatedTarget.closest('.dynamo-index-row').firstChild.nextElementSibling.innerText;
             var categoryDataId = e.relatedTarget.closest('.dynamo-index-row').getAttribute('data-id');
-            console.log(categoryDataId);
 
             //Get the name in lowercase format with no spaces to use in the ajax call
             var categoryNameLower = categoryName.toLowerCase();
@@ -279,13 +277,11 @@
             $('#areYouSureCheckbox').change(function(){
                 if(categoryInputField.value == categoryName && categoryCheckbox.checked == true)
                 {
-                        console.log('made it');
                         permaDeleteBtn.classList.remove('disabled');
                         permaDeleteBtn.removeAttribute("disabled")
                 }
                 else
                 {
-                    console.log('disabled bro');
                     permaDeleteBtn.classList.add('disabled');
                     permaDeleteBtn.disabled = true;
                 }
