@@ -39,6 +39,10 @@ class FieldGroup
 
     public function render($item)
     {
+        if ($this->shouldNotDisplay($item)) {
+            return null;
+        }
+        
         return $this->fields->reduce(function ($carry, $field) use ($item) {
             return $carry . $field->render($item);
         });
@@ -104,5 +108,21 @@ class FieldGroup
     public function isEmpty()
     {
         return $this->fields->isEmpty();
+    }
+
+    public function shouldDisplay($item)
+    {
+        $display = true;
+        
+        if (isset($this->options['display']) && is_callable($this->options['display'])) {
+            $display = call_user_func($this->options['display'], $item);
+        }
+
+        return $display;
+    }
+
+    public function shouldNotDisplay($item)
+    {
+        return ! $this->shouldDisplay($item);
     }
 }

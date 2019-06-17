@@ -2,7 +2,7 @@
 $group = $dynamo->getGroup($field->key);
 ?>
 
-@if (! $group->isEmpty())
+@if (! $group->isEmpty() && $group->shouldDisplay($item))
 
     {!! $group->renderBefore() !!}
 

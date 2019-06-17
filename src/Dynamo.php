@@ -364,11 +364,11 @@ class Dynamo
 
     public function handleSpecialFields($item, $data = [])
     {
-        foreach ($this->getHandlers() as $key => $handler) {
-            call_user_func_array($handler, [&$item, &$data]);
-        }
-
         $processedHasMany = [];
+        
+        foreach ($this->getHandlers() as $key => $handler) {
+            call_user_func_array($handler, [&$item, &$data, &$processedHasMany]);
+        }
 
         $globalHandlers = static::getGlobalHandlers();
 
