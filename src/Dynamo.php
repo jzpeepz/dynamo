@@ -31,6 +31,7 @@ class Dynamo
     private $actionButtons = null;
     private $ignoredScopes = null;
     public static $globalHandlers = null;
+    private $modifier = null;
 
     public function __construct($class)
     {
@@ -205,6 +206,17 @@ class Dynamo
             return $field->key != $fieldKey;
         });
 
+        // remove field from groups
+        $this->fields->transform(function ($field, $key) use ($fieldKey) {
+            if ($field->type =='group') {
+                $group = $field->getOption('group');
+                $group->removeField($fieldKey);
+                $field->setOption('group', $group);
+            }
+
+            return $field;
+        });
+
         return $this;
     }
 
@@ -353,11 +365,11 @@ class Dynamo
 
     public function handleSpecialFields($item, $data = [])
     {
-        foreach ($this->getHandlers() as $key => $handler) {
-            call_user_func_array($handler, [&$item, &$data]);
-        }
-
         $processedHasMany = [];
+        
+        foreach ($this->getHandlers() as $key => $handler) {
+            call_user_func_array($handler, [&$item, &$data, &$processedHasMany]);
+        }
 
         $globalHandlers = static::getGlobalHandlers();
 
@@ -890,5 +902,21 @@ class Dynamo
     public function getIgnoredScopes()
     {
         return $this->ignoredScopes;
+    }
+
+    public function modify($closure)
+    {
+        $this->modifier = $closure;
+        
+        return $this;
+    }
+
+    public function getModified($item)
+    {
+        if (is_callable($this->modifier)) {
+            return call_user_func($this->modifier, $this, $item);
+        }
+
+        return $this;
     }
 }

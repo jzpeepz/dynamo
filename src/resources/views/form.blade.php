@@ -11,7 +11,7 @@
                         {{ $item->exists ? 'Edit' : 'Add' }} {{ $dynamo->getName() }}
 
                         @if (method_exists($item, 'url'))
-                            <a href="{{ $item->url() }}" target="_blank" class="btn btn-info btn-xs pull-right">Preview</a>
+                            <a href="{{ $item->url() }}" target="_blank" class="btn btn-info btn-xs pull-right dynamo-preview-button">Preview</a>
                         @endif
                     </div>
 
@@ -68,7 +68,7 @@
                                         *   the dynamo form as normally would *
                                         *************************************** --}}
 
-                                    @foreach ($dynamo->getFieldGroups() as $group => $fields)
+                                    @foreach ($dynamo->getFieldGroups() as $group => $fields)    
                                         <fieldset id="{{ $group }}" class="{{ ! empty($group) ? 'well' : '' }} dynamo-group">
                                             @if ($dynamo->hasGroupLabel($group))
                                                 <legend class="dynamo-group-label">{{ $dynamo->getGroupLabel($group) }}</legend>
