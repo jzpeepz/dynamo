@@ -29,7 +29,13 @@ class Dynamo
     private $formTabs = null;
     private $indexButtons = null;
     private $actionButtons = null;
+    private $formHeaderButtons = null;
+    private $formFooterButtons = null;
     private $ignoredScopes = null;
+    private $indexPanelTitleText = null;
+    private $formPanelTitleText = null;
+    private $saveItemText = null;
+    private $addItemText = null;
     public static $globalHandlers = null;
 
     public function __construct($class)
@@ -48,6 +54,8 @@ class Dynamo
         $this->formTabs = collect();
         $this->indexButtons = collect();
         $this->actionButtons = collect();
+        $this->formHeaderButtons = collect();
+        $this->formFooterButtons = collect();
     }
 
     public function __call($name, $arguments)
@@ -737,6 +745,103 @@ class Dynamo
     public function getActionButtons()
     {
         return $this->actionButtons;
+    }
+
+    public function addFormHeaderButton(\Closure $button)
+    {
+        $this->formHeaderButtons->push($button);
+
+        return $this;
+    }
+
+    public function getFormHeaderButtons()
+    {
+        return $this->formHeaderButtons;
+    }
+
+    public function hasFormFooterButton()
+    {
+        return $this->formFooterButtons->isNotEmpty();
+    }
+
+    public function addFormFooterButton(\Closure $button)
+    {
+        $this->formFooterButtons->push($button);
+
+        return $this;
+    }
+
+    public function getFormFooterButtons()
+    {
+        return $this->formFooterButtons;
+    }
+
+    public function hasIndexPanelTitleOverride()
+    {
+        return isset($this->indexPanelTitleText);
+    }
+
+    public function setIndexPanelTitle($value)
+    {
+        $this->indexPanelTitleText = $value;
+
+        return $this;
+    }
+
+    public function getIndexPanelTitleOverride()
+    {
+        return $this->indexPanelTitleText;
+    }
+
+    public function hasFormPanelTitleOverride()
+    {
+        return isset($this->formPanelTitleText);
+    }
+
+    public function setFormPanelTitle($value)
+    {
+        $this->formPanelTitleText = $value;
+
+        return $this;
+    }
+
+    public function getFormPanelTitleOverride()
+    {
+        return $this->formPanelTitleText;
+    }
+
+    public function hasSaveItemTextChange()
+    {
+        return isset($this->saveItemText);
+    }
+
+    public function setSaveItemText($value)
+    {
+        $this->saveItemText = $value;
+
+        return $this;
+    }
+
+    public function getSaveItemText()
+    {
+        return $this->saveItemText;
+    }
+
+    public function hasAddItemTextChange()
+    {
+        return isset($this->addItemText);
+    }
+
+    public function setAddItemText($value)
+    {
+        $this->addItemText = $value;
+
+        return $this;
+    }
+
+    public function getAddItemText()
+    {
+        return $this->addItemText;
     }
 
     public static function addGlobalHandler($type, \Closure $handler)

@@ -8,11 +8,21 @@
             <div class="col-md-10 col-md-offset-1">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        {{ $item->exists ? 'Edit' : 'Add' }} {{ $dynamo->getName() }}
+                        {{ $item->exists ? 'Edit' : 'Add' }}
 
-                        @if (method_exists($item, 'url'))
-                            <a href="{{ $item->url() }}" target="_blank" class="btn btn-info btn-xs pull-right">Preview</a>
+                        @if($dynamo->hasFormPanelTitleOverride() == null)
+                            {{ $dynamo->getName() }}
+                        @else
+                            {{ $dynamo->getFormPanelTitleOverride() }}
                         @endif
+
+                        @if ($item->exists && method_exists($item, 'url'))
+                            <a href="{{ $item->url() }}" target="_blank" style="margin-left: 10px;" class="btn btn-info btn-xs pull-right"><i class="fa fa-eye"></i> Preview</a>
+                        @endif
+
+                        @foreach ($dynamo->getFormHeaderButtons() as $button)
+                                <div style="margin-left: 10px;" class="pull-right">{!! call_user_func($button) !!}</div>
+                        @endforeach
                     </div>
 
                     <div class="panel-body">
@@ -41,6 +51,9 @@
                         @endif
 
                         {!! Form::model($item, $formOptions) !!}
+
+                            <input type="hidden" id="item-id" value="{{ $item->id }}">
+
                             <div class="tab-content">
                                 @if ($dynamo->hasFormTabs())
 
@@ -83,9 +96,26 @@
                                 @endif
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Save {{ $dynamo->getName() }}</button>
+                            <button type="submit" class="btn btn-primary">
+                            @if ($dynamo->hasSaveItemTextChange() == null)
+                                Save {{ $dynamo->getName() }}
+                            @else
+                                {{ $dynamo->getSaveItemText() }}
+                            @endif
+                            </button>
                             <a href="{{ route($dynamo->getRoute('index')) }}" class="btn">Cancel</a>
                         {!! Form::close() !!}
+
+                        @if($dynamo->hasFormFooterButton())
+                            <div class="d-flex justify-content-end" style="margin-top: -51px;">
+                        @endif
+
+                            @foreach ($dynamo->getFormFooterButtons() as $button)
+                                    <div style="margin-left: 10px;" class="pull-right">{!! call_user_func($button) !!}</div>
+                            @endforeach
+                        @if($dynamo->hasFormFooterButton())
+                            </div>
+                        @endif
 
                     </div>
                 </div>

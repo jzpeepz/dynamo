@@ -14,12 +14,24 @@
                         ***************************************************************** --}}
                     <div class="card-header" id="dynamo-card-header-name">
                         @if ($dynamo->addVisible())
-                            <a href="{{ route($dynamo->getRoute('create')) }}" class="btn btn-success btn-sm float-right">Add {{ $dynamo->getName() }}</a>
+                            <a href="{{ route($dynamo->getRoute('create')) }}" class="btn btn-success btn-sm float-right">
+                                @if ($dynamo->hasAddItemTextChange() == null)
+                                    Add {{ $dynamo->getName() }}
+                                @else
+                                    {{ $dynamo->getAddItemText()}}
+                                @endif
+                            </a>
                         @endif
+
                         @foreach ($dynamo->getIndexButtons() as $button)
                             <div class="mr-2 float-right">{!! call_user_func($button) !!}</div>
                         @endforeach
-                        {{ $dynamo->getName() }} Manager
+
+                        @if($dynamo->hasIndexPanelTitleOverride() == null)
+                            {{ $dynamo->getName() }} Manager
+                        @else
+                            {{ $dynamo->getIndexPanelTitleOverride() }}
+                        @endif
                     </div>
                     {{--***************************
                         *     END HEADER BLOCK    *

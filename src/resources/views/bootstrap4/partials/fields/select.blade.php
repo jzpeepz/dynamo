@@ -10,7 +10,7 @@
             <i style="font-size: 17px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
                 title="{!! $field->getOption('tooltip') !!}"></i>
         @endif
-        {!! Form::select($field->key . ($multiple ? '[]' : ''), $field->getSelectOptions(), $item->{$field->key}, ['class' => 'form-control '.$field->getOption('class'), 'multiple' => $multiple]) !!}
+        {!! Form::select($field->key . ($multiple ? '[]' : ''), $field->getSelectOptions(), $item->{$field->key}, $field->getHtmlAttributes(['class' => 'form-control '.$field->getOption('class'), 'multiple' => $multiple]) ) !!}
         @if (! empty($field->getOption('help')))
             <p class="help-block">{!! $field->getOption('help') !!}</p>
         @endif

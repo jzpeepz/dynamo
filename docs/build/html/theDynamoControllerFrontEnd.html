@@ -87,6 +87,7 @@
 <li class="toctree-l1"><a class="reference internal" href="many-to-many.html">Creating Many-to-Many Relationships Between Dynamo Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dynamoMethods.html">Dynamo Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="relationshipDeleteModal.html">Deleting Categories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="relatingModelsToThemselves.html">Relating Models To Themselves with Dynamo</a></li>
 </ul>
 <p class="caption"><span class="caption-text">License</span></p>
 <ul>
@@ -160,17 +161,17 @@
 <p>At this point in the workflow, you have:</p>
 <ol class="arabic">
 <li><p class="first">Installed Dynamo into your Laravel app by running:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">composer</span> <span class="n">require</span> <span class="n">jzpeepz</span><span class="o">/</span><span class="n">dynamo</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">composer</span> <span class="n">require</span> <span class="n">jzpeepz</span><span class="o">/</span><span class="n">dynamo</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">Created an Object using:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">php</span> <span class="n">artisan</span> <span class="n">make</span><span class="p">:</span><span class="n">dynamo</span> <span class="n">FaqCategory</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">php</span> <span class="n">artisan</span> <span class="n">make</span><span class="p">:</span><span class="n">dynamo</span> <span class="n">FaqCategory</span>
 </pre></div>
 </div>
 </li>
 </ol>
-<p>This command created a database migration, a model, and controller. Once you define the migration and run php artisan migrate, you’re now ready for the third step:</p>
+<p>This command created a database migration, a model, and controller. Once you define the migration and run php artisan migrate, you&#8217;re now ready for the third step:</p>
 <ol class="arabic simple" start="3">
 <li>Implement the Dynamo Controller!</li>
 </ol>
@@ -182,9 +183,9 @@ This function returns a Dynamo instance which has lots of chainable methods that
 <p>This is what your Dynamo Controller will look like by default right after it is created. By default the auto() function is called which will
 take all the things your employee object consist of (that you defined in your database migration, say first_name, last_name,
 phone_number) and create fields in the form for them. You can chain on methods to this auto function if you need to do more specific things.
-It’s super easy! Check it out…</p>
+It&#8217;s super easy! Check it out...</p>
 <a class=""
-               data-lightbox="group-d7343209-82b2-4b10-a0d1-a550864dcfd0"
+               data-lightbox="group-dad9b994-1301-4941-aa95-78efa4c25531"
                href="_images/ControllerExample.gif"
                title=""
                data-title=""
@@ -194,7 +195,7 @@ It’s super easy! Check it out…</p>
                      height="350px"
                      alt=""/>
                 </a><a class=""
-               data-lightbox="group-fe89e7ce-cecb-4c00-8ed1-7d86f76e4432"
+               data-lightbox="group-8f782d9f-4ab9-4ca6-9482-fe5e81c23fa7"
                href="_images/EmployeeController2.png"
                title=""
                data-title=""
@@ -203,10 +204,10 @@ It’s super easy! Check it out…</p>
                      width="350px"
                      height="350px"
                      alt=""/>
-                </a><p>Everything you see before the comment “//ClearIndexes” will appear in the form view when someone is creating an object in the database.</p>
+                </a><p>Everything you see before the comment &#8220;//ClearIndexes&#8221; will appear in the form view when someone is creating an object in the database.</p>
 <p>Example of Form View of a Dynamo admin/module:</p>
 <a class=""
-               data-lightbox="group-30b08474-767b-4925-8c8c-de220160f846"
+               data-lightbox="group-6a024e36-9109-489d-bde8-aa867d78885d"
                href="_images/formOfModuleView.png"
                title=""
                data-title=""
@@ -215,10 +216,10 @@ It’s super easy! Check it out…</p>
                      width="350px"
                      height="350px"
                      alt=""/>
-                </a><p>Everything you see after the comment “//ClearIndexes” will appear in the index view when someone is viewing all the Objects in the database.</p>
+                </a><p>Everything you see after the comment &#8220;//ClearIndexes&#8221; will appear in the index view when someone is viewing all the Objects in the database.</p>
 <p>Example of Index View of a Dynamo admin/module:</p>
 <a class=""
-               data-lightbox="group-56eec05f-6534-43c5-9662-74d81c55a116"
+               data-lightbox="group-0796b804-9058-45ba-9240-950ce2be78ed"
                href="_images/indexOfModuleView.png"
                title=""
                data-title=""
@@ -228,10 +229,10 @@ It’s super easy! Check it out…</p>
                      height="350px"
                      alt=""/>
                 </a><p>Now, keep in mind, all the function calls you see above happened automatically with the auto() function.
-The only thing the auto function can’t do is stuff like renaming a field like you see happen at “-&gt;file(“photo”, “Headshot”)” where
+The only thing the auto function can&#8217;t do is stuff like renaming a field like you see happen at &#8220;-&gt;file(&#8220;photo&#8221;, &#8220;Headshot&#8221;)&#8221; where
 you might want it to say Headshot rather than photo. We will go into this in more detail in the Dynamo Methods section.</p>
 <p>This is the basics of Dynamo. You have created an admin on your custom CMS for managing Employees
-on your Laravel application is less than 2 minutes. Isn’t that powerful? You could do this for News Post, Products being sold on the site, Faq’s and
+on your Laravel application is less than 2 minutes. Isn&#8217;t that powerful? You could do this for News Post, Products being sold on the site, Faq&#8217;s and
 Faq Categories, and so on.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -280,7 +281,17 @@ Faq Categories, and so on.</p>
 
     
     
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>

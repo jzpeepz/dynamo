@@ -24,4 +24,4 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 
     <strong style="font-size: 20px;">Questions</strong><br><br>
 
-Question? Please contact Jonathan at jonathan@flex360.com
+Question? Please contact jonathan@flex360.com

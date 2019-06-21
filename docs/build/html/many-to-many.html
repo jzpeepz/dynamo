@@ -87,6 +87,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Creating Many-to-Many Relationships Between Dynamo Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dynamoMethods.html">Dynamo Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="relationshipDeleteModal.html">Deleting Categories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="relatingModelsToThemselves.html">Relating Models To Themselves with Dynamo</a></li>
 </ul>
 <p class="caption"><span class="caption-text">License</span></p>
 <ul>
@@ -157,12 +158,12 @@
             
   <div class="section" id="creating-many-to-many-relationships-between-dynamo-models">
 <h1>Creating Many-to-Many Relationships Between Dynamo Models<a class="headerlink" href="#creating-many-to-many-relationships-between-dynamo-models" title="Permalink to this headline">¶</a></h1>
-<strong style="font-size: 20px;">Step 1: Generate the two models you will be using.</strong><br><br><div class="highlight-PHP notranslate"><div class="highlight"><pre><span></span><span class="x">php artisan make:dynamo Faq</span>
+<strong style="font-size: 20px;">Step 1: Generate the two models you will be using.</strong><br><br><div class="highlight-PHP"><div class="highlight"><pre><span></span><span class="x">php artisan make:dynamo Faq</span>
 <span class="x">php artisan make:dynamo Category</span>
 </pre></div>
 </div>
 <strong style="font-size: 20px;">Step 2: Complete the needed migrations.</strong><br><br><p>Example Faq migration:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Schema::create(&#39;faqs&#39;, function (Blueprint $table) {
+<div class="highlight-default"><div class="highlight"><pre><span></span>Schema::create(&#39;faqs&#39;, function (Blueprint $table) {
     $table-&gt;increments(&#39;id&#39;);
     $table-&gt;string(&#39;question&#39;, 255);
     $table-&gt;mediumText(&#39;answer&#39;);
@@ -171,7 +172,7 @@
 </pre></div>
 </div>
 <p>Example Category migration:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Schema::create(&#39;categories&#39;, function (Blueprint $table) {
+<div class="highlight-default"><div class="highlight"><pre><span></span>Schema::create(&#39;categories&#39;, function (Blueprint $table) {
     $table-&gt;increments(&#39;id&#39;);
     $table-&gt;string(&#39;name&#39;);
     $table-&gt;timestamps();
@@ -179,7 +180,7 @@
 </pre></div>
 </div>
 <p>Example pivot table migration:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Schema::create(&#39;category_faq&#39;, function(Blueprint $table) {
+<div class="highlight-default"><div class="highlight"><pre><span></span>Schema::create(&#39;category_faq&#39;, function(Blueprint $table) {
     $table-&gt;integer(&#39;faq_id&#39;)-&gt;unsigned()-&gt;nullable();
     $table-&gt;foreign(&#39;faq_id&#39;)-&gt;references(&#39;id&#39;)-&gt;on(&#39;faqs&#39;);
 
@@ -189,24 +190,24 @@
 </pre></div>
 </div>
 <p>Run:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">php</span> <span class="n">artisan</span> <span class="n">migrate</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">php</span> <span class="n">artisan</span> <span class="n">migrate</span>
 </pre></div>
 </div>
 <strong style="font-size: 20px;">Step 3: Add the proper belongsToMany Eloquent function to each model.</strong><br><br><p>For the Category model:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>public function faqs()
+<div class="highlight-default"><div class="highlight"><pre><span></span>public function faqs()
 {
        return $this-&gt;belongsToMany(&#39;App\Faq&#39;);
 }
 </pre></div>
 </div>
 <p>For the Faq Model:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>public function categories()
+<div class="highlight-default"><div class="highlight"><pre><span></span>public function categories()
 {
     return $this-&gt;belongsToMany(&#39;App\Category&#39;);
 }
 </pre></div>
 </div>
-<strong style="font-size: 20px;">Step 4: Chain the hasMany() method onto your Dynamo instance in both controllers. Make sure your key is the name of the Eloquent function from you model.</strong><br><br><div class="highlight-PHP notranslate"><div class="highlight"><pre><span></span><span class="x">return Dynamo::make(\App\Employee::class)</span>
+<strong style="font-size: 20px;">Step 4: Chain the hasMany() method onto your Dynamo instance in both controllers. Make sure your key is the name of the Eloquent function from you model.</strong><br><br><div class="highlight-PHP"><div class="highlight"><pre><span></span><span class="x">return Dynamo::make(\App\Employee::class)</span>
 <span class="x">                    -&gt;hasMany(&#39;categories&#39;, [&#39;options&#39; =&gt; [$categories]]);</span>
 </pre></div>
 </div>
@@ -257,7 +258,17 @@
 
     
     
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>

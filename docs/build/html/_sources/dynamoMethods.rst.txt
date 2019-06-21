@@ -22,6 +22,8 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
            <a href="#method-addActionButton">addActionButton</a>
            <a href="#method-addField">addField</a>
            <a href="#method-addFilter">addFilter</a>
+           <a href="#method-addFormFooterButton">addFormFooterButton</a>
+           <a href="#method-addFormHeaderButton">addFormHeaderButton</a>
            <a href="#method-addHandler">addHandler</a>
            <a href="#method-addIndex">addIndex</a>
            <a href="#method-addIndexButton">addIndexButton</a>
@@ -42,6 +44,11 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
            <a href="#method-removeIndex">removeIndex</a>
            <a href="#method-searchable">searchable</a>
            <a href="#method-select">select</a>
+           <a href="#method-setAddItemText">setAddItemText</a>
+           <a href="#method-setFormPanelTitle">setFormPanelTitle</a>
+           <a href="#method-setIndexPanelTitle">setIndexPanelTitle</a>
+           <a href="#method-setPreviewLink">setPreviewLink</a>
+           <a href="#method-setSaveItemText">setSaveItemText</a>
            <a href="#method-text">text</a>
            <a href="#method-textarea">textarea</a>
         </p>
@@ -54,8 +61,31 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
     <hr>
 
     <p><a name="method-addActionButton"></a></p>
+    <h4><code>Options that can be passed into any dynamo field</code></h4>
+    <p>Before going over the methods, it's important to understand that there is "field partials" for each type of field in Dynamo. There is text, select, hasMany,
+       group, file, checkbox, password, and textarea partials of code that get used when you call a function on the DynamoController. These partials of code look to see if
+       you passed in any extra options to be applied. For example, you can pass in a "tooltip" option to any field to render a tooltip next to the input's label.<br><br>
+       Here I use the select function which renders the select.blade.php partial of code in the dynamo package. I pass in some additional options that I want applied to that partial
+       code. The first is "attributes". For this option, set its value to an array of HTML attributes that you want applied to your input field, like disabled is true. This makes
+       it where the input field can't be edited by the user. The next option is "options", which is how you pass in the different possible things that can be selected. In this case,
+       I use an Eloquent model called "Testing" and call that functions getStatusus() function which returns an array of key-value pairs. this array says 10 = Draft and 30 = Published.
+       So if they select to save the post as a Draft, it will save the number 10 in the status field in the database. Next we have label which just changes the text of the input's label.
+       By default this label will be the name of the database field passed in; in this case, that is status. Next we have tooltip, then we have position. By default Dynamo will position
+       the order of the input fields on the form in the order you write them, but when using the auto function sometimes things get out of position, so you can manually set the order.
+       </p>
+
+.. thumbnail:: images/fieldOptions1.png
+   :align: center
+
+
+
+.. raw:: html
+
+    <hr>
+
+    <p><a name="method-addActionButton"></a></p>
     <h4><code>addActionButton()</code></h4>
-    <p>The <code>addField</code> method allows you to create a button along-side the other default action butons, Edit and Delete. Keep in mind these default buttons can be
+    <p>The <code>addField</code> method allows you to create a button along-side the other default action buttons, Edit and Delete. Keep in mind these default buttons can be
        remove by calling hideDelete()</p>
 
 .. thumbnail:: images/addActionButton1.png
@@ -64,7 +94,7 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
    Here we see the code, simply chain the function onto your Dynamo object in your Dynamo controller. addActionButton() takes one parameter which should be a closure function
    that return raw html for a link and bootstraps button classes. You can return any raw html you want; it doesn't have to be bootstrap, you could just use the button html tag.
 
-.. thumb    nail:: images/addActionButton2.png
+.. thumbnail:: images/addActionButton2.png
    :align: center
 
    Here we see the test button alongside the other buttons, Edit and Delete, in the Action index.
@@ -112,6 +142,58 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
     :align: center
 
     Filtered by term 2016
+
+.. raw:: html
+
+    <hr>
+
+    <p><a name="method-addFormFooterButton"></a></p>
+    <h4><code>addFormFooterButton()</code></h4>
+    <p>The <code>addFormFooterButton</code> method let's you add a custom button on the footer section of the dynamo form. You can call this function as many times as you want
+       and buttons will keep rendering next to the delete button. One unique thing you can do in the bootstrap 4 version of Dynamo is call ->hideDelete() followed by calling
+       ->addFormFooterButton() to "override" the delete button with a data-toggle="modal" data-target="#relationships-manager-modal" included in the markup. Check out the screenshots below</p>
+
+.. thumbnail:: images/addFormFooterButton1.png
+    :align: center
+
+      Here I've called many different functions on this dynamo form, but we only interested in the bottom right-hand corner. I've called ->hideDelete() and ->addFormFooterButton()
+      to "overwrite" the delete button with my own delete button that does something extra you'll see in the next screenshot. I also called ->addFormFooterButton() a second time
+      to get that "LOL" button that you, and it links to whatever page I want it to within my website/application.
+
+.. thumbnail:: images/addFormFooterButton2.png
+    :align: center
+
+      Here you see how I override the delete button. I use my ->addFormFooterButton function to create a Bootstrap 4 button that has data-toggle="modal" data-target="#relationships-manager-modal"
+      included. This makes this delete button open up a Bootstrap 4 modal when clicked. This modal is built into Dynamo so all you have to do is overwrite the delete button. The modal that pops
+      up allows the user to delete the category they are currently editing. See the next screenshot for what the modal looks like.
+
+.. thumbnail:: images/addFormFooterButton3.png
+     :align: center
+
+       Here you see the Bootstrap modal that pops up after clicking the delete button. If the user types the name of the category and checks the box they can delete the category.
+       Form Footer Buttons are awesome!
+
+.. raw:: html
+
+   <hr>
+
+   <p><a name="method-addFormHeaderButton"></a></p>
+   <h4><code>addFormHeaderButton()</code></h4>
+   <p>The <code>addFormHeaderButton</code> method let's you add a custom button on the header section of the dynamo form. Foreach time you call this function,
+      a new button will appear on the header in the order you called the functions. By default, Dynamo creates a "Preview" button that is rendered if you are editing
+      an item. The preview button's link will call the url() function that you created on your Dynamo model. So if you created a Dynamo object called "FAQ", you would
+      want to implement a function on that model called url(). Check out the screenshots below</p>
+
+.. thumbnail:: images/addFormHeaderButton1.png
+   :align: center
+
+     Here you can see I called ->addFormHeaderButton() twice to create a bootstrap4 primary button with the text "HAHA" and a bootstrap4 warning button with the text "LOL".
+     Of course, you can make these buttons link to anywhere in your website/application. See the next screenshot for the code.
+
+.. thumbnail:: images/addFormHeaderButton2.png
+   :align: center
+
+     Here you see that I called ->addFormHeaderButton() twice to create those two bootstrap buttons.
 
 .. raw:: html
 
@@ -592,10 +674,112 @@ Auto function being called on the newly created Dynamo object.
 
     <hr>
 
+    <p><a name="method-setAddItemText"></a></p>
+    <h4><code>setAddItemText()</code></h4>
+    <p>The <code>setAddItemText</code> method will allow the user to override the text on the Add button for models. The default text says "Add $dynamo->name" or "Add Faq"
+       The reason we created this method is because normally you want to use camelcase(thisIsCamelCase) when naming your Dynamo models and variable names. But you might not want
+       the text of the add button to read "Add Faq". You might instead want it to read "Add FAQ". Therefore, the ->setAddItemText function was born.</p>
+
+.. thumbnail:: images/setAddItemText1.png
+    :align: center
+
+    Here I call the function ->setAddItemText() to override the default Add Item Text. The next screenshot shows the result.
+
+.. thumbnail:: images/setAddItemText2.png
+    :align: center
+
+    This is the result. Notice in the upper right-hand corner the text of the green "Add" button has changed.
+
+.. raw:: html
+
+    <hr>
+
+    <p><a name="method-setFormPanelTitle"></a></p>
+    <h4><code>setFormPanelTitle()</code></h4>
+    <p>The <code>setFormPanelTitle</code> method will allow the user to override the text on the dynamo Form panel.</p>
+
+.. thumbnail:: images/setFormPanelTitle1.png
+    :align: center
+
+    Here I call the function ->setFormPanelTitle() to override the default Form Panel Title Text. The next screenshot shows the result.
+
+.. thumbnail:: images/setFormPanelTitle2.png
+    :align: center
+
+    This is the result. The title of the Form panel has changed.
+
+.. raw:: html
+
+    <hr>
+
+    <p><a name="method-setIndexPanelTitle"></a></p>
+    <h4><code>setIndexPanelTitle()</code></h4>
+    <p>The <code>setIndexPanelTitle</code> method will allow the user to override the text on the dynamo Index panel.</p>
+
+.. thumbnail:: images/setIndexPanelTitle1.png
+    :align: center
+
+    Here I call the function ->setIndexPanelTitle() to override the default Index Panel Title Text. The next screenshot shows the result.
+
+.. thumbnail:: images/setIndexPanelTitle2.png
+    :align: center
+
+    This is the result. The title of the Index panel has changed.
+
+.. raw:: html
+
+    <hr>
+
+    <p><a name="method-setPreviewLink"></a></p>
+    <h4><code>setPreviewLink()</code></h4>
+    <p>The <code>setPreviewLink</code> method will allow the user to override the url() link on the "Preview" button on the dynamo Form. By default
+       the "Preview" button will look for a function on the dynamo model called "url()". If that function, exist, the button will render. But sometimes,
+       you may want to override that link and use your own link. If so, use the ->setPreviewLink() function</p>
+
+.. thumbnail:: images/setPreviewLink1.png
+   :align: center
+
+   Here we see the url() function for my model. If I didn't call the setPreviewLink() function to override it, this is what the button would link to.
+
+.. thumbnail:: images/setPreviewLink2.png
+    :align: center
+
+    Here I call the function ->setPreviewLink() to override the default Preview link of /default-link-bro/ to /pilot/login/. The next screenshot shows the result.
+
+.. thumbnail:: images/setPreviewLink3.png
+    :align: center
+
+    This is the result. Notice when I hover over the button, the link in the bottom left corner is /pilot/login/ instead of /default-link-bro/.
+
+.. raw:: html
+
+    <hr>
+
+    <p><a name="method-setSaveItemText"></a></p>
+    <h4><code>setSaveItemText()</code></h4>
+    <p>The <code>setSaveItemText</code> method will allow the user to override the text on the blue Save button at the bottom of the dynamo Form.</p>
+
+.. thumbnail:: images/setSaveItemText1.png
+   :align: center
+
+   Here I call the function to override the Save button text on the form.
+
+.. thumbnail:: images/setSaveItemText2.png
+    :align: center
+
+    Here we see the result.
+
+.. raw:: html
+
+    <hr>
+
     <p><a name="method-text"></a></p>
     <h4><code>text()</code></h4>
     <p>The <code>text</code> method is probably the simplest Dynamo method. It makes a textbox on the form for the given database field. Now, you can of course pass
-       in other parameters as you can with all Dynamo methods. Check out some of the examples below.</p>
+       in other parameters as you can with all Dynamo methods, such as position (to make the field appear in a different order than default), tooltip(allows you to
+       render a ? mark tooltip explaining perhaps the format that is expected in the field), class(where you can assign the input field to have additional class names),
+       label(allows you to change the label text of the input field, be default it will be whatever the name of the field is in the database), and you can also do
+       closure functions with the "current item" as the argument for the third parameter of the text field. Check out some of the examples below.</p>
 
 .. thumbnail:: images/text1.png
     :align: center
@@ -640,8 +824,11 @@ Auto function being called on the newly created Dynamo object.
     <p><a name="method-textarea"></a></p>
     <h4><code>textarea()</code></h4>
     <p>The <code>textarea</code> method is just like the text() method, except it's a bigger text box on the form. In many of our websites, we pass in a class
-       called "wysiwyg editor" which stands for "What You See Is What You Get", and it allows the user to make html code without having to actually code. Check it
-       out.</p>
+       called "wysiwyg editor" which stands for "What You See Is What You Get". This will only work if you have the |froala| text-editor installed in your laravel project.</p>
+
+.. |froala| raw:: html
+
+    <a href="https://www.froala.com/wysiwyg-editor/pricing" target="_blank">package</a>
 
 .. thumbnail:: images/textarea1.png
     :align: center

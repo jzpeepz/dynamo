@@ -7,18 +7,43 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
                 <div class="panel panel-default">
+                    {{--*****************************************************************
+                        *                         START HEADER BLOCK                    *
+                        *            This block is the header of the dynamo panel        *
+                        *    Includes name of manager, index buttons, and create button *
+                        ***************************************************************** --}}
                     <div class="panel-heading">
                         @if ($dynamo->addVisible())
-                            <a href="{{ route($dynamo->getRoute('create')) }}" class="btn btn-success btn-xs pull-right">Add {{ $dynamo->getName() }}</a>
+                            <a href="{{ route($dynamo->getRoute('create')) }}" class="btn btn-success btn-xs pull-right">
+                                @if ($dynamo->hasAddItemTextChange() == null)
+                                    Add {{ $dynamo->getName() }}
+                                @else
+                                    {{ $dynamo->getAddItemText()}}
+                                @endif
+                            </a>
                         @endif
 
                         @foreach ($dynamo->getIndexButtons() as $button)
                             <div class="pull-right" style="margin-right: 5px;">{!! call_user_func($button) !!}</div>
                         @endforeach
 
-                        {{ $dynamo->getName() }} Manager
+                        @if($dynamo->hasIndexPanelTitleOverride() == null)
+                            {{ $dynamo->getName() }} Manager
+                        @else
+                            {{ $dynamo->getIndexPanelTitleOverride() }}
+                        @endif
 
                     </div>
+
+                    {{--***************************
+                        *     END HEADER BLOCK    *
+                        *************************** --}}
+
+                        {{--**************************************
+                            *       START SEARCH BAR BLOCK       *
+                            *  This block begins the panel-body   *
+                            *     Includes search bar form       *
+                            ************************************** --}}
 
                     <div class="panel-body">
 
@@ -50,11 +75,16 @@
                                 </div>
 
                             @endif
-                            {{--***************************************
-                                *     If the user uses IndexTabs       *
-                                *      Run this block to render       *
-                                *     the tabs                        *
-                                *************************************** --}}
+                            {{--*******************************
+                                *     END SEARCH BAR BLOCK    *
+                                ******************************* --}}
+
+                                {{--*********************************************************
+                                    *                 START INDEXTAB BLOCK                  *
+                                    *             This block renders indexTabs              *
+                                    *   Includes indexTabs, count of members in that tab,   *
+                                    *                and tooltps for each tab               *
+                                    ********************************************************* --}}
 
                             @if ($dynamo->hasIndexTabs())
 
@@ -75,15 +105,38 @@
                                     @endforeach
                                 </ul>
 
-                            @endif {{-- endif for Index Tabs --}}
+                            @endif
 
                         </form>
+                        {{--*****************************
+                            *     END INDEXTAB BLOCK    *
+                            ***************************** --}}
+
+                        {{--**********************************************
+                            *               START ITEMS EMPTY BLOCK      *
+                            *   If no items, say no items found and link *
+                            *        to create a new dynamo item         *
+                            ********************************************** --}}
 
                         @if ($items->isEmpty())
 
-                            <div>No items found. <a href="{{ route($dynamo->getRoute('create')) }}">Add one.</a></div>
+                            <div style="margin-top: 15px;">No items found. <a href="{{ route($dynamo->getRoute('create')) }}">Add one.</a></div>
 
                         @else
+
+                            {{--********************************
+                                *     END ITEMS EMPTY BLOCK    *
+                                ******************************** --}}
+
+                            {{--*******************************************************
+                                *               START TABLE BLOCK                           *
+                                *   Render the dynamo table of objects                *
+                                *   Includes table head which is the getIndexes()     *
+                                *   Includes table body which renders rows of each    *
+                                *   dynamo item with their values in each column      *
+                                *   and with an edit button linking to the formView   *
+                                *   of each dynamo object.                            *
+                                ******************************************************* --}}
 
                             <table class="table" id="dynamo-index">
                                 <thead>
@@ -124,6 +177,9 @@
                             </table>
 
                             {!! method_exists($items, 'render') ? $items->appends(request()->all())->render() : null !!}
+                            {{--**************************
+                                *     END TABLE BLOCK    *
+                                ************************** --}}
 
                         @endif
                     </div>
@@ -131,10 +187,10 @@
             </div>
         </div>
 
-        {{--***************************************
-            *  If the user uses manage            *
-            *   relationships,                    *
-            *   run this block to include modal   *
+        {{--*********************************************
+            *      START RELATIONSHIPS MODAL BLOCK      *
+            *   If the user uses manage relationships,  *
+            *      run this block to include modal      *
             *************************************** --}}
     <div class="modal fade" id="relationships-manager-modal" tabindex="-1" role="dialog">
 

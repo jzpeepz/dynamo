@@ -1,0 +1,410 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Relating Models To Themselves with Dynamo &mdash; dynamo  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/sphinxcontrib-images/LightBox2/lightbox2/css/lightbox.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="License" href="license.html" />
+    <link rel="prev" title="Deleting Categories" href="relationshipDeleteModal.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> dynamo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Dynamo Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="theDynamoControllerBackEnd.html">The Dynamo Controller Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theDynamoControllerFrontEnd.html">The Dynamo Controller Frontend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="many-to-many.html">Creating Many-to-Many Relationships Between Dynamo Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamoMethods.html">Dynamo Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="relationshipDeleteModal.html">Deleting Categories</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Relating Models To Themselves with Dynamo</a></li>
+</ul>
+<p class="caption"><span class="caption-text">License</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">dynamo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Relating Models To Themselves with Dynamo</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/relatingModelsToThemselves.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="relating-models-to-themselves-with-dynamo">
+<h1>Relating Models To Themselves with Dynamo<a class="headerlink" href="#relating-models-to-themselves-with-dynamo" title="Permalink to this headline">¶</a></h1>
+<p>Sometimes you will run into the case where you want to relate a model to itself. One of our clients wanted their web-app&#8217;s product detail page to list other products in a &#8220;related_products&#8221; relationship.
+Or maybe you&#8217;re building a social network and you want to relate Users to Users in a relationship called &#8220;friends&#8221;.</p>
+<p>The issue that came about with Dynamo is that we used the -&gt;hasManySimple(&#8216;related_products&#8217;) method on the DynamoController. The pivot table called &#8220;product_product&#8221; had two columns &#8220;product_id&#8221; and &#8220;related_product_id&#8221;.
+When creating a product you could use the multiSelect box to select the related products, but if you saved and then went to that related product, it wouldn&#8217;t show the original product in the multiSelect box, and thus,
+the user might assume that no related products were attached, and attach some related products. If they attached the same product again you would end up with entries in the pivot table like (1,2) and (2,1). We wanted
+there to only be one entry (1,2) and the application understand on each of those product details pages, to list each other as related. Below is how we implemented this:</p>
+<p>First we created the following relationships:</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">public function getAllRelatedProductsAttribute($value)</span>
+<span class="x"> {</span>
+<span class="x">     return $this-&gt;allRelatedProducts();</span>
+<span class="x"> }</span>
+
+<span class="x"> public function allRelatedProducts()</span>
+<span class="x"> {</span>
+<span class="x">     return $this-&gt;relatedProducts-&gt;merge($this-&gt;relatedTo);</span>
+<span class="x"> }</span>
+
+<span class="x"> public function relatedProducts()</span>
+<span class="x"> {</span>
+<span class="x">     return $this-&gt;belongsToMany(&#39;App\Product&#39;, &#39;product_product&#39;, &#39;product_id&#39;, &#39;related_product_id&#39;);</span>
+<span class="x"> }</span>
+
+<span class="x"> public function relatedTo()</span>
+<span class="x"> {</span>
+<span class="x">     return $this-&gt;belongsToMany(&#39;App\Product&#39;, &#39;product_product&#39;, &#39;related_product_id&#39;, &#39;product_id&#39;);</span>
+<span class="x"> }</span>
+</pre></div>
+</div>
+<p>Let&#8217;s start from the bottom up. All of these relationships were defined on the Product.php model in the root of the app directory in the Laravel framework. relatedTo() says that &#8220;this&#8221; Product model is relatedTo
+itself (AppProduct), the pivot table&#8217;s name is &#8220;product_product&#8221;, and we set the &#8220;this&#8221; Product to the related_product_id column and set the product that we are relating it to to the product_id column. If this sounds
+a bit confusing please refer <a href="https://laravel.com/docs/5.5/eloquent-relationships#many-to-many" target="_blank">here</a> in the Laravel documentation to how these parameters work. Next we need a relationship function that returns all the products that are related to &#8220;this&#8221; Product; so we reverse the third
+and fourth parameter. Next, we make a relationship function called allRelatedProducts which merges the relatedTo() and relatedProduts() function so the collection will contain both of their collections in one. Then
+we make a getter function that returns the allRelatedProducts() relationship function.</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">-&gt;formTab(FormTab::make(&#39;Relationships&#39;)</span>
+<span class="x">                        -&gt;select(&#39;allRelatedProducts&#39;, [</span>
+<span class="x">                            &#39;label&#39; =&gt; &#39;Related Products: Select all products related to this product&#39;,</span>
+<span class="x">                            &#39;options&#39; =&gt; Product::orderBy(&#39;name&#39;)-&gt;get()-&gt;pluck(&#39;name&#39;, &#39;id&#39;),</span>
+<span class="x">                            &#39;class&#39; =&gt; &#39;chosen-select&#39;,</span>
+<span class="x">                            &#39;multiple&#39; =&gt; true,</span>
+<span class="x">                        ])</span>
+<span class="x">                        -&gt;select(&#39;product_category_id&#39;, [</span>
+<span class="x">                            &#39;label&#39; =&gt; &#39;Product Category: Select the category for this product&#39;,</span>
+<span class="x">                            &#39;options&#39; =&gt; ProductCategory::getSelectList(),</span>
+<span class="x">                            &#39;class&#39; =&gt; &#39;chosen-select&#39;,</span>
+<span class="x">                        ])</span>
+<span class="x">                        -&gt;select(&#39;product_type_id&#39;, [</span>
+<span class="x">                            &#39;label&#39; =&gt; &#39;Product Type: Select the type for this product&#39;,</span>
+<span class="x">                            &#39;options&#39; =&gt; ProductType::getSelectList(),</span>
+<span class="x">                            &#39;class&#39; =&gt; &#39;chosen-select&#39;,</span>
+<span class="x">                        ])</span>
+<span class="x">                        -&gt;select(&#39;sales_sheet_id&#39;, [</span>
+<span class="x">                            &#39;label&#39; =&gt; &#39;Sales Sheet: Select the sales sheet for this product&#39;,</span>
+<span class="x">                            &#39;options&#39; =&gt; ResourceCategory::getSalesSheetSelectList(),</span>
+<span class="x">                            &#39;class&#39; =&gt; &#39;chosen-select&#39;,</span>
+<span class="x">                        ])</span>
+<span class="x">                        -&gt;select(&#39;warranty_id&#39;, [</span>
+<span class="x">                            &#39;label&#39; =&gt; &#39;Warranty: Select the warranty for this product&#39;,</span>
+<span class="x">                            &#39;options&#39; =&gt; ResourceCategory::getWarrantySelectList(),</span>
+<span class="x">                            &#39;class&#39; =&gt; &#39;chosen-select&#39;,</span>
+<span class="x">                        ])</span>
+<span class="x">                        -&gt;select(&#39;drawing_id&#39;, [</span>
+<span class="x">                            &#39;label&#39; =&gt; &#39;Drawing: Select the drawing for this product&#39;,</span>
+<span class="x">                            &#39;options&#39; =&gt; ResourceCategory::getDrawingSelectList(),</span>
+<span class="x">                            &#39;class&#39; =&gt; &#39;chosen-select&#39;,</span>
+<span class="x">                        ])</span>
+<span class="x">                        -&gt;hasManySimple(&#39;resources&#39;, [</span>
+<span class="x">                            &#39;label&#39; =&gt; &#39;Resources: Select all resources for this product&#39;,</span>
+<span class="x">                            &#39;options&#39; =&gt; Resource::orderBy(&#39;title&#39;)-&gt;get()-&gt;pluck(&#39;title&#39;, &#39;id&#39;),</span>
+<span class="x">                            &#39;nameField&#39; =&gt; &#39;title&#39;,</span>
+<span class="x">                        ])</span>
+<span class="x">                    )</span>
+</pre></div>
+</div>
+<p>We create this FormTab called Relationships where the user may attach all the relationships this Product they are creating has. Look at the first select box. The first parameter is &#8216;allRelatedProducts&#8217;.
+This is needed so that if the user is Editing an already existing Product that already has related Products set, it will populate with those related Products. Another important thing is that it has
+&#8216;multiple&#8217; =&gt; true,&#8217; which tells dynamo to make it a multiSelect box on the form. Directly below this formTab we create a handler:</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">-&gt;addHandler(&#39;allRelatedProducts&#39;, function (&amp;$product, &amp;$data) {</span>
+<span class="x">                        if (isset($data[&#39;allRelatedProducts&#39;])) {</span>
+<span class="x">                            $relatedIds = $product-&gt;allRelatedProducts-&gt;pluck(&#39;id&#39;);</span>
+
+<span class="x">                            $relatedIdsToRemove = array_diff($relatedIds-&gt;toArray(), $data[&#39;allRelatedProducts&#39;]);</span>
+
+<span class="x">                            $product-&gt;relatedTo()-&gt;detach($relatedIdsToRemove);</span>
+
+<span class="x">                            $product-&gt;relatedProducts()-&gt;sync($data[&#39;allRelatedProducts&#39;]);</span>
+
+<span class="x">                            unset($data[&#39;allRelatedProducts&#39;]);</span>
+<span class="x">                        } else {</span>
+<span class="x">                            // clear both relationships</span>
+<span class="x">                            $product-&gt;relatedProducts()-&gt;detach();</span>
+<span class="x">                            $product-&gt;relatedTo()-&gt;detach();</span>
+<span class="x">                        }</span>
+<span class="x">                    })</span>
+</pre></div>
+</div>
+<p>The first parameter is the relationship that we are handling. The second is a closure function that does the &#8220;handling&#8221;. It takes the item and its data that we are creating/editing as the closure arguments.
+It&#8217;s important that you at the &#8216;&amp;&#8217; to pass the arguments by reference because we need the data outside the scope of the function. Then we do an if statement that says, if the Product has allRelatedProducts data already
+set, then get the products relatedProduct ids, and find the difference in the ids that were submitted. Detach the leftover ids, because that means the user deselected Products that were once related but now they don&#8217;t
+want them related anymore. Then &#8220;sync&#8221; or update the relatedProducts() relationship. Look here for the <a href="https://laravel.com/docs/5.5/eloquent-relationships#updating-many-to-many-relationships" target="_blank">sync</a> method in the documentation. Then unset the part of the data.</p>
+<p>else, if the allRelatedProducts select box is not set to anything (blank, user either cleared all related products or there wasn&#8217;t any to begin with) then detach all related products both ways.</p>
+<p>All that&#8217;s pretty much it! it&#8217;s admittedly a bit confusing at first. But this algorithm is what needs to be done anytime you have a model that relates to itself. For example, in the case of creating a &#8220;friends&#8221; relationship
+between two User models, you would create relationships functions &#8220;friendsOf&#8221;, &#8220;friends&#8221;, &#8220;allFriends&#8221;, and the getter function. Then create the select box on the &#8220;allFriends&#8221; relationship. And the handler code is exactly
+the same, except you need to rename the variables and relationship function names appropriately and it will work.</p>
+<p>Then in the form when creating a new User, the admin can select the friends of that User. If then, the admin saves, and takes a look at one of those friend models, the new User will populate in the select box automatically.
+If the relationship gets detached on either model, it will automatically be detached from the other model as well, since the pivot table is saving it in one row rather than like I explained at the beginning.</p>
+<p>Below are some screenshots of the outcome (click the images to read the captions):</p>
+<a class=""
+               data-lightbox="group-63f12474-43c0-4e90-9727-6e41c4fc16b7"
+               href="_images/self1.png"
+               title="Here I create a new Product"
+               data-title="Here I create a new Product"
+               ><img src="_images/self1.png"
+                     class="align-center"
+                     width="350px"
+                     height="350px"
+                     alt=""/>
+                </a><a class=""
+               data-lightbox="group-dda9eb2d-d7cb-4ac1-bcd9-6ebbe8a07a72"
+               href="_images/self2.png"
+               title="I relate my new Product to another Product called Related Product."
+               data-title="I relate my new Product to another Product called Related Product."
+               ><img src="_images/self2.png"
+                     class="align-center"
+                     width="350px"
+                     height="350px"
+                     alt=""/>
+                </a><a class=""
+               data-lightbox="group-f7506618-8745-4c1a-877d-a86409bc1bf2"
+               href="_images/self3.png"
+               title="Here we see the pivot table and 1 single row related these two products."
+               data-title="Here we see the pivot table and 1 single row related these two products."
+               ><img src="_images/self3.png"
+                     class="align-center"
+                     width="350px"
+                     height="350px"
+                     alt=""/>
+                </a><a class=""
+               data-lightbox="group-3e07804a-85f6-49bc-a3f4-8d2857e1654e"
+               href="_images/self4.png"
+               title="Next I navigate to and Edit the Related Product in the CMS."
+               data-title="Next I navigate to and Edit the Related Product in the CMS."
+               ><img src="_images/self4.png"
+                     class="align-center"
+                     width="350px"
+                     height="350px"
+                     alt=""/>
+                </a><a class=""
+               data-lightbox="group-4b6eceaa-8c6c-47e2-b0c2-0584ff72a527"
+               href="_images/self5.png"
+               title="And I automatically see the new Product I created attached to it. If we were using a ->hasManySimple() function on our DynamoController like we normally would to relate two SEPARATE models (not the same model), we would not see the newly created Product show up here automatically, and the user may try to select it again, creating a duplicate in the database which is not good."
+               data-title="And I automatically see the new Product I created attached to it. If we were using a ->hasManySimple() function on our DynamoController like we normally would to relate two SEPARATE models (not the same model), we would not see the newly created Product show up here automatically, and the user may try to select it again, creating a duplicate in the database which is not good."
+               ><img src="_images/self5.png"
+                     class="align-center"
+                     width="350px"
+                     height="350px"
+                     alt=""/>
+                </a><a class=""
+               data-lightbox="group-31ef61c9-95f7-4f96-b8cc-550114fcba37"
+               href="_images/self6.png"
+               title="Still on the Related Product Edit page, I deselect the Product1 I created from the beginning and hit save. We expect that the row in the database is gone, and that if I go back to Product1 and edit it, that I won't see Related Product attached to it."
+               data-title="Still on the Related Product Edit page, I deselect the Product1 I created from the beginning and hit save. We expect that the row in the database is gone, and that if I go back to Product1 and edit it, that I won't see Related Product attached to it."
+               ><img src="_images/self6.png"
+                     class="align-center"
+                     width="350px"
+                     height="350px"
+                     alt=""/>
+                </a><a class=""
+               data-lightbox="group-0050ac5b-10a3-4cfa-9ed8-dd0f68b4b714"
+               href="_images/self7.png"
+               title="As expected, the row is gone and the two Products are no longer related."
+               data-title="As expected, the row is gone and the two Products are no longer related."
+               ><img src="_images/self7.png"
+                     class="align-center"
+                     width="350px"
+                     height="350px"
+                     alt=""/>
+                </a></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="license.html" class="btn btn-neutral float-right" title="License" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="relationshipDeleteModal.html" class="btn btn-neutral" title="Deleting Categories" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Jonathan Peoples, Colton Williams
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/sphinxcontrib-images/LightBox2/lightbox2/js/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="_static/sphinxcontrib-images/LightBox2/lightbox2/js/lightbox.min.js"></script>
+        <script type="text/javascript" src="_static/sphinxcontrib-images/LightBox2/lightbox2-customize/jquery-noconflict.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -5,8 +5,11 @@ This section isn't necessary to know in order to use Dynamo. It is explaining en
 but it might be helpful to understand what is going on when you create a model with Dynamo. Again, I would recommend watching the Quick Start video on the homepage
 of the documentation to get a better understanding.
 
-The Dynamo Controller class contains functions similar to the functions of a Resource route in Laravel. A Resource route is
-7 routes all in one. Recall that when you create a Dynamo object with the command,
+The Dynamo Controller class contains |CRUD| functions similar to the functions of a Resource route in Laravel. Recall that when you create a Dynamo object with the command,
+
+.. |CRUD| raw:: html
+
+   <a href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete" target="_blank">CRUD</a>
 
 .. code-block:: php
 

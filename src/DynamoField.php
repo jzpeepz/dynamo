@@ -131,4 +131,15 @@ class DynamoField
 
         return ! empty($theme) ? $theme . '.' : '';
     }
+
+    public function getHtmlAttributes($defaultAttributes = [])
+    {
+        $customAttributes = $this->getOption('attributes');
+
+        if(empty($customAttributes)) {
+            $customAttributes = [];
+        }
+
+        return array_merge($defaultAttributes, $customAttributes);
+    }
 }

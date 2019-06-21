@@ -87,6 +87,7 @@
 <li class="toctree-l1"><a class="reference internal" href="many-to-many.html">Creating Many-to-Many Relationships Between Dynamo Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dynamoMethods.html">Dynamo Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="relationshipDeleteModal.html">Deleting Categories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="relatingModelsToThemselves.html">Relating Models To Themselves with Dynamo</a></li>
 </ul>
 <p class="caption"><span class="caption-text">License</span></p>
 <ul>
@@ -158,22 +159,22 @@
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <p>Install via Composer:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">composer</span> <span class="n">require</span> <span class="n">jzpeepz</span><span class="o">/</span><span class="n">dynamo</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">composer</span> <span class="n">require</span> <span class="n">jzpeepz</span><span class="o">/</span><span class="n">dynamo</span>
 </pre></div>
 </div>
 <p>Include the service provider in your config/app.php:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Jzpeepz</span>\<span class="n">Dynamo</span>\<span class="n">DynamoServiceProvider</span><span class="p">::</span><span class="k">class</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Jzpeepz</span>\<span class="n">Dynamo</span>\<span class="n">DynamoServiceProvider</span><span class="p">::</span><span class="k">class</span>
 </pre></div>
 </div>
 <p>Publish the Dynamo config file:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">php</span> <span class="n">artisan</span> <span class="n">vendor</span><span class="p">:</span><span class="n">publish</span> <span class="o">--</span><span class="n">tag</span><span class="o">=</span><span class="n">dynamo</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">php</span> <span class="n">artisan</span> <span class="n">vendor</span><span class="p">:</span><span class="n">publish</span> <span class="o">--</span><span class="n">tag</span><span class="o">=</span><span class="n">dynamo</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">NOTE: If using a local disk for uploading, be sure to symlink it to your public directory and provide the proper path in the config file.</p>
 </div>
-<p>If you’d like, the Github repo for Dynamo is <a href="https://github.com/jzpeepz/dynamo" target="_blank">here</a>.</p>
+<p>If you&#8217;d like, the Github repo for Dynamo is <a href="https://github.com/jzpeepz/dynamo" target="_blank">here</a>.</p>
 <strong style="font-size: 20px;">Configuration</strong><br><br><p>You can edit the configuration of Dynamo at:</p>
 <p>vendor-&gt;jzpeepz-&gt;dynamo-&gt;src-&gt;config-&gt;dynamo.php.</p>
 <p>The vendor folder is a hidden folder, so much sure your text editor is letting you see it. jzpeeps is the root folder for the Dynamo package.</p>
@@ -182,11 +183,11 @@
 <p>Upload_path is the path within the storage disk to store the uploaded files. This is also the directory within the public directory to which the storage directory is linked.</p>
 <p>route_prefix is a prefix to add to all Dynamo routes.</p>
 <p>layout is the layout to use with Dynamo views.</p>
-<p>controller_namespace and controller_path is the path that tells Dynamo where you want you’re controllers to be auto-generated.</p>
-<p>view_prefix does this… TODO</p>
-<p>view_theme is the HTML / CSS framework you are using. Dynamo is build to run on either ‘bootstrap3’ or ‘bootstrap4’.</p>
-<p>target_blade_section does this… TODO</p>
-<p>default_has_many_class does this … TODO</p>
+<p>controller_namespace and controller_path is the path that tells Dynamo where you want you&#8217;re controllers to be auto-generated.</p>
+<p>view_prefix does this... TODO</p>
+<p>view_theme is the HTML / CSS framework you are using. Dynamo is build to run on either &#8216;bootstrap3&#8217; or &#8216;bootstrap4&#8217;.</p>
+<p>target_blade_section does this... TODO</p>
+<p>default_has_many_class does this ... TODO</p>
 <hr><p>model_uses, just like the comment says, is used to generate use statements automatically into the Model class that is generated when you make a Dynamo object.</p>
 <p>model_implements, similar to model_uses, tells Dynamo what interfaces you want your Dynamo objects to implement.</p>
 <p>Finally, model_traits tells Dynamo what traits the object should use.</p>
@@ -235,7 +236,17 @@
 
     
     
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
