@@ -29,9 +29,9 @@ copyright = u'2018, Jonathan Peoples, Colton Williams'
 author = u'Jonathan Peoples, Colton Williams'
 
 # The short X.Y version
-#version = '1.3.5'
+version = '1.5'
 # The full version, including alpha/beta/rc tags
-#release = '1.3.5'
+release = '1.5'
 
 
 # -- General configuration ---------------------------------------------------
