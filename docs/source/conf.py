@@ -29,31 +29,31 @@ copyright = u'2018, Jonathan Peoples, Colton Williams'
 author = u'Jonathan Peoples, Colton Williams'
 
 # The short X.Y version
-version = '1.5'
+version = '1.3.5'
 # The full version, including alpha/beta/rc tags
-release = '1.5'
+release = '1.3.5'
 
 
 # -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #
-needs_sphinx = '1.5'
+needs_sphinx = '1.3.5'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [
-'sphinxcontrib.images',
-]
-
-images_config = {
-    'default_image_width': '350px',
-    'default_image_height': '350px',
-    'default_show_title': True,
-    'show_caption': True,
-
-}
+# extensions = [
+# 'sphinxcontrib.images',
+# ]
+#
+# images_config = {
+#     'default_image_width': '350px',
+#     'default_image_height': '350px',
+#     'default_show_title': True,
+#     'show_caption': True,
+#
+# }
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['ntemplates']
