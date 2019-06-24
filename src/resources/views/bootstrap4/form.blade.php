@@ -108,7 +108,9 @@
 
                             {!! Form::close() !!}
 
-                            <div class="d-flex justify-content-end" style="margin-top: -38px;">
+                            @if($dynamo->hasFormFooterButton())
+                                <div class="d-flex justify-content-end" style="margin-top: -51px;">
+                            @endif
 
                                 @foreach ($dynamo->getFormFooterButtons() as $button)
                                     <div class="mb-0 ml-2">{!! call_user_func($button) !!}</div>
