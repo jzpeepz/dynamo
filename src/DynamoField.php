@@ -43,12 +43,11 @@ class DynamoField
 
         $displayClosure = $this->getOption('display');
 
-        if (! empty($displayClosure)) {
+        if (!empty($displayClosure)) {
             $display = call_user_func($displayClosure, $item);
         }
 
         if ($this->render) {
-
             if ($this->hasViewHandler()) {
                 return call_user_func($this->getViewHandler(), $item, $this);
             }
@@ -76,7 +75,7 @@ class DynamoField
 
     public function hasOption()
     {
-        return ! $this->options[$key];
+        return !$this->options[$key];
     }
 
     public function getValue($item)
@@ -89,9 +88,9 @@ class DynamoField
         }
 
         // check to see if the key ends with '_id' meaning a refence to another model
-        $lastThree = substr($key, strlen($key)-3);
+        $lastThree = substr($key, strlen($key) - 3);
         if ($lastThree == '_id') {
-            $class = '\\App\\'.studly_case(str_replace($lastThree, '', $key));
+            $class = '\\App\\' . studly_case(str_replace($lastThree, '', $key));
 
             if (class_exists($class)) {
                 $model = $class::find($item->$key);
@@ -122,7 +121,7 @@ class DynamoField
 
     public function hasViewHandler()
     {
-        return ! empty($this->viewHandler) && is_callable($this->viewHandler);
+        return !empty($this->viewHandler) && is_callable($this->viewHandler);
     }
 
     public function setViewHandler($handler)
@@ -134,24 +133,31 @@ class DynamoField
 
     public function getViewHandler()
     {
-        return $this->viewHandler;;
+        return $this->viewHandler;
     }
 
     public function getThemePrefix()
     {
         $theme = config('dynamo.view_theme');
 
-        return ! empty($theme) ? $theme . '.' : '';
+        return !empty($theme) ? $theme . '.' : '';
     }
 
     public function getHtmlAttributes($defaultAttributes = [])
     {
         $customAttributes = $this->getOption('attributes');
 
-        if(empty($customAttributes)) {
+        if (empty($customAttributes)) {
             $customAttributes = [];
         }
 
         return array_merge($defaultAttributes, $customAttributes);
+    }
+
+    public function isRequired()
+    {
+        $attributes = $this->getOption('attributes');
+
+        return isset($attributes['required']) && $attributes['required'] == true;
     }
 }
