@@ -26,6 +26,7 @@
 
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Installation" href="installation.html" />
@@ -162,35 +163,37 @@
   <div class="section" id="the-dynamo-controller-frontend">
 <h1>The Dynamo Controller Frontend<a class="headerlink" href="#the-dynamo-controller-frontend" title="Permalink to this headline">¶</a></h1>
 <p>At this point in the workflow, you have:</p>
-<ol class="arabic">
-<li><p class="first">Installed Dynamo into your Laravel app by running:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">composer</span> <span class="n">require</span> <span class="n">jzpeepz</span><span class="o">/</span><span class="n">dynamo</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">Created an Object using:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">php</span> <span class="n">artisan</span> <span class="n">make</span><span class="p">:</span><span class="n">dynamo</span> <span class="n">FaqCategory</span>
-</pre></div>
-</div>
-</li>
+<ol class="arabic simple">
+<li>Installed Dynamo into your Laravel app by running:</li>
 </ol>
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="nf">composer</span> <span class="nf">require</span> <span class="nf">jzpeepz</span><span class="o">/</span><span class="nf">dynamo</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Created an Object using:</li>
+</ol>
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="nf">php</span> <span class="nf">artisan</span> <span class="nf">make</span><span class="o">:</span><span class="nf">dynamo</span> <span class="nf">FaqCategory</span>
+</pre></div>
+</div>
 <p>This command created a database migration, a model, and controller. Once you define the migration and run php artisan migrate, you&#8217;re now ready for the third step:</p>
 <ol class="arabic simple" start="3">
 <li>Implement the Dynamo Controller!</li>
 </ol>
 <p>Admin customization happens in your controller inside the getDynamo() function of the Dynamo Controller.
 This function returns a Dynamo instance which has lots of chainable methods that customize your Dynamo admin. Lets use an Employee object for an example:</p>
-<blockquote>
-<div><img alt="_images/EmployeeController1.png" class="align-center" src="_images/EmployeeController1.png" />
-</div></blockquote>
+<img alt="_images/EmployeeController1.png" class="align-center" src="_images/EmployeeController1.png" />
 <p>This is what your Dynamo Controller will look like by default right after it is created. By default the auto() function is called which will
 take all the things your employee object consist of (that you defined in your database migration, say first_name, last_name,
 phone_number) and create fields in the form for them. You can chain on methods to this auto function if you need to do more specific things.
 It&#8217;s super easy! Check it out...</p>
+<img alt="_images/ControllerExample.gif" class="align-center" src="_images/ControllerExample.gif" />
+<img alt="_images/EmployeeController2.png" class="align-center" src="_images/EmployeeController2.png" />
 <p>Everything you see before the comment &#8220;//ClearIndexes&#8221; will appear in the form view when someone is creating an object in the database.</p>
 <p>Example of Form View of a Dynamo admin/module:</p>
+<img alt="_images/formOfModuleView.png" class="align-center" src="_images/formOfModuleView.png" />
 <p>Everything you see after the comment &#8220;//ClearIndexes&#8221; will appear in the index view when someone is viewing all the Objects in the database.</p>
 <p>Example of Index View of a Dynamo admin/module:</p>
+<img alt="_images/indexOfModuleView.png" class="align-center" src="_images/indexOfModuleView.png" />
 <p>Now, keep in mind, all the function calls you see above happened automatically with the auto() function.
 The only thing the auto function can&#8217;t do is stuff like renaming a field like you see happen at &#8220;-&gt;file(&#8220;photo&#8221;, &#8220;Headshot&#8221;)&#8221; where
 you might want it to say Headshot rather than photo. We will go into this in more detail in the Dynamo Methods section.</p>

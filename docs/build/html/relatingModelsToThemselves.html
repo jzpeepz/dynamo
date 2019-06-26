@@ -168,25 +168,25 @@ When creating a product you could use the multiSelect box to select the related 
 the user might assume that no related products were attached, and attach some related products. If they attached the same product again you would end up with entries in the pivot table like (1,2) and (2,1). We wanted
 there to only be one entry (1,2) and the application understand on each of those product details pages, to list each other as related. Below is how we implemented this:</p>
 <p>First we created the following relationships:</p>
-<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">public function getAllRelatedProductsAttribute($value)</span>
-<span class="x"> {</span>
-<span class="x">     return $this-&gt;allRelatedProducts();</span>
-<span class="x"> }</span>
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="nf">public</span> <span class="nf">function</span> <span class="nf">getAllRelatedProductsAttribute</span><span class="o">(</span><span class="nv">$value</span><span class="o">)</span>
+ <span class="o">{</span>
+     <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">allRelatedProducts</span><span class="o">();</span>
+ <span class="o">}</span>
 
-<span class="x"> public function allRelatedProducts()</span>
-<span class="x"> {</span>
-<span class="x">     return $this-&gt;relatedProducts-&gt;merge($this-&gt;relatedTo);</span>
-<span class="x"> }</span>
+ <span class="nf">public</span> <span class="nf">function</span> <span class="nf">allRelatedProducts</span><span class="o">()</span>
+ <span class="o">{</span>
+     <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">relatedProducts</span><span class="o">-&gt;</span><span class="nf">merge</span><span class="o">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">relatedTo</span><span class="o">);</span>
+ <span class="o">}</span>
 
-<span class="x"> public function relatedProducts()</span>
-<span class="x"> {</span>
-<span class="x">     return $this-&gt;belongsToMany(&#39;App\Product&#39;, &#39;product_product&#39;, &#39;product_id&#39;, &#39;related_product_id&#39;);</span>
-<span class="x"> }</span>
+ <span class="nf">public</span> <span class="nf">function</span> <span class="nf">relatedProducts</span><span class="o">()</span>
+ <span class="o">{</span>
+     <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">belongsToMany</span><span class="o">(</span><span class="s">&#39;App\Product&#39;</span><span class="o">,</span> <span class="s">&#39;product_product&#39;</span><span class="o">,</span> <span class="s">&#39;product_id&#39;</span><span class="o">,</span> <span class="s">&#39;related_product_id&#39;</span><span class="o">);</span>
+ <span class="o">}</span>
 
-<span class="x"> public function relatedTo()</span>
-<span class="x"> {</span>
-<span class="x">     return $this-&gt;belongsToMany(&#39;App\Product&#39;, &#39;product_product&#39;, &#39;related_product_id&#39;, &#39;product_id&#39;);</span>
-<span class="x"> }</span>
+ <span class="nf">public</span> <span class="nf">function</span> <span class="nf">relatedTo</span><span class="o">()</span>
+ <span class="o">{</span>
+     <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">belongsToMany</span><span class="o">(</span><span class="s">&#39;App\Product&#39;</span><span class="o">,</span> <span class="s">&#39;product_product&#39;</span><span class="o">,</span> <span class="s">&#39;related_product_id&#39;</span><span class="o">,</span> <span class="s">&#39;product_id&#39;</span><span class="o">);</span>
+ <span class="o">}</span>
 </pre></div>
 </div>
 <p>Let&#8217;s start from the bottom up. All of these relationships were defined on the Product.php model in the root of the app directory in the Laravel framework. relatedTo() says that &#8220;this&#8221; Product model is relatedTo
@@ -194,66 +194,66 @@ itself (AppProduct), the pivot table&#8217;s name is &#8220;product_product&#822
 a bit confusing please refer <a href="https://laravel.com/docs/5.5/eloquent-relationships#many-to-many" target="_blank">here</a> in the Laravel documentation to how these parameters work. Next we need a relationship function that returns all the products that are related to &#8220;this&#8221; Product; so we reverse the third
 and fourth parameter. Next, we make a relationship function called allRelatedProducts which merges the relatedTo() and relatedProduts() function so the collection will contain both of their collections in one. Then
 we make a getter function that returns the allRelatedProducts() relationship function.</p>
-<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">-&gt;formTab(FormTab::make(&#39;Relationships&#39;)</span>
-<span class="x">                        -&gt;select(&#39;allRelatedProducts&#39;, [</span>
-<span class="x">                            &#39;label&#39; =&gt; &#39;Related Products: Select all products related to this product&#39;,</span>
-<span class="x">                            &#39;options&#39; =&gt; Product::orderBy(&#39;name&#39;)-&gt;get()-&gt;pluck(&#39;name&#39;, &#39;id&#39;),</span>
-<span class="x">                            &#39;class&#39; =&gt; &#39;chosen-select&#39;,</span>
-<span class="x">                            &#39;multiple&#39; =&gt; true,</span>
-<span class="x">                        ])</span>
-<span class="x">                        -&gt;select(&#39;product_category_id&#39;, [</span>
-<span class="x">                            &#39;label&#39; =&gt; &#39;Product Category: Select the category for this product&#39;,</span>
-<span class="x">                            &#39;options&#39; =&gt; ProductCategory::getSelectList(),</span>
-<span class="x">                            &#39;class&#39; =&gt; &#39;chosen-select&#39;,</span>
-<span class="x">                        ])</span>
-<span class="x">                        -&gt;select(&#39;product_type_id&#39;, [</span>
-<span class="x">                            &#39;label&#39; =&gt; &#39;Product Type: Select the type for this product&#39;,</span>
-<span class="x">                            &#39;options&#39; =&gt; ProductType::getSelectList(),</span>
-<span class="x">                            &#39;class&#39; =&gt; &#39;chosen-select&#39;,</span>
-<span class="x">                        ])</span>
-<span class="x">                        -&gt;select(&#39;sales_sheet_id&#39;, [</span>
-<span class="x">                            &#39;label&#39; =&gt; &#39;Sales Sheet: Select the sales sheet for this product&#39;,</span>
-<span class="x">                            &#39;options&#39; =&gt; ResourceCategory::getSalesSheetSelectList(),</span>
-<span class="x">                            &#39;class&#39; =&gt; &#39;chosen-select&#39;,</span>
-<span class="x">                        ])</span>
-<span class="x">                        -&gt;select(&#39;warranty_id&#39;, [</span>
-<span class="x">                            &#39;label&#39; =&gt; &#39;Warranty: Select the warranty for this product&#39;,</span>
-<span class="x">                            &#39;options&#39; =&gt; ResourceCategory::getWarrantySelectList(),</span>
-<span class="x">                            &#39;class&#39; =&gt; &#39;chosen-select&#39;,</span>
-<span class="x">                        ])</span>
-<span class="x">                        -&gt;select(&#39;drawing_id&#39;, [</span>
-<span class="x">                            &#39;label&#39; =&gt; &#39;Drawing: Select the drawing for this product&#39;,</span>
-<span class="x">                            &#39;options&#39; =&gt; ResourceCategory::getDrawingSelectList(),</span>
-<span class="x">                            &#39;class&#39; =&gt; &#39;chosen-select&#39;,</span>
-<span class="x">                        ])</span>
-<span class="x">                        -&gt;hasManySimple(&#39;resources&#39;, [</span>
-<span class="x">                            &#39;label&#39; =&gt; &#39;Resources: Select all resources for this product&#39;,</span>
-<span class="x">                            &#39;options&#39; =&gt; Resource::orderBy(&#39;title&#39;)-&gt;get()-&gt;pluck(&#39;title&#39;, &#39;id&#39;),</span>
-<span class="x">                            &#39;nameField&#39; =&gt; &#39;title&#39;,</span>
-<span class="x">                        ])</span>
-<span class="x">                    )</span>
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="k">for</span><span class="nf">mTab</span><span class="o">(</span><span class="nf">FormTab</span><span class="o">::</span><span class="nf">make</span><span class="o">(</span><span class="s">&#39;Relationships&#39;</span><span class="o">)</span>
+                        <span class="o">-&gt;</span><span class="nf">select</span><span class="o">(</span><span class="s">&#39;allRelatedProducts&#39;</span><span class="o">,</span> <span class="o">[</span>
+                            <span class="s">&#39;label&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Related Products: Select all products related to this product&#39;</span><span class="o">,</span>
+                            <span class="s">&#39;options&#39;</span><span class="o"> =&gt;</span> <span class="nf">Product</span><span class="o">::</span><span class="nf">orderBy</span><span class="o">(</span><span class="s">&#39;name&#39;</span><span class="o">)-&gt;</span><span class="nf">get</span><span class="o">()-&gt;</span><span class="nf">pluck</span><span class="o">(</span><span class="s">&#39;name&#39;</span><span class="o">,</span> <span class="s">&#39;id&#39;</span><span class="o">),</span>
+                            <span class="s">&#39;class&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;chosen-select&#39;</span><span class="o">,</span>
+                            <span class="s">&#39;multiple&#39;</span><span class="o"> =&gt;</span> <span class="nf">true</span><span class="o">,</span>
+                        <span class="o">])</span>
+                        <span class="o">-&gt;</span><span class="nf">select</span><span class="o">(</span><span class="s">&#39;product_category_id&#39;</span><span class="o">,</span> <span class="o">[</span>
+                            <span class="s">&#39;label&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Product Category: Select the category for this product&#39;</span><span class="o">,</span>
+                            <span class="s">&#39;options&#39;</span><span class="o"> =&gt;</span> <span class="nf">ProductCategory</span><span class="o">::</span><span class="nf">getSelectList</span><span class="o">(),</span>
+                            <span class="s">&#39;class&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;chosen-select&#39;</span><span class="o">,</span>
+                        <span class="o">])</span>
+                        <span class="o">-&gt;</span><span class="nf">select</span><span class="o">(</span><span class="s">&#39;product_type_id&#39;</span><span class="o">,</span> <span class="o">[</span>
+                            <span class="s">&#39;label&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Product Type: Select the type for this product&#39;</span><span class="o">,</span>
+                            <span class="s">&#39;options&#39;</span><span class="o"> =&gt;</span> <span class="nf">ProductType</span><span class="o">::</span><span class="nf">getSelectList</span><span class="o">(),</span>
+                            <span class="s">&#39;class&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;chosen-select&#39;</span><span class="o">,</span>
+                        <span class="o">])</span>
+                        <span class="o">-&gt;</span><span class="nf">select</span><span class="o">(</span><span class="s">&#39;sales_sheet_id&#39;</span><span class="o">,</span> <span class="o">[</span>
+                            <span class="s">&#39;label&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Sales Sheet: Select the sales sheet for this product&#39;</span><span class="o">,</span>
+                            <span class="s">&#39;options&#39;</span><span class="o"> =&gt;</span> <span class="nf">ResourceCategory</span><span class="o">::</span><span class="nf">getSalesSheetSelectList</span><span class="o">(),</span>
+                            <span class="s">&#39;class&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;chosen-select&#39;</span><span class="o">,</span>
+                        <span class="o">])</span>
+                        <span class="o">-&gt;</span><span class="nf">select</span><span class="o">(</span><span class="s">&#39;warranty_id&#39;</span><span class="o">,</span> <span class="o">[</span>
+                            <span class="s">&#39;label&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Warranty: Select the warranty for this product&#39;</span><span class="o">,</span>
+                            <span class="s">&#39;options&#39;</span><span class="o"> =&gt;</span> <span class="nf">ResourceCategory</span><span class="o">::</span><span class="nf">getWarrantySelectList</span><span class="o">(),</span>
+                            <span class="s">&#39;class&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;chosen-select&#39;</span><span class="o">,</span>
+                        <span class="o">])</span>
+                        <span class="o">-&gt;</span><span class="nf">select</span><span class="o">(</span><span class="s">&#39;drawing_id&#39;</span><span class="o">,</span> <span class="o">[</span>
+                            <span class="s">&#39;label&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Drawing: Select the drawing for this product&#39;</span><span class="o">,</span>
+                            <span class="s">&#39;options&#39;</span><span class="o"> =&gt;</span> <span class="nf">ResourceCategory</span><span class="o">::</span><span class="nf">getDrawingSelectList</span><span class="o">(),</span>
+                            <span class="s">&#39;class&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;chosen-select&#39;</span><span class="o">,</span>
+                        <span class="o">])</span>
+                        <span class="o">-&gt;</span><span class="nf">hasManySimple</span><span class="o">(</span><span class="s">&#39;resources&#39;</span><span class="o">,</span> <span class="o">[</span>
+                            <span class="s">&#39;label&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Resources: Select all resources for this product&#39;</span><span class="o">,</span>
+                            <span class="s">&#39;options&#39;</span><span class="o"> =&gt;</span> <span class="nf">Resource</span><span class="o">::</span><span class="nf">orderBy</span><span class="o">(</span><span class="s">&#39;title&#39;</span><span class="o">)-&gt;</span><span class="nf">get</span><span class="o">()-&gt;</span><span class="nf">pluck</span><span class="o">(</span><span class="s">&#39;title&#39;</span><span class="o">,</span> <span class="s">&#39;id&#39;</span><span class="o">),</span>
+                            <span class="s">&#39;nameField&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;title&#39;</span><span class="o">,</span>
+                        <span class="o">])</span>
+                    <span class="o">)</span>
 </pre></div>
 </div>
 <p>We create this FormTab called Relationships where the user may attach all the relationships this Product they are creating has. Look at the first select box. The first parameter is &#8216;allRelatedProducts&#8217;.
 This is needed so that if the user is Editing an already existing Product that already has related Products set, it will populate with those related Products. Another important thing is that it has
 &#8216;multiple&#8217; =&gt; true,&#8217; which tells dynamo to make it a multiSelect box on the form. Directly below this formTab we create a handler:</p>
-<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">-&gt;addHandler(&#39;allRelatedProducts&#39;, function (&amp;$product, &amp;$data) {</span>
-<span class="x">                        if (isset($data[&#39;allRelatedProducts&#39;])) {</span>
-<span class="x">                            $relatedIds = $product-&gt;allRelatedProducts-&gt;pluck(&#39;id&#39;);</span>
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">addHandler</span><span class="o">(</span><span class="s">&#39;allRelatedProducts&#39;</span><span class="o">,</span> <span class="nf">function</span> <span class="o">(&amp;</span><span class="nv">$product</span><span class="o">,</span> <span class="o">&amp;</span><span class="nv">$data</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="nf">isset</span><span class="o">(</span><span class="nv">$data</span><span class="o">[</span><span class="s">&#39;allRelatedProducts&#39;</span><span class="o">]))</span> <span class="o">{</span>
+                            <span class="nv">$relatedIds</span><span class="o"> =</span> <span class="nv">$product</span><span class="o">-&gt;</span><span class="nf">allRelatedProducts</span><span class="o">-&gt;</span><span class="nf">pluck</span><span class="o">(</span><span class="s">&#39;id&#39;</span><span class="o">);</span>
 
-<span class="x">                            $relatedIdsToRemove = array_diff($relatedIds-&gt;toArray(), $data[&#39;allRelatedProducts&#39;]);</span>
+                            <span class="nv">$relatedIdsToRemove</span><span class="o"> =</span> <span class="nf">array_diff</span><span class="o">(</span><span class="nv">$relatedIds</span><span class="o">-&gt;</span><span class="nf">toArray</span><span class="o">(),</span> <span class="nv">$data</span><span class="o">[</span><span class="s">&#39;allRelatedProducts&#39;</span><span class="o">]);</span>
 
-<span class="x">                            $product-&gt;relatedTo()-&gt;detach($relatedIdsToRemove);</span>
+                            <span class="nv">$product</span><span class="o">-&gt;</span><span class="nf">relatedTo</span><span class="o">()-&gt;</span><span class="nf">detach</span><span class="o">(</span><span class="nv">$relatedIdsToRemove</span><span class="o">);</span>
 
-<span class="x">                            $product-&gt;relatedProducts()-&gt;sync($data[&#39;allRelatedProducts&#39;]);</span>
+                            <span class="nv">$product</span><span class="o">-&gt;</span><span class="nf">relatedProducts</span><span class="o">()-&gt;</span><span class="nf">sync</span><span class="o">(</span><span class="nv">$data</span><span class="o">[</span><span class="s">&#39;allRelatedProducts&#39;</span><span class="o">]);</span>
 
-<span class="x">                            unset($data[&#39;allRelatedProducts&#39;]);</span>
-<span class="x">                        } else {</span>
-<span class="x">                            // clear both relationships</span>
-<span class="x">                            $product-&gt;relatedProducts()-&gt;detach();</span>
-<span class="x">                            $product-&gt;relatedTo()-&gt;detach();</span>
-<span class="x">                        }</span>
-<span class="x">                    })</span>
+                            <span class="nf">unset</span><span class="o">(</span><span class="nv">$data</span><span class="o">[</span><span class="s">&#39;allRelatedProducts&#39;</span><span class="o">]);</span>
+                        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                            <span class="o">//</span> <span class="nf">clear</span> <span class="nf">both</span> <span class="nf">relationships</span>
+                            <span class="nv">$product</span><span class="o">-&gt;</span><span class="nf">relatedProducts</span><span class="o">()-&gt;</span><span class="nf">detach</span><span class="o">();</span>
+                            <span class="nv">$product</span><span class="o">-&gt;</span><span class="nf">relatedTo</span><span class="o">()-&gt;</span><span class="nf">detach</span><span class="o">();</span>
+                        <span class="o">}</span>
+                    <span class="o">})</span>
 </pre></div>
 </div>
 <p>The first parameter is the relationship that we are handling. The second is a closure function that does the &#8220;handling&#8221;. It takes the item and its data that we are creating/editing as the closure arguments.

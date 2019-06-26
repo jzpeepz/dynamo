@@ -3,11 +3,15 @@ The Dynamo Controller Frontend
 
 At this point in the workflow, you have:
 
-1. Installed Dynamo into your Laravel app by running::
+1. Installed Dynamo into your Laravel app by running:
+
+.. code-block:: trafficscript
 
     composer require jzpeepz/dynamo
 
-2. Created an Object using::
+2. Created an Object using:
+
+.. code-block:: trafficscript
 
     php artisan make:dynamo FaqCategory
 
@@ -18,32 +22,32 @@ This command created a database migration, a model, and controller. Once you def
 Admin customization happens in your controller inside the getDynamo() function of the Dynamo Controller.
 This function returns a Dynamo instance which has lots of chainable methods that customize your Dynamo admin. Lets use an Employee object for an example:
 
-    .. image:: images/EmployeeController1.png
-        :align: center
+.. image:: images/EmployeeController1.png
+    :align: center
 
 This is what your Dynamo Controller will look like by default right after it is created. By default the auto() function is called which will
 take all the things your employee object consist of (that you defined in your database migration, say first_name, last_name,
 phone_number) and create fields in the form for them. You can chain on methods to this auto function if you need to do more specific things.
 It's super easy! Check it out...
 
-.. thumbnail:: images/ControllerExample.gif
+.. image:: images/ControllerExample.gif
     :align: center
 
-.. thumbnail:: images/EmployeeController2.png
+.. image:: images/EmployeeController2.png
     :align: center
 
 Everything you see before the comment "//ClearIndexes" will appear in the form view when someone is creating an object in the database.
 
 Example of Form View of a Dynamo admin/module:
 
-.. thumbnail:: images/formOfModuleView.png
+.. image:: images/formOfModuleView.png
     :align: center
 
 Everything you see after the comment "//ClearIndexes" will appear in the index view when someone is viewing all the Objects in the database.
 
 Example of Index View of a Dynamo admin/module:
 
-.. thumbnail:: images/indexOfModuleView.png
+.. image:: images/indexOfModuleView.png
     :align: center
 
 Now, keep in mind, all the function calls you see above happened automatically with the auto() function.

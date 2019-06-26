@@ -21,9 +21,12 @@ import sys
 # sys.path.append('src/config')
 # sys.path.append('docs/images')
 
+# custom css is defined in this setup function
+# the style sheet is located in the _static/css folder
+def setup(app):
+    app.add_stylesheet('css/custom.css')
 
 # -- Project information -----------------------------------------------------
-
 project = u'dynamo'
 copyright = u'2018, Jonathan Peoples, Colton Williams'
 author = u'Jonathan Peoples, Colton Williams'
@@ -113,7 +116,7 @@ html_theme_options = {
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 #tml_static_path = ['nstatic']
-
+html_static_path = ['_static']
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
 #

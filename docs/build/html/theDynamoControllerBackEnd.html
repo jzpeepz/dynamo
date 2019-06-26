@@ -26,6 +26,7 @@
 
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="The Dynamo Controller Frontend" href="theDynamoControllerFrontEnd.html" />
@@ -161,163 +162,134 @@
             
   <div class="section" id="the-dynamo-controller-backend">
 <h1>The Dynamo Controller Backend<a class="headerlink" href="#the-dynamo-controller-backend" title="Permalink to this headline">¶</a></h1>
-<p>This section isn&#8217;t necessary to know in order to use Dynamo. It is explaining encapsulated code within the package that you never actually see,
+<p>This section isn&#8217;t necessary to know in order to use Dynamo. It is explaining encapsulated code within the package that you don&#8217;t actually need to see,
 but it might be helpful to understand what is going on when you create a model with Dynamo. Again, I would recommend watching the Quick Start video on the homepage
 of the documentation to get a better understanding.</p>
 <p>The Dynamo Controller class contains <a href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete" target="_blank">CRUD</a> functions similar to the functions of a Resource route in Laravel. Recall that when you create a Dynamo object with the command,</p>
-<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">php artisan make:dynamo FaqCategory</span>
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="nf">php</span> <span class="nf">artisan</span> <span class="nf">make</span><span class="o">:</span><span class="nf">dynamo</span> <span class="nf">FaqCategory</span>
 </pre></div>
 </div>
 <p>Dynamo will generate a route in your routes-&gt;web.php file,</p>
-<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">Route::resource(&#39;faqcategory&#39;, &#39;\App\Http\Controllers\Admin\FaqCategoryController&#39;);</span>
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="nf">Route</span><span class="o">::</span><span class="nf">resource</span><span class="o">(</span><span class="s">&#39;faqcategory&#39;</span><span class="o">,</span> <span class="s">&#39;\App\Http\Controllers\Admin\FaqCategoryController&#39;</span><span class="o">);</span>
 </pre></div>
 </div>
-<p>that links to the Dynamo Controller. The following routes are generated:</p>
-<p>The index function that returns an index view of all the resources. So in the Faq Category
+<p>that links to the Dynamo Controller. The following routes are generated in your Laravel application that you can see by running <strong>php artisan route:list</strong>:</p>
+<img alt="_images/routesGenerated.png" class="align-center" src="_images/routesGenerated.png" />
+<p>The index function returns an index view or table of all the resources for that module. So in the Faq Category
 example, the index function would show a view of all the Faq Categories saved in the database:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>/**
- * Display a listing of the resource.
- *
- * @return \Illuminate\Http\Response
- */
-public function index()
-{
-    $items = $this-&gt;dynamo-&gt;getIndexItems();
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="nf">public</span> <span class="nf">function</span> <span class="k">in</span><span class="nf">dex</span><span class="o">()</span>
+<span class="o">{</span>
+    <span class="nv">$items</span><span class="o"> =</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">getIndexItems</span><span class="o">();</span>
 
-    return DynamoView::make($this-&gt;dynamo, &#39;dynamo::index&#39;, compact(&#39;items&#39;));
-}
+    <span class="k">return</span> <span class="nf">DynamoView</span><span class="o">::</span><span class="nf">make</span><span class="o">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">,</span> <span class="s">&#39;dynamo::index&#39;</span><span class="o">,</span> <span class="nf">compact</span><span class="o">(</span><span class="s">&#39;items&#39;</span><span class="o">));</span>
+<span class="o">}</span>
 </pre></div>
 </div>
-<p>Resulting DynamoView:</p>
+<p>Resulting DynamoView( screenshot is bootstrap3 theme instead of bootstrap4 ):</p>
+<img alt="_images/indexDynamoView.png" class="align-center" src="_images/indexDynamoView.png" />
 <p>The next two functions are create() and store(). Create shows the form view that the user will use to create Faq Category objects:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>/**
- * Show the form for creating a new resource.
- *
- * @return \Illuminate\Http\Response
- */
-public function create()
-{
-    $item = new $this-&gt;dynamo-&gt;class;
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="nf">public</span> <span class="nf">function</span> <span class="nf">create</span><span class="o">()</span>
+<span class="o">{</span>
+    <span class="nv">$item</span><span class="o"> =</span> <span class="nf">new</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">class</span><span class="o">;</span>
 
-    $formOptions = [
-        &#39;route&#39; =&gt; $this-&gt;dynamo-&gt;getRoute(&#39;store&#39;),
-        &#39;files&#39; =&gt; true,
-    ];
+    <span class="nv">$formOptions</span><span class="o"> =</span> <span class="o">[</span>
+        <span class="s">&#39;route&#39;</span><span class="o"> =&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">getRoute</span><span class="o">(</span><span class="s">&#39;store&#39;</span><span class="o">),</span>
+        <span class="s">&#39;files&#39;</span><span class="o"> =&gt;</span> <span class="nf">true</span><span class="o">,</span>
+    <span class="o">];</span>
 
-    return DynamoView::make($this-&gt;dynamo, &#39;dynamo::form&#39;, compact(&#39;item&#39;, &#39;formOptions&#39;));
-}
+    <span class="k">return</span> <span class="nf">DynamoView</span><span class="o">::</span><span class="nf">make</span><span class="o">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">,</span> <span class="s">&#39;dynamo::form&#39;</span><span class="o">,</span> <span class="nf">compact</span><span class="o">(</span><span class="s">&#39;item&#39;</span><span class="o">,</span> <span class="s">&#39;formOptions&#39;</span><span class="o">));</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Resulting DynamoView:</p>
+<img alt="_images/createDynamoView.png" class="align-center" src="_images/createDynamoView.png" />
 <p>Store() is the function that gets hit when the user presses the submit button on the Create an Faq Category form. Store will &#8220;store&#8221; this new Faq Category object in your database:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>/**
- * Store a newly created resource in storage.
- *
- * @param  \Illuminate\Http\Request  $request
- * @return \Illuminate\Http\Response
- */
-public function store(Request $request)
-{
-    $item = new $this-&gt;dynamo-&gt;class;
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="nf">public</span> <span class="nf">function</span> <span class="nf">store</span><span class="o">(</span><span class="nf">Request</span> <span class="nv">$request</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="nv">$item</span><span class="o"> =</span> <span class="nf">new</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">class</span><span class="o">;</span>
 
-    $this-&gt;dynamo-&gt;store($item);
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">store</span><span class="o">(</span><span class="nv">$item</span><span class="o">);</span>
 
-    session([&#39;alert-success&#39; =&gt; $this-&gt;dynamo-&gt;getName() . &#39; was saved successfully!&#39;]);
+    <span class="nf">session</span><span class="o">([</span><span class="s">&#39;alert-success&#39;</span><span class="o"> =&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">getName</span><span class="o">()</span> <span class="o">.</span> <span class="s">&#39; was saved successfully!&#39;</span><span class="o">]);</span>
 
-    return redirect()-&gt;route($this-&gt;dynamo-&gt;getRoute(&#39;edit&#39;), $item-&gt;id);
-}
+    <span class="k">return</span> <span class="nf">redirect</span><span class="o">()-&gt;</span><span class="nf">route</span><span class="o">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">getRoute</span><span class="o">(</span><span class="s">&#39;edit&#39;</span><span class="o">),</span> <span class="nv">$item</span><span class="o">-&gt;</span><span class="nf">id</span><span class="o">);</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Resulting DynamoView:</p>
+<img alt="_images/storeDynamoView.png" class="align-center" src="_images/storeDynamoView.png" />
 <p>The next two functions are edit() and update() which go hand-in-hand the same way create() and store() go hand-in-hand. When the user clicks the edit button on one of
 the Faq Category objects in the index view, the form view for that particular employee will be presented to the user so they can make changes to that Faq Category
 (perhaps update a phone number, or in this case update the name of the category):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>/**
- * Show the form for editing the specified resource.
- *
- * @param  int  $id
- * @return \Illuminate\Http\Response
- */
-public function edit($id)
-{
-    $className = $this-&gt;dynamo-&gt;class;
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="nf">public</span> <span class="nf">function</span> <span class="nf">edit</span><span class="o">(</span><span class="nv">$id</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="nv">$className</span><span class="o"> =</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">class</span><span class="o">;</span>
 
-    $item = $className::withoutGlobalScopes()-&gt;find($id);
+    <span class="nv">$item</span><span class="o"> =</span> <span class="nv">$className</span><span class="o">::</span><span class="nf">withoutGlobalScopes</span><span class="o">()-&gt;</span><span class="nf">find</span><span class="o">(</span><span class="nv">$id</span><span class="o">);</span>
 
-    $formOptions = [
-        &#39;route&#39; =&gt; [$this-&gt;dynamo-&gt;getRoute(&#39;update&#39;), $id],
-        &#39;method&#39; =&gt; &#39;put&#39;,
-        &#39;files&#39; =&gt; true,
-    ];
+    <span class="nv">$formOptions</span><span class="o"> =</span> <span class="o">[</span>
+        <span class="s">&#39;route&#39;</span><span class="o"> =&gt;</span> <span class="o">[</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">getRoute</span><span class="o">(</span><span class="s">&#39;update&#39;</span><span class="o">),</span> <span class="nv">$id</span><span class="o">],</span>
+        <span class="s">&#39;method&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;put&#39;</span><span class="o">,</span>
+        <span class="s">&#39;files&#39;</span><span class="o"> =&gt;</span> <span class="nf">true</span><span class="o">,</span>
+    <span class="o">];</span>
 
-    return DynamoView::make($this-&gt;dynamo, &#39;dynamo::form&#39;, compact(&#39;item&#39;, &#39;formOptions&#39;));
-}
+    <span class="k">return</span> <span class="nf">DynamoView</span><span class="o">::</span><span class="nf">make</span><span class="o">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">,</span> <span class="s">&#39;dynamo::form&#39;</span><span class="o">,</span> <span class="nf">compact</span><span class="o">(</span><span class="s">&#39;item&#39;</span><span class="o">,</span> <span class="s">&#39;formOptions&#39;</span><span class="o">));</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Update() gets hit when the user presses the Submit button and whatever changes they made will get updated for that particular Faq Category in the database:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>/**
- * Update the specified resource in storage.
- *
- * @param  \Illuminate\Http\Request  $request
- * @param  int  $id
- * @return \Illuminate\Http\Response
- */
-public function update(Request $request, $id)
-{
-    $className = $this-&gt;dynamo-&gt;class;
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="nf">public</span> <span class="nf">function</span> <span class="nf">update</span><span class="o">(</span><span class="nf">Request</span> <span class="nv">$request</span><span class="o">,</span> <span class="nv">$id</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="nv">$className</span><span class="o"> =</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">class</span><span class="o">;</span>
 
-    $item = $className::withoutGlobalScopes()-&gt;find($id);
+    <span class="nv">$item</span><span class="o"> =</span> <span class="nv">$className</span><span class="o">::</span><span class="nf">withoutGlobalScopes</span><span class="o">()-&gt;</span><span class="nf">find</span><span class="o">(</span><span class="nv">$id</span><span class="o">);</span>
 
-    $this-&gt;dynamo-&gt;store($item);
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">store</span><span class="o">(</span><span class="nv">$item</span><span class="o">);</span>
 
-    session([&#39;alert-success&#39; =&gt; $this-&gt;dynamo-&gt;getName() . &#39; was saved successfully!&#39;]);
+    <span class="nf">session</span><span class="o">([</span><span class="s">&#39;alert-success&#39;</span><span class="o"> =&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">getName</span><span class="o">()</span> <span class="o">.</span> <span class="s">&#39; was saved successfully!&#39;</span><span class="o">]);</span>
 
-    return redirect()-&gt;route($this-&gt;dynamo-&gt;getRoute(&#39;edit&#39;), $id);
-}
+    <span class="k">return</span> <span class="nf">redirect</span><span class="o">()-&gt;</span><span class="nf">route</span><span class="o">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">getRoute</span><span class="o">(</span><span class="s">&#39;edit&#39;</span><span class="o">),</span> <span class="nv">$id</span><span class="o">);</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>The final function on the Dynamo Controller is destroy(). This function gets hit when the user clicks the delete button in the index view, and an alert will appear asking
 them if they are sure they want to do this. If they press yes, the item will attempt to be deleted. If the item can&#8217;t be deleted due to throwing a QueryException (because
 you can&#8217;t add or update a child row if another object in the database is using it for a foreign key), it will redirect and say you can&#8217;t do that because this object is in use.
 Otherwise, the item will be deleted and they will be shown a success message, and this Employee no longer exist:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>/**
- * Remove the specified resource from storage.
- *
- * @param  int  $id
- * @return \Illuminate\Http\Response
- */
-public function destroy($id)
-{
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="nf">public</span> <span class="nf">function</span> <span class="nf">destroy</span><span class="o">(</span><span class="nv">$id</span><span class="o">)</span>
+<span class="o">{</span>
 
-    $className = $this-&gt;dynamo-&gt;class;
+    <span class="nv">$className</span><span class="o"> =</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">class</span><span class="o">;</span>
 
-    // Run through and look for fields with type &#39;multiSelect&#39;
-    foreach($this-&gt;dynamo-&gt;getFields() as $field) {
+    <span class="o">//</span> <span class="nf">Run</span> <span class="nf">through</span> <span class="nf">and</span> <span class="nf">look</span> <span class="k">for</span> <span class="nf">fields</span> <span class="nf">with</span> <span class="nf">type</span> <span class="s">&#39;multiSelect&#39;</span>
+    <span class="k">foreach</span><span class="o">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">getFields</span><span class="o">()</span> <span class="nf">as</span> <span class="nv">$field</span><span class="o">)</span> <span class="o">{</span>
 
-        if($field-&gt;type == &#39;hasMany&#39;) {
-            //if &#39;multiSelect&#39; found then relational data may exist. Detach data from the model
-            $className::withoutGlobalScopes()-&gt;find($id)-&gt;{$field-&gt;key}()-&gt;detach();
-        }
+        <span class="k">if</span><span class="o">(</span><span class="nv">$field</span><span class="o">-&gt;</span><span class="nf">type</span><span class="o"> ==</span> <span class="s">&#39;hasMany&#39;</span><span class="o">)</span> <span class="o">{</span>
+            <span class="o">//</span><span class="k">if</span> <span class="s">&#39;multiSelect&#39;</span> <span class="nf">found</span> <span class="nf">then</span> <span class="nf">relational</span> <span class="nf">data</span> <span class="nf">may</span> <span class="nf">exist.</span> <span class="nf">Detach</span> <span class="nf">data</span> <span class="nf">from</span> <span class="nf">the</span> <span class="nf">model</span>
+            <span class="nv">$className</span><span class="o">::</span><span class="nf">withoutGlobalScopes</span><span class="o">()-&gt;</span><span class="nf">find</span><span class="o">(</span><span class="nv">$id</span><span class="o">)-&gt;{</span><span class="nv">$field</span><span class="o">-&gt;</span><span class="nf">key</span><span class="o">}()-&gt;</span><span class="nf">detach</span><span class="o">();</span>
+        <span class="o">}</span>
 
-    }
+    <span class="o">}</span>
 
-    $item = $className::withoutGlobalScopes()-&gt;findOrFail($id);
+    <span class="nv">$item</span><span class="o"> =</span> <span class="nv">$className</span><span class="o">::</span><span class="nf">withoutGlobalScopes</span><span class="o">()-&gt;</span><span class="nf">findOrFail</span><span class="o">(</span><span class="nv">$id</span><span class="o">);</span>
 
-    try {
-        $item-&gt;delete();
-    } catch (QueryException $e) {
-        session([&#39;alert-danger&#39; =&gt; $this-&gt;dynamo-&gt;getName() . &#39; cannot be deleted while in use!&#39;]);
-        return redirect()-&gt;route($this-&gt;dynamo-&gt;getRoute(&#39;index&#39;));
-    }
+    <span class="nf">try</span> <span class="o">{</span>
+        <span class="nv">$item</span><span class="o">-&gt;</span><span class="nf">delete</span><span class="o">();</span>
+    <span class="o">}</span> <span class="nf">catch</span> <span class="o">(</span><span class="nf">QueryException</span> <span class="nv">$e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nf">session</span><span class="o">([</span><span class="s">&#39;alert-danger&#39;</span><span class="o"> =&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">getName</span><span class="o">()</span> <span class="o">.</span> <span class="s">&#39; cannot be deleted while in use!&#39;</span><span class="o">]);</span>
+        <span class="k">return</span> <span class="nf">redirect</span><span class="o">()-&gt;</span><span class="nf">route</span><span class="o">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">getRoute</span><span class="o">(</span><span class="s">&#39;index&#39;</span><span class="o">));</span>
+    <span class="o">}</span>
 
-    session([&#39;alert-warning&#39; =&gt; $this-&gt;dynamo-&gt;getName() . &#39; was deleted successfully!&#39;]);
+    <span class="nf">session</span><span class="o">([</span><span class="s">&#39;alert-warning&#39;</span><span class="o"> =&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">getName</span><span class="o">()</span> <span class="o">.</span> <span class="s">&#39; was deleted successfully!&#39;</span><span class="o">]);</span>
 
-    return redirect()-&gt;route($this-&gt;dynamo-&gt;getRoute(&#39;index&#39;));
-}
+    <span class="k">return</span> <span class="nf">redirect</span><span class="o">()-&gt;</span><span class="nf">route</span><span class="o">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">dynamo</span><span class="o">-&gt;</span><span class="nf">getRoute</span><span class="o">(</span><span class="s">&#39;index&#39;</span><span class="o">));</span>
+<span class="o">}</span>
 </pre></div>
 </div>
 <p>Resulting DynamoView if object can&#8217;t be deleted because it&#8217;s connected to other objects in the relational database via pivot tables:</p>
+<img alt="_images/deleteFailDynamoView.png" class="align-center" src="_images/deleteFailDynamoView.png" />
 <p>Resulting DynamoView if object was successfully deleted:</p>
+<img alt="_images/deleteDynamoView.png" class="align-center" src="_images/deleteDynamoView.png" />
 </div>
 
 

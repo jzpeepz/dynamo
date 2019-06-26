@@ -11,7 +11,7 @@ there to only be one entry (1,2) and the application understand on each of those
 
 First we created the following relationships:
 
-.. code-block:: php
+.. code-block:: trafficscript
 
     public function getAllRelatedProductsAttribute($value)
      {
@@ -43,7 +43,7 @@ we make a getter function that returns the allRelatedProducts() relationship fun
 
   <a href="https://laravel.com/docs/5.5/eloquent-relationships#many-to-many" target="_blank">here</a>
 
-.. code-block:: php
+.. code-block:: trafficscript
 
     ->formTab(FormTab::make('Relationships')
                             ->select('allRelatedProducts', [
@@ -88,7 +88,7 @@ We create this FormTab called Relationships where the user may attach all the re
 This is needed so that if the user is Editing an already existing Product that already has related Products set, it will populate with those related Products. Another important thing is that it has
 'multiple' => true,' which tells dynamo to make it a multiSelect box on the form. Directly below this formTab we create a handler:
 
-.. code-block:: php
+.. code-block:: trafficscript
 
     ->addHandler('allRelatedProducts', function (&$product, &$data) {
                             if (isset($data['allRelatedProducts'])) {

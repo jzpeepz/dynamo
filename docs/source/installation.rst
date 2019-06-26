@@ -1,15 +1,21 @@
 Installation
 ============
 
-Install via Composer::
+Install via Composer:
+
+.. code-block:: trafficscript
 
     composer require jzpeepz/dynamo
 
-Include the service provider in your config/app.php::
+Include the service provider in your config/app.php:
+
+.. code-block:: trafficscript
 
     Jzpeepz\Dynamo\DynamoServiceProvider::class
 
-Publish the Dynamo config file::
+Publish the Dynamo config file:
+
+.. code-block:: trafficscript
 
     php artisan vendor:publish --tag=dynamo
 
@@ -29,7 +35,9 @@ If you'd like, the Github repo for Dynamo is |github|.
 
 You can edit the configuration of Dynamo at:
 
-vendor->jzpeepz->dynamo->src->config->dynamo.php.
+.. code-block:: trafficscript
+
+    vendor->jzpeepz->dynamo->src->config->dynamo.php.
 
 The vendor folder is a hidden folder, so much sure your text editor is letting you see it. jzpeeps is the root folder for the Dynamo package.
 

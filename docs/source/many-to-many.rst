@@ -7,7 +7,7 @@ Creating Many-to-Many Relationships Between Dynamo Models
     <strong style="font-size: 20px;">Step 1: Generate the two models you will be using.</strong><br><br>
 
 
-.. code-block:: PHP
+.. code-block:: trafficscript
 
     php artisan make:dynamo Faq
     php artisan make:dynamo Category
@@ -17,7 +17,9 @@ Creating Many-to-Many Relationships Between Dynamo Models
 
     <strong style="font-size: 20px;">Step 2: Complete the needed migrations.</strong><br><br>
 
-Example Faq migration::
+Example Faq migration:
+
+.. code-block:: trafficscript
 
     Schema::create('faqs', function (Blueprint $table) {
     	$table->increments('id');
@@ -26,7 +28,9 @@ Example Faq migration::
     	$table->timestamps();
     });
 
-Example Category migration::
+Example Category migration:
+
+.. code-block:: trafficscript
 
     Schema::create('categories', function (Blueprint $table) {
     	$table->increments('id');
@@ -34,7 +38,9 @@ Example Category migration::
     	$table->timestamps();
     });
 
-Example pivot table migration::
+Example pivot table migration:
+
+.. code-block:: trafficscript
 
     Schema::create('category_faq', function(Blueprint $table) {
     	$table->integer('faq_id')->unsigned()->nullable();
@@ -44,7 +50,9 @@ Example pivot table migration::
     	$table->foreign('category_id')->references('id')->on('categories');
     });
 
-Run::
+Run:
+
+.. code-block:: trafficscript
 
     php artisan migrate
 
@@ -53,14 +61,18 @@ Run::
     <strong style="font-size: 20px;">Step 3: Add the proper belongsToMany Eloquent function to each model.</strong><br><br>
 
 
-For the Category model::
+For the Category model:
+
+.. code-block:: trafficscript
 
     public function faqs()
     {
 	   return $this->belongsToMany('App\Faq');
     }
 
-For the Faq Model::
+For the Faq Model:
+
+.. code-block:: trafficscript
 
     public function categories()
     {
@@ -72,7 +84,7 @@ For the Faq Model::
 
     <strong style="font-size: 20px;">Step 4: Chain the hasMany() method onto your Dynamo instance in both controllers. Make sure your key is the name of the Eloquent function from you model.</strong><br><br>
 
-.. code-block:: PHP
+.. code-block:: trafficscript
 
     return Dynamo::make(\App\Employee::class)
 			->hasMany('categories', ['options' => [$categories]]);

@@ -26,6 +26,7 @@
 
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Deleting Categories" href="relationshipDeleteModal.html" />
@@ -212,7 +213,7 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
     </p>
 </div><div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">NOTE: In the examples below, click the pictures to get a description and better view of them!</p>
+<p class="last">This list is alphabetical order, and you can quickly jump to a function description by clicking the links above</p>
 </div>
 <hr>
 
@@ -228,87 +229,317 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
    So if they select to save the post as a Draft, it will save the number 10 in the status field in the database. Next we have label which just changes the text of the input's label.
    By default this label will be the name of the database field passed in; in this case, that is status. Next we have tooltip, then we have position. By default Dynamo will position
    the order of the input fields on the form in the order you write them, but when using the auto function sometimes things get out of position, so you can manually set the order.
-   </p><hr>
+   </p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">select</span><span class="o">(</span><span class="s">&#39;status&#39;</span><span class="o">,</span> <span class="o">[</span>
+     <span class="s">&#39;attributes&#39;</span><span class="o"> =&gt;</span> <span class="o">[</span><span class="s">&#39;disabled&#39;</span><span class="o"> =&gt;</span> <span class="nf">true</span><span class="o">,</span> <span class="s">&#39;colton&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;&#39;</span><span class="o">],</span>
+     <span class="s">&#39;options&#39;</span><span class="o"> =&gt;</span> <span class="nf">Testing</span><span class="o">::</span><span class="nf">getStatuses</span><span class="o">(),</span>
+     <span class="s">&#39;label&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Your Address Please sir&#39;</span><span class="o">,</span>
+     <span class="s">&#39;tooltip&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Use the \&#39;\&#39;Draft\&#39;\&#39; status to save information as you have it. When you\&#39;re ready for an FAQ to</span>
+<span class="s">                   show up on the front end of the website, change it to \&#39;\&#39;Published\&#39;\&#39; and then click the \&#39;\&#39;Save FAQ\&#39;\&#39; button.&#39;</span><span class="o">,</span>
+     <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">200</span><span class="o">,</span>
+ <span class="o">])</span>
+</pre></div>
+</div>
+<hr>
 
 <p><a name="method-addActionButton"></a></p>
 <h4><code>addActionButton()</code></h4>
-<p>The <code>addField</code> method allows you to create a button along-side the other default action buttons, Edit and Delete. Keep in mind these default buttons can be
-   remove by calling hideDelete()</p><hr>
+<p>The <code>addActionButton</code> method allows you to create a button along-side the other default action buttons, Edit and Delete. Keep in mind these default buttons can be
+   remove by calling hideDelete()</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">addActionButton</span><span class="o">(</span><span class="nf">function</span><span class="o">()</span> <span class="o">{</span>
+     <span class="k">return</span> <span class="s">&#39;&lt;a href=&quot;/pilot/testing&quot; class=&quot;btn btn-primary btn-sm&quot;&gt;Test&lt;/a&gt;&#39;</span><span class="o">;</span>
+ <span class="o">})</span>
+</pre></div>
+</div>
+<p>Here we see the code, simply chain the function onto your Dynamo object in your Dynamo controller. addActionButton() takes one parameter which should be a closure function
+that returns raw html for a link and bootstraps button classes. You can return any raw html you want; it doesn&#8217;t have to be bootstrap, you could just use the button html tag.</p>
+<p>Result:</p>
+<img alt="_images/addActionButton2.png" class="align-center" src="_images/addActionButton2.png" />
+<hr>
 
 <p><a name="method-addField"></a></p>
 <h4><code>addField()</code></h4>
 <p>The <code>addField</code> method is a bit tricky. You will never actually call this method directly. However, the Dynamo has a PHP magic method __call
    that calls addField. In the case where you use methods such as text(), file(), checkbox(), hasMany(), password(), select(), textarea(), you are actually
    just calling __call() in reality, which calls addField(). Now, you are free to create your own methods similar to the ones I just listed. You have to created
-   them in the vendor->jzpeepz->dynamo->src->resources->views->partials->fields directory.</p><hr>
+   them in the vendor->jzpeepz->dynamo->src->resources->views->partials->fields directory.</p><img alt="_images/addField1.png" class="align-center" src="_images/addField1.png" />
+<p>Path to addField() partials.</p>
+<hr>
 
 <p><a name="method-addFilter"></a></p>
 <h4><code>addFilter()</code></h4>
 <p>The <code>addFilter</code> method is a brand new function in Dynamo that lets you filter the index view of an admin by whatever you want. We needed to implement
    this feature for our House of Representatives project because our client wanted to be able to "Filter" the Representatives by Terms. Terms and Representatives have
-   a many-to-many relationship with each other in our database. See how we used addFilter below.</p><hr>
+   a many-to-many relationship with each other in our database. See how we used addFilter below.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">addFilter</span><span class="o">(</span><span class="s">&#39;term&#39;</span><span class="o">,</span> <span class="nf">Term</span><span class="o">::</span><span class="nf">orderBy</span><span class="o">(</span><span class="s">&#39;name&#39;</span><span class="o">,</span> <span class="s">&#39;desc&#39;</span><span class="o">)-&gt;</span><span class="nf">get</span><span class="o">()-&gt;</span><span class="nf">prepend</span><span class="o">([</span><span class="s">&#39;id&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;&#39;</span><span class="o">,</span> <span class="s">&#39;name&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;All&#39;</span><span class="o">])-&gt;</span><span class="nf">pluck</span><span class="o">(</span><span class="s">&#39;name&#39;</span><span class="o">,</span> <span class="s">&#39;id&#39;</span><span class="o">),</span> <span class="nf">function</span> <span class="o">(</span><span class="nv">$query</span><span class="o">)</span> <span class="o">{</span>
+     <span class="nv">$termId</span><span class="o"> =</span> <span class="nf">request</span><span class="o">()-&gt;</span><span class="k">in</span><span class="nf">put</span><span class="o">(</span><span class="s">&#39;term&#39;</span><span class="o">);</span>
+
+     <span class="k">if</span> <span class="o">(</span><span class="nf">empty</span><span class="o">(</span><span class="nv">$termId</span><span class="o">))</span> <span class="o">{</span>
+         <span class="k">return</span> <span class="nv">$query</span><span class="o">;</span>
+     <span class="o">}</span>
+
+     <span class="k">return</span> <span class="nv">$query</span><span class="o">-&gt;</span><span class="nf">select</span><span class="o">(</span><span class="s">&#39;representatives.*&#39;</span><span class="o">)</span>
+                  <span class="o">-&gt;</span><span class="nf">distinct</span><span class="o">()</span>
+                  <span class="o">-&gt;</span><span class="nf">join</span><span class="o">(</span><span class="s">&#39;representative_term&#39;</span><span class="o">,</span> <span class="s">&#39;representative_term.representative_id&#39;</span><span class="o">,</span> <span class="s">&#39;=&#39;</span><span class="o">,</span> <span class="s">&#39;id&#39;</span><span class="o">)</span>
+                  <span class="o">-&gt;</span><span class="nf">where</span><span class="o">(</span><span class="s">&#39;representative_term.term_id&#39;</span><span class="o">,</span> <span class="nv">$termId</span><span class="o">);</span>
+ <span class="o">});</span>
+</pre></div>
+</div>
+<p>Here is where we called addFilter on the DynamoController. The parameters are the database field you want to filter by(in this case terms), a collection
+of the objects(in this case, we grabbed all terms names and sorted them in descending order), then a closure function that actually does the filtering. In
+this case, depending on what term you choose, we will grab all the Representatives from that term.</p>
+<a class="reference internal image-reference" href="_images/addFilter2.png"><img alt="_images/addFilter2.png" class="align-center" src="_images/addFilter2.png" style="width: 1200px;" /></a>
+<p>Filtered by Term 2222</p>
+<img alt="_images/addFilter3.png" class="align-center" src="_images/addFilter3.png" />
+<p>Filtered by term 2016</p>
+<hr>
 
 <p><a name="method-addFormFooterButton"></a></p>
 <h4><code>addFormFooterButton()</code></h4>
 <p>The <code>addFormFooterButton</code> method let's you add a custom button on the footer section of the dynamo form. You can call this function as many times as you want
    and buttons will keep rendering next to the delete button. One unique thing you can do in the bootstrap 4 version of Dynamo is call ->hideDelete() followed by calling
-   ->addFormFooterButton() to "override" the delete button with a data-toggle="modal" data-target="#relationships-manager-modal" included in the markup. Check out the screenshots below</p><hr>
+   ->addFormFooterButton() to "override" the delete button with a data-toggle="modal" data-target="#relationships-manager-modal" included in the markup. Check out the screenshots below</p><img alt="_images/addFormFooterButton1.png" class="align-center" src="_images/addFormFooterButton1.png" />
+<p>Here I&#8217;ve called many different functions on this dynamo form, but we only interested in the bottom right-hand corner. I&#8217;ve called -&gt;hideDelete() and -&gt;addFormFooterButton()
+to &#8220;overwrite&#8221; the delete button with my own delete button that does something extra you&#8217;ll see in the next screenshot. I also called -&gt;addFormFooterButton() a second time
+to get that &#8220;LOL&#8221; button that you, and it links to whatever page I want it to within my website/application.</p>
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">addFormFooterButton</span><span class="o">(</span><span class="nf">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s">&#39;&lt;a href=&quot;/pilot/testing&quot; class=&quot;btn btn-warning btn&quot;&gt;LOL&lt;/a&gt;&#39;</span><span class="o">;</span>
+<span class="o">})</span>
+<span class="o">-&gt;</span><span class="nf">addFormFooterButton</span><span class="o">(</span><span class="nf">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s">&#39;&lt;a href=&quot;&quot; class=&quot;btn btn-danger btn&quot; data-toggle=&quot;modal&quot; data-target=&quot;#relationships-manager-modal&quot;&gt;Delete&lt;/a&gt;&#39;</span><span class="o">;</span>
+<span class="o">})</span>
+<span class="o">-&gt;</span><span class="nf">hideDelete</span><span class="o">()</span>
+</pre></div>
+</div>
+<p>Here you see how I override the delete button. I use my -&gt;addFormFooterButton function to create a Bootstrap 4 button that has data-toggle=&#8221;modal&#8221; data-target=&#8221;#relationships-manager-modal&#8221;
+included. This makes this delete button open up a Bootstrap 4 modal when clicked. This modal is built into Dynamo so all you have to do is overwrite the delete button. The modal that pops
+up allows the user to delete the category they are currently editing. See the next screenshot for what the modal looks like.</p>
+<img alt="_images/addFormFooterButton3.png" class="align-center" src="_images/addFormFooterButton3.png" />
+<p>Here you see the Bootstrap modal that pops up after clicking the delete button. If the user types the name of the category and checks the box they can delete the category.
+Form Footer Buttons are awesome!</p>
+<hr>
 
 <p><a name="method-addFormHeaderButton"></a></p>
 <h4><code>addFormHeaderButton()</code></h4>
 <p>The <code>addFormHeaderButton</code> method let's you add a custom button on the header section of the dynamo form. Foreach time you call this function,
    a new button will appear on the header in the order you called the functions. By default, Dynamo creates a "Preview" button that is rendered if you are editing
    an item. The preview button's link will call the url() function that you created on your Dynamo model. So if you created a Dynamo object called "FAQ", you would
-   want to implement a function on that model called url(). Check out the screenshots below</p><hr>
+   want to implement a function on that model called url(). Check out the screenshots below</p><img alt="_images/addFormHeaderButton1.png" class="align-center" src="_images/addFormHeaderButton1.png" />
+<p>Here you can see I called -&gt;addFormHeaderButton() twice to create a bootstrap4 primary button with the text &#8220;HAHA&#8221; and a bootstrap4 warning button with the text &#8220;LOL&#8221;.
+Of course, you can make these buttons link to anywhere in your website/application. See the code below</p>
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">addFormHeaderButton</span><span class="o">(</span><span class="nf">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s">&#39;&lt;a href=&quot;/pilot/testing&quot; class=&quot;btn btn-primary btn-sm&quot;&gt;HAHA&lt;/a&gt;&#39;</span><span class="o">;</span>
+<span class="o">})</span>
+<span class="o">-&gt;</span><span class="nf">addFormHeaderButton</span><span class="o">(</span><span class="nf">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s">&#39;&lt;a href=&quot;/pilot/testing&quot; class=&quot;btn btn-warning btn-sm&quot;&gt;LOL&lt;/a&gt;&#39;</span><span class="o">;</span>
+<span class="o">})</span>
+</pre></div>
+</div>
+<hr>
 
 <p><a name="method-addHandler"></a></p>
 <h4><code>addHandler()</code></h4>
-<p>The <code>addHandler</code> method is called by default in your DynamoController and will auto-populate the form
-   with text boxes for each field in the database for that object.</p><hr>
+<p>The <code>addHandler</code> method is .... (TBD)</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">select</span><span class="o">(</span><span class="s">&#39;status&#39;</span><span class="o">,</span> <span class="o">[</span>
+     <span class="s">&#39;attributes&#39;</span><span class="o"> =&gt;</span> <span class="o">[</span><span class="s">&#39;disabled&#39;</span><span class="o"> =&gt;</span> <span class="nf">true</span><span class="o">,</span> <span class="s">&#39;colton&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;&#39;</span><span class="o">],</span>
+     <span class="s">&#39;options&#39;</span><span class="o"> =&gt;</span> <span class="nf">Testing</span><span class="o">::</span><span class="nf">getStatuses</span><span class="o">(),</span>
+     <span class="s">&#39;label&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Your Address Please sir&#39;</span><span class="o">,</span>
+     <span class="s">&#39;tooltip&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Use the \&#39;\&#39;Draft\&#39;\&#39; status to save information as you have it. When you\&#39;re ready for an FAQ to</span>
+<span class="s">                   show up on the front end of the website, change it to \&#39;\&#39;Published\&#39;\&#39; and then click the \&#39;\&#39;Save FAQ\&#39;\&#39; button.&#39;</span><span class="o">,</span>
+     <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">200</span><span class="o">,</span>
+ <span class="o">])</span>
+</pre></div>
+</div>
+<p>(TBD)</p>
+<img alt="_images/auto1.png" class="align-center" src="_images/auto1.png" />
+<hr>
 
 <p><a name="method-addIndex"></a></p>
 <h4><code>addIndex()</code></h4>
 <p>The <code>addIndex</code> method allows you to add a new column to the index view of your module. This method takes up to
    three parameters, but only passing one is necessary. The first parameter is the name of the field in your database. The second
    is the how you want the name to appear in the index view. The third is a closure function to do something specific. Notice
-   in the examples below of cases where addIndex is used with one, two, and three parameters and their outputs on the index view.</p><hr>
+   in the examples below of cases where addIndex is used with one, two, and three parameters and their outputs on the index view.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">clearIndexes</span><span class="o">()</span>
+<span class="o">-&gt;</span><span class="nf">addIndexButton</span><span class="o">(</span><span class="nf">function</span> <span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s">&#39;&lt;a href=&quot;/pilot/representative/import&quot; class=&quot;btn btn-primary btn-xs&quot;&gt;Import Representatives from Spreadsheet&lt;/a&gt;&#39;</span><span class="o">;</span>
+<span class="o">})</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;headshot&#39;</span><span class="o">,</span> <span class="s">&#39;Photo&#39;</span><span class="o">,</span> <span class="nf">function</span> <span class="o">(</span><span class="nv">$item</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="nf">empty</span><span class="o">(</span><span class="nv">$item</span><span class="o">-&gt;</span><span class="nf">headshot_small</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#39;&#39;</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="s">&#39;&lt;img style=&quot;width: 100px  &quot; src=&quot;&#39;</span> <span class="o">.</span><span class="nv">$item</span><span class="o">-&gt;</span><span class="nf">headshot_small.</span> <span class="s">&#39;&quot; class=&quot;&quot; style=&quot;width: 60px;&quot;&gt;&#39;</span><span class="o">;</span>
+<span class="o">})</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;name&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;district&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="nf">searchable</span><span class="o">(</span><span class="s">&#39;first_name&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="nf">searchable</span><span class="o">(</span><span class="s">&#39;last_name&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="k">in</span><span class="nf">dexOrderBy</span><span class="o">(</span><span class="s">&#39;last_name&#39;</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>In the closure function, we are checking to see if this Representative has a Headshot photo in the database or not. If not, just display an empty string.
+If so, display their image with a certain width.</p>
+<img alt="_images/addIndex2.png" class="align-center" src="_images/addIndex2.png" />
+<p>The first three Representatives did not have pictures, the fourth did.</p>
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">clearIndexes</span><span class="o">()</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;title&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;short_description&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;activate&#39;</span><span class="o">,</span> <span class="s">&#39;Active&#39;</span><span class="o">,</span> <span class="nf">function</span> <span class="o">(</span><span class="nv">$item</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">//</span><span class="k">return</span> <span class="nv">$item</span><span class="o">-&gt;</span><span class="nf">activate</span> <span class="o">?</span> <span class="s">&#39;&lt;h3&gt;&lt;span class=&quot;label label-success&quot;&gt;Yes&lt;/span&gt;&lt;/h3&gt;&#39;</span> <span class="o">:</span> <span class="s">&#39;&lt;h3&gt;&lt;span class=&quot;label label-danger&quot;&gt;No&lt;/span&gt;&lt;/h3&gt;&#39;</span><span class="o">;</span>
+    <span class="k">return</span> <span class="nv">$item</span><span class="o">-&gt;</span><span class="nf">activate</span> <span class="o">?</span> <span class="s">&#39;&lt;i class=&quot;far fa-check-circle fa-3x&quot; style=&quot;color: green; padding-top: 10px;&quot;&gt;&lt;/i&gt;&#39;</span> <span class="o">:</span>
+    <span class="s">&#39;&lt;i class=&quot;far fa-times-circle fa-3x&quot; style=&quot;color: red; padding-top: 10px;&quot;&gt;&lt;/i&gt;&#39;</span><span class="o">;</span>
+<span class="o">})</span>
+</pre></div>
+</div>
+<p>The third addIndex uses a closure that uses a ternary operation to check if this Alert is activated. If so, a success box is rendered with the word &#8220;Yes&#8221; in it.
+If not, a danger box is rendered with the word &#8220;No&#8221; in it.</p>
+<img alt="_images/addIndex4.png" class="align-center" src="_images/addIndex4.png" />
+<hr>
 
 <p><a name="method-addIndexButton"></a></p>
 <h4><code>addIndexButton()</code></h4>
 <p>The <code>addIndexButton</code> method allows you to add a button along side the Add button in your Dynamo Manager. One example of where you would want to use addIndexButton
-   would be if you wanted to minimize the amount of modules in your navigation. Below is an example:</p><hr>
+   would be if you wanted to minimize the amount of modules in your navigation. Below is an example:</p><img alt="_images/addIndexButton1.png" class="align-center" src="_images/addIndexButton1.png" />
+<p>Here, in the top right corner, we add a button in the Representatives Manager that says Import Representatives from Spreadsheet that links to
+another form for uploading Representatives via .csv.</p>
+<img alt="_images/addIndexButton2.png" class="align-center" src="_images/addIndexButton2.png" />
+<p>This is the page the button links to</p>
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">addIndexButton</span><span class="o">(</span><span class="nf">function</span> <span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s">&#39;&lt;a href=&quot;/pilot/representative/import&quot; class=&quot;btn btn-primary btn-xs&quot;&gt;Import Representatives from Spreadsheet&lt;/a&gt;&#39;</span><span class="o">;</span>
+<span class="o">})</span>
+</pre></div>
+</div>
+<p>This is the function in use. It takes one parameter that is a closure function that returns raw html linking to that page.</p>
+<hr>
 
 <p><a name="method-auto"></a></p>
 <h4><code>auto()</code></h4>
 <p>The <code>auto</code> method is called by default in your DynamoController and will auto-populate the form
-   with text boxes for each field in the database for that object, and will automatically set the index view with those same fields.</p><hr>
+   with text boxes for each field in the database for that object, and will automatically set the index view with those same fields.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span>class FaqController extends DynamoController
+{
+    public function getDynamo()
+    {
+
+    return Dynamo::make(\App\Faq::class)
+             -&gt;auto()
+
+    }
+}
+</pre></div>
+</div>
+<p>Auto function being called on the newly created Dynamo object.</p>
+<img alt="_images/auto1.png" class="align-center" src="_images/auto1.png" />
+<p>The form that auto() produces for the Faq object.</p>
+<a class="reference internal image-reference" href="_images/auto2.png"><img alt="_images/auto2.png" class="align-center" src="_images/auto2.png" style="height: 400px;" /></a>
+<p>The index view auto() produces for Faqs.</p>
+<hr>
 
 <p><a name="method-checkbox"></a></p>
 <h4><code>checkbox()</code></h4>
 <p>The <code>checkbox</code> method lets you add a checkbox to your form. It is particularly useful if you have a boolean attribute for an object in your database.
-   For example, we used checkboxes on our House of Representatives website to allow the user to "Activate" Faq's and Alerts, as seen in the screenshots below.</p><hr>
+   For example, we used checkboxes on our House of Representatives website to allow the user to "Activate" Faq's and Alerts, as seen in the screenshots below.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">auto</span><span class="o">()</span>
+<span class="o">-&gt;</span><span class="nf">checkbox</span><span class="o">(</span><span class="s">&#39;activate&#39;</span><span class="o">,</span> <span class="o">[</span>
+  <span class="s">&#39;label&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Activate: Only one may be active at a time&#39;</span>
+<span class="o">])</span>
+
+<span class="o">//</span><span class="nf">set</span> <span class="nf">admin</span> <span class="nf">view</span>
+<span class="o">-&gt;</span><span class="nf">clearIndexes</span><span class="o">()</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;title&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;short_description&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;activate&#39;</span><span class="o">,</span> <span class="s">&#39;Active&#39;</span><span class="o">,</span> <span class="nf">function</span> <span class="o">(</span><span class="nv">$item</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">//</span><span class="k">return</span> <span class="nv">$item</span><span class="o">-&gt;</span><span class="nf">activate</span> <span class="o">?</span> <span class="s">&#39;&lt;h3&gt;&lt;span class=&quot;label label-success&quot;&gt;Yes&lt;/span&gt;&lt;/h3&gt;&#39;</span> <span class="o">:</span> <span class="s">&#39;&lt;h3&gt;&lt;span class=&quot;label label-danger&quot;&gt;No&lt;/span&gt;&lt;/h3&gt;&#39;</span><span class="o">;</span>
+    <span class="k">return</span> <span class="nv">$item</span><span class="o">-&gt;</span><span class="nf">activate</span> <span class="o">?</span> <span class="s">&#39;&lt;i class=&quot;far fa-check-circle fa-3x&quot; style=&quot;color: green; padding-top: 10px;&quot;&gt;&lt;/i&gt;&#39;</span> <span class="o">:</span>
+    <span class="s">&#39;&lt;i class=&quot;far fa-times-circle fa-3x&quot; style=&quot;color: red; padding-top: 10px;&quot;&gt;&lt;/i&gt;&#39;</span><span class="o">;</span>
+<span class="o">})</span>
+<span class="o">-&gt;</span><span class="k">in</span><span class="nf">dexOrderBy</span><span class="o">(</span><span class="s">&#39;title&#39;</span><span class="o">);</span>
+</pre></div>
+</div>
+<p>A checkbox method is called here, with an array of options containing one option, &#8216;label&#8217;, so let the user know that they can only activate one Alert at a time.</p>
+<img alt="_images/checkbox2.png" class="align-center" src="_images/checkbox2.png" />
+<p>The result on the form for Alerts.</p>
+<a class="reference internal image-reference" href="_images/checkbox3.png"><img alt="_images/checkbox3.png" class="align-center" src="_images/checkbox3.png" style="height: 400px;" /></a>
+<p>The result on the index view for Alerts.</p>
+<hr>
 
 <p><a name="method-clearIndexes"></a></p>
 <h4><code>clearIndexes()</code></h4>
 <p>The <code>clearIndexes</code> method will remove all the columns that are generated from the auto() function that is at
    the top of the DynamoController by default. After calling clearIndexes, you will certainly want to call addIndex right after.
-   Notice the examples below.</p><hr>
+   Notice the examples below.</p><img alt="_images/clearIndexes1.png" class="align-center" src="_images/clearIndexes1.png" />
+<p>I&#8217;ve commented out my addIndex() calls for the sake of demonstration. The next image shows the result.</p>
+<img alt="_images/clearIndexes2.png" class="align-center" src="_images/clearIndexes2.png" />
+<img alt="_images/clearIndexes3.png" class="align-center" src="_images/clearIndexes3.png" />
+<p>Now I&#8217;ve uncommented my addIndex calls to show the result in the next image.</p>
+<img alt="_images/clearIndexes4.png" class="align-center" src="_images/clearIndexes4.png" />
+<hr>
 
 <p><a name="method-file"></a></p>
 <h4><code>file()</code></h4>
 <p>The <code>file</code> method will allow the user to select a file from their computer when filling out the form for this field. Let's say you have a Staff module
-   and you want the user to be able create Staff "objects" with their name, and photo. Check out the example below.</p><hr>
+   and you want the user to be able create Staff "objects" with their name, and photo. Check out the example below.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">auto</span><span class="o">()</span>
+<span class="o">-&gt;</span><span class="nf">file</span><span class="o">(</span><span class="s">&#39;photo&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="nf">textarea</span><span class="o">(</span><span class="s">&#39;bio&#39;</span><span class="o">,</span> <span class="o">[</span>
+    <span class="s">&#39;class&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;wysiwyg-editor&#39;</span><span class="o">,</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">text</span><span class="o">(</span><span class="s">&#39;job_title_extra&#39;</span><span class="o">,</span> <span class="o">[</span>
+    <span class="s">&#39;label&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Additional Job Title (optional)&#39;</span><span class="o">,</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">hasManySimple</span><span class="o">(</span><span class="s">&#39;departments&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="nf">removeField</span><span class="o">(</span><span class="s">&#39;position&#39;</span><span class="o">)</span>
+
+<span class="o">//</span><span class="nf">Set</span> <span class="k">in</span><span class="nf">dexes</span> <span class="k">for</span> <span class="nf">admin</span> <span class="nf">view</span>
+<span class="o">-&gt;</span><span class="nf">clearIndexes</span><span class="o">()</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;photo&#39;</span><span class="o">,</span> <span class="s">&#39;Photo&#39;</span><span class="o">,</span> <span class="nf">function</span> <span class="o">(</span><span class="nv">$item</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="nf">empty</span><span class="o">(</span><span class="nv">$item</span><span class="o">-&gt;</span><span class="nf">photo</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&#39;&#39;</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="s">&#39;&lt;img style=&quot;width: 100px  &quot; src=&quot;&#39;</span> <span class="o">.</span><span class="nv">$item</span><span class="o">-&gt;</span><span class="nf">photo.</span> <span class="s">&#39;&quot; class=&quot;&quot; style=&quot;width: 60px;&quot;&gt;&#39;</span><span class="o">;</span>
+<span class="o">})</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;first_name&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;last_name&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;departments&#39;</span><span class="o">,</span> <span class="s">&quot;Departments&quot;</span><span class="o">,</span> <span class="nf">function</span><span class="o">(</span><span class="nv">$item</span><span class="o">){</span>
+
+    <span class="k">return</span> <span class="nv">$item</span><span class="o">-&gt;</span><span class="nf">departments</span><span class="o">-&gt;</span><span class="nf">implode</span><span class="o">(</span><span class="s">&#39;name&#39;</span><span class="o">,</span> <span class="s">&#39;, &#39;</span><span class="o">);</span>
+
+<span class="o">})</span>
+
+<span class="o">-&gt;</span><span class="k">in</span><span class="nf">dexOrderBy</span><span class="o">(</span><span class="s">&#39;last_name&#39;</span><span class="o">);</span>
+</pre></div>
+</div>
+<p>Notice the file method call.</p>
+<img alt="_images/file2.png" class="align-center" src="_images/file2.png" />
+<p>This is the result for the form view. The user can select the photo from their computer.</p>
+<img alt="_images/file3.png" class="align-center" src="_images/file3.png" />
+<p>This is the result of the index view.</p>
+<hr>
 
 <p><a name="method-group"></a></p>
 <h4><code>group()</code></h4>
-<p>The <code>group</code> method is called by default in your DynamoController and will auto-populate the form
-   with text boxes for each field in the database for that object.</p><p>Auto function being called on the newly created Dynamo object.</p>
+<p>The <code>group</code> method is... ( TBD )</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">select</span><span class="o">(</span><span class="s">&#39;status&#39;</span><span class="o">,</span> <span class="o">[</span>
+     <span class="s">&#39;attributes&#39;</span><span class="o"> =&gt;</span> <span class="o">[</span><span class="s">&#39;disabled&#39;</span><span class="o"> =&gt;</span> <span class="nf">true</span><span class="o">,</span> <span class="s">&#39;colton&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;&#39;</span><span class="o">],</span>
+     <span class="s">&#39;options&#39;</span><span class="o"> =&gt;</span> <span class="nf">Testing</span><span class="o">::</span><span class="nf">getStatuses</span><span class="o">(),</span>
+     <span class="s">&#39;label&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Your Address Please sir&#39;</span><span class="o">,</span>
+     <span class="s">&#39;tooltip&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Use the \&#39;\&#39;Draft\&#39;\&#39; status to save information as you have it. When you\&#39;re ready for an FAQ to</span>
+<span class="s">                   show up on the front end of the website, change it to \&#39;\&#39;Published\&#39;\&#39; and then click the \&#39;\&#39;Save FAQ\&#39;\&#39; button.&#39;</span><span class="o">,</span>
+     <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">200</span><span class="o">,</span>
+ <span class="o">])</span>
+</pre></div>
+</div>
+<p>(TBD)</p>
+<img alt="_images/auto1.png" class="align-center" src="_images/auto1.png" />
 <hr>
 
 <p><a name="method-hasMany"></a></p>
 <h4><code>hasMany()</code></h4>
 <p>The <code>hasMany</code> method is called by default in your DynamoController and will auto-populate the form
-   with text boxes for each field in the database for that object, and will automatically set the index view with those same fields.</p><hr>
+   with text boxes for each field in the database for that object, and will automatically set the index view with those same fields.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">select</span><span class="o">(</span><span class="s">&#39;status&#39;</span><span class="o">,</span> <span class="o">[</span>
+     <span class="s">&#39;attributes&#39;</span><span class="o"> =&gt;</span> <span class="o">[</span><span class="s">&#39;disabled&#39;</span><span class="o"> =&gt;</span> <span class="nf">true</span><span class="o">,</span> <span class="s">&#39;colton&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;&#39;</span><span class="o">],</span>
+     <span class="s">&#39;options&#39;</span><span class="o"> =&gt;</span> <span class="nf">Testing</span><span class="o">::</span><span class="nf">getStatuses</span><span class="o">(),</span>
+     <span class="s">&#39;label&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Your Address Please sir&#39;</span><span class="o">,</span>
+     <span class="s">&#39;tooltip&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Use the \&#39;\&#39;Draft\&#39;\&#39; status to save information as you have it. When you\&#39;re ready for an FAQ to</span>
+<span class="s">                   show up on the front end of the website, change it to \&#39;\&#39;Published\&#39;\&#39; and then click the \&#39;\&#39;Save FAQ\&#39;\&#39; button.&#39;</span><span class="o">,</span>
+     <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">200</span><span class="o">,</span>
+ <span class="o">])</span>
+</pre></div>
+</div>
+<p>(TBD)</p>
+<img alt="_images/auto1.png" class="align-center" src="_images/auto1.png" />
+<hr>
 
 <p><a name="method-hasManySimple"></a></p>
 <h4><code>hasManySimple()</code></h4>
@@ -316,33 +547,150 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
    common database relationship on websites might be: "FAQs have many FAQ Categories, and FAQ Categories have many FAQs". If you have made this relationship in your
    database using foreign keys and such, then you can use this method. First go to the model of FAQ and add a public function that says FAQs belongToMany FAQ Categories,
    and go to the model of the FAQ Category and do the same. Next, you will be able to chain on the hasManySimple() function on the FAQ DynamoController! Check out the
-   example below.</p><hr>
+   example below.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="nf">Schema</span><span class="o">::</span><span class="nf">create</span><span class="o">(</span><span class="s">&#39;faqs&#39;</span><span class="o">,</span> <span class="nf">function</span> <span class="o">(</span><span class="nf">Blueprint</span> <span class="nv">$table</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nv">$table</span><span class="o">-&gt;</span><span class="k">in</span><span class="nf">crements</span><span class="o">(</span><span class="s">&#39;id&#39;</span><span class="o">);</span>
+    <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">string</span><span class="o">(</span><span class="s">&#39;question&#39;</span><span class="o">);</span>
+    <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">string</span><span class="o">(</span><span class="s">&#39;short_answer&#39;</span><span class="o">);</span>
+    <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">string</span><span class="o">(</span><span class="s">&#39;long_answer&#39;</span><span class="o">);</span>
+    <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">string</span><span class="o">(</span><span class="s">&#39;faq_categories&#39;</span><span class="o">);</span>
+    <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">timestamps</span><span class="o">();</span>
+<span class="o">});</span>
+
+<span class="nf">Schema</span><span class="o">::</span><span class="nf">create</span><span class="o">(</span><span class="s">&#39;faq_categories&#39;</span><span class="o">,</span> <span class="nf">function</span> <span class="o">(</span><span class="nf">Blueprint</span> <span class="nv">$table</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nv">$table</span><span class="o">-&gt;</span><span class="k">in</span><span class="nf">crements</span><span class="o">(</span><span class="s">&#39;id&#39;</span><span class="o">);</span>
+    <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">string</span><span class="o">(</span><span class="s">&#39;name&#39;</span><span class="o">);</span>
+    <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">timestamps</span><span class="o">();</span>
+<span class="o">});</span>
+
+<span class="nf">Schema</span><span class="o">::</span><span class="nf">create</span><span class="o">(</span><span class="s">&#39;faq_faq_category&#39;</span><span class="o">,</span> <span class="nf">function</span> <span class="o">(</span><span class="nf">Blueprint</span> <span class="nv">$table</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nv">$table</span><span class="o">-&gt;</span><span class="k">in</span><span class="nf">teger</span><span class="o">(</span><span class="s">&#39;faq_id&#39;</span><span class="o">)-&gt;</span><span class="nf">unsigned</span><span class="o">();</span>
+    <span class="nv">$table</span><span class="o">-&gt;</span><span class="k">for</span><span class="nf">eign</span><span class="o">(</span><span class="s">&#39;faq_id&#39;</span><span class="o">)-&gt;</span><span class="nf">references</span><span class="o">(</span><span class="s">&#39;id&#39;</span><span class="o">)-&gt;</span><span class="nf">on</span><span class="o">(</span><span class="s">&#39;faqs&#39;</span><span class="o">);</span>
+
+    <span class="nv">$table</span><span class="o">-&gt;</span><span class="k">in</span><span class="nf">teger</span><span class="o">(</span><span class="s">&#39;faq_category_id&#39;</span><span class="o">)-&gt;</span><span class="nf">unsigned</span><span class="o">();</span>
+    <span class="nv">$table</span><span class="o">-&gt;</span><span class="k">for</span><span class="nf">eign</span><span class="o">(</span><span class="s">&#39;faq_category_id&#39;</span><span class="o">)-&gt;</span><span class="nf">references</span><span class="o">(</span><span class="s">&#39;id&#39;</span><span class="o">)-&gt;</span><span class="nf">on</span><span class="o">(</span><span class="s">&#39;faq_categories&#39;</span><span class="o">);</span>
+<span class="o">});</span>
+</pre></div>
+</div>
+<p>First ^^ , make sure you have created the relationship your in database migrations.</p>
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">*</span><span class="nf">This</span> <span class="nf">function</span> <span class="nf">goes</span> <span class="nf">on</span> <span class="nf">the</span> <span class="nf">Faq</span> <span class="nf">model</span><span class="o">*</span>
+<span class="nf">public</span> <span class="nf">function</span> <span class="nf">faq_categories</span><span class="o">()</span>
+<span class="o">{</span>
+    <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">belongsToMany</span><span class="o">(</span><span class="s">&#39;App\FaqCategory&#39;</span><span class="o">);</span>
+<span class="o">}</span>
+
+
+<span class="o">*</span><span class="nf">This</span> <span class="nf">function</span> <span class="nf">goes</span> <span class="nf">on</span> <span class="nf">the</span> <span class="nf">FaqCategory</span> <span class="nf">model</span><span class="o">*</span>
+<span class="nf">public</span> <span class="nf">function</span> <span class="nf">faqs</span><span class="o">()</span>
+<span class="o">{</span>
+    <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">belongsToMany</span><span class="o">(</span><span class="s">&#39;App\Faq&#39;</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Next ^^ , make sure both your models have a public function that relates the two.</p>
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">auto</span><span class="o">()</span>
+<span class="o">-&gt;</span><span class="nf">text</span><span class="o">(</span><span class="s">&#39;question&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="nf">text</span><span class="o">(</span><span class="s">&#39;short_answer&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="nf">textarea</span><span class="o">(</span><span class="s">&#39;answer&#39;</span><span class="o">,</span> <span class="o">[</span>
+    <span class="s">&#39;class&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;wysiwyg-editor&#39;</span><span class="o">,</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">hasManySimple</span><span class="o">(</span><span class="s">&#39;faq_categories&#39;</span><span class="o">)</span>
+
+<span class="o">//</span> <span class="nf">setup</span> <span class="nf">the</span> <span class="k">in</span><span class="nf">dex</span> <span class="nf">view</span>
+<span class="o">-&gt;</span><span class="nf">clearIndexes</span><span class="o">()</span>
+
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;question&#39;</span><span class="o">)</span>
+
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;short_answer&#39;</span><span class="o">);</span>
+</pre></div>
+</div>
+<p>Now ^^ , on the controller, you can call hasManySimple() and the first parameter should be named EXACTLY the way you named the functions on the model in the previous
+steps. ( which is faq_categories )</p>
+<img alt="_images/hasManySimple5.png" class="align-center" src="_images/hasManySimple5.png" />
+<p>This is the result on the form. The user is able to select many categories for each FAQ they make.</p>
+<img alt="_images/hasManySimple6.png" class="align-center" src="_images/hasManySimple6.png" />
+<p>And when they submit the form, your database will create the relationship between this FAQ_id and that FAQ Category_id.</p>
+<hr>
 
 <p><a name="method-hideAdd"></a></p>
 <h4><code>hideAdd()</code></h4>
 <p>The <code>hideAdd</code> method simply hides the Add button, so the user isn't able to add new objects/items into the database. You would use this
-   if you wanted them to be able to view, edit, and delete the items, but not add new items. You could also use the hideDelete() method in combination with this method.</p><hr>
+   if you wanted them to be able to view, edit, and delete the items, but not add new items. You could also use the hideDelete() method in combination with this method.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">auto</span><span class="o">();</span>
+<span class="o">//</span><span class="nf">hideAdd</span><span class="o">()</span>
+</pre></div>
+</div>
+<p>First I comment out hideAdd() to show the default.</p>
+<img alt="_images/hideAdd2.png" class="align-center" src="_images/hideAdd2.png" />
+<p>Notice that the add FAQ Category button exist in the top right corner of the container by default.</p>
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">auto</span><span class="o">()</span>
+<span class="nf">hideAdd</span><span class="o">();</span>
+</pre></div>
+</div>
+<p>Now I uncomment hideAdd(), ...</p>
+<img alt="_images/hideAdd4.png" class="align-center" src="_images/hideAdd4.png" />
+<p>Now the FAQ Category button isn&#8217;t available to the user so they can&#8217;t create new FAQ Categories.</p>
+<hr>
 
 <p><a name="method-hideDelete"></a></p>
 <h4><code>hideDelete()</code></h4>
 <p>The <code>hideDelete</code> method simply hides the delete button on the index view, so the user will not be able to delete the
-   object/item from the database.</p><hr>
+   object/item from the database.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">auto</span><span class="o">();</span>
+<span class="o">//</span><span class="nf">hideDelete</span><span class="o">()</span>
+</pre></div>
+</div>
+<p>First I just took a basic DynamoController and commented out the hideDelete() function to show the default.</p>
+<img alt="_images/hideDelete2.png" class="align-center" src="_images/hideDelete2.png" />
+<p>Notice you have an Edit/Delete button by default under your Action index</p>
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">auto</span><span class="o">()</span>
+<span class="nf">hideDelete</span><span class="o">();</span>
+</pre></div>
+</div>
+<p>Now I uncomment hideDelete(), ...</p>
+<img alt="_images/hideDelete4.png" class="align-center" src="_images/hideDelete4.png" />
+<p>And the delete button is hidden. Magical isn&#8217;t it?</p>
+<hr>
 
 <p><a name="method-indexOrderBy"></a></p>
 <h4><code>indexOrderBy()</code></h4>
 <p>The <code>indexOrderBy</code> method is how you order all the objects in the index view. Commonly, you might order by last name or by date created.
-   By default, it orders in ascending order, you can pass a second parameter of 'desc' if you'd like to reverse it.</p><hr>
+   By default, it orders in ascending order, you can pass a second parameter of 'desc' if you'd like to reverse it.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">auto</span><span class="o">()</span>
+<span class="o">-&gt;</span><span class="nf">removeField</span><span class="o">(</span><span class="s">&#39;position&#39;</span><span class="o">)</span>
+
+<span class="o">//</span><span class="nf">set</span> <span class="nf">admin</span> <span class="nf">view</span>
+<span class="o">-&gt;</span><span class="nf">clearIndexes</span><span class="o">()</span>
+<span class="o">-&gt;</span><span class="nf">addIndexButton</span><span class="o">(</span><span class="nf">function</span> <span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s">&#39;&lt;a href=&quot;/pilot/staff/import&quot; class=&quot;btn btn-primary btn-xs&quot;&gt;Import Staff from Spreadsheet&lt;/a&gt;&#39;</span><span class="o">;</span>
+<span class="o">})</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;hamburger&#39;</span><span class="o">,</span> <span class="s">&#39;Sort&#39;</span><span class="o">,</span> <span class="nf">function</span><span class="o">(</span><span class="nv">$item</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s">&#39;&lt;i class=&quot;fas fa-bars fa-2x&quot; &gt;&lt;/i&gt;&#39;</span><span class="o">;</span>
+<span class="o">})</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;name&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;job_title&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="k">in</span><span class="nf">dexOrderBy</span><span class="o">(</span><span class="s">&#39;position&#39;</span><span class="o">);</span>
+</pre></div>
+</div>
+<p>In this case, rather than indexOrderBy(&#8216;last_name&#8217;), we made it where the user could drag-and-drop the staff members in the order they would like in the index view.
+Wherever they dropped the Staff member, it would update that staff members position in the database. Then we can just indexOrderBy(&#8216;position&#8217;).</p>
+<img alt="_images/indexOrderBy2.png" class="align-center" src="_images/indexOrderBy2.png" />
+<hr>
 
 <p><a name="method-paginate"></a></p>
 <h4><code>paginate()</code></h4>
-<p>The <code>paginate</code> method </p><p>Auto function being called on the newly created Dynamo object.</p>
+<p>The <code>paginate</code> method does exactly what you think it would. It paginates the items in the index view so whatever number of items you want per page
+   and provides page links at the bottom of the table.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">paginate</span><span class="o">(</span><span class="m">10</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>I call paginate and pass in 10 so I get 10 items per page. See the screenshot below. We have 10 FAQs on the first page and links to the next pages below the table</p>
+<img alt="_images/paginate1.png" class="align-center" src="_images/paginate1.png" />
 <hr>
 
 <p><a name="method-password"></a></p>
 <h4><code>password()</code></h4>
-<p>The <code>password</code> method will remove all the columns that are generated from the auto() function that is at
-   the top of the DynamoController by default. After calling clearIndexes, you will certainly want to call addIndex right after.
-   Notice the examples below.</p><hr>
+<p>The <code>password</code> method... ( TBD )</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">password</span><span class="o">()</span>
+</pre></div>
+</div>
+<p>TBD ...</p>
+<img alt="_images/paginate1.png" class="align-center" src="_images/paginate1.png" />
+<hr>
 
 <p><a name="method-removeBoth"></a></p>
 <h4><code>removeBoth()</code></h4>
@@ -351,10 +699,29 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
 
 <p><a name="method-removeField"></a></p>
 <h4><code>removeField()</code></h4>
-<p>The <code>removeField</code> method removes any field that you pass it from the index view. This method is needed when the auto() function
-   adds a field you don't want the user to see. A common case of using removeField would be like in the indexOrderBy example, where we order staff members
+<p>The <code>removeField</code> method removes any field that you pass it from the form view. This method is needed when the auto() function
+   adds a field on the form you don't want the user to fill out. A common case of using removeField would be like in the indexOrderBy example, where we order staff members
    by position. But we don't actually want the user to be able to set the position manually within the form. So we removeField('position'). They update the
-   position by drag-and-drag in that case. Check it out below</p><hr>
+   position by drag-and-drag in that case. Check it out below</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">auto</span><span class="o">()</span>
+<span class="o">-&gt;</span><span class="nf">removeField</span><span class="o">(</span><span class="s">&#39;position&#39;</span><span class="o">)</span>
+
+<span class="o">//</span><span class="nf">set</span> <span class="nf">admin</span> <span class="nf">view</span>
+<span class="o">-&gt;</span><span class="nf">clearIndexes</span><span class="o">()</span>
+<span class="o">-&gt;</span><span class="nf">addIndexButton</span><span class="o">(</span><span class="nf">function</span> <span class="o">()</span> <span class="o">{</span>
+   <span class="k">return</span> <span class="s">&#39;&lt;a href=&quot;/pilot/staff/import&quot; class=&quot;btn btn-primary btn-xs&quot;&gt;Import Staff from Spreadsheet&lt;/a&gt;&#39;</span><span class="o">;</span>
+<span class="o">})</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;hamburger&#39;</span><span class="o">,</span> <span class="s">&#39;Sort&#39;</span><span class="o">,</span> <span class="nf">function</span><span class="o">(</span><span class="nv">$item</span><span class="o">)</span> <span class="o">{</span>
+   <span class="k">return</span> <span class="s">&#39;&lt;i class=&quot;fas fa-bars fa-2x&quot; &gt;&lt;/i&gt;&#39;</span><span class="o">;</span>
+<span class="o">})</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;name&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;job_title&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="k">in</span><span class="nf">dexOrderBy</span><span class="o">(</span><span class="s">&#39;position&#39;</span><span class="o">);</span>
+</pre></div>
+</div>
+<p>See how we remove the position field in the form. We don&#8217;t want the user to have to fill that out in the form because they are able to drag-and-drop staff members
+to set the position in the index view.</p>
+<img alt="_images/indexOrderBy2.png" class="align-center" src="_images/indexOrderBy2.png" />
+<hr>
 
 <p><a name="method-removeIndex"></a></p>
 <h4><code>removeIndex()</code></h4>
@@ -369,36 +736,94 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
    pass into this function must be the name of the field in the database that you want to be searchable in the search
    bar. For example, if you have an admin called Representatives, and you want to have a search bar where the user can search
    for staff members by their first and last name you might chain on the searchable method twice:
-   </p><hr>
+   </p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">searchable</span><span class="o">(</span><span class="s">&#39;first_name&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="nf">searchable</span><span class="o">(</span><span class="s">&#39;last_name&#39;</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>Here we call searchable twice for first and last name.</p>
+<img alt="_images/searchable2.png" class="align-center" src="_images/searchable2.png" />
+<p>Here we see you can search by last_name</p>
+<img alt="_images/searchable3.png" class="align-center" src="_images/searchable3.png" />
+<p>Here we see you can search by first_name</p>
+<img alt="_images/searchable4.png" class="align-center" src="_images/searchable4.png" />
+<p>Here we see search working for first and last name at the same time.</p>
+<hr>
 
 <p><a name="method-select"></a></p>
 <h4><code>select()</code></h4>
 <p>The <code>select</code> method will allow the user to use a select box and select a single item. When you use the select method, your second parameter
-   will be an array all the options they have to select from.</p><hr>
+   will be an array all the options they have to select from.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">select</span><span class="o">(</span><span class="s">&#39;faq_category_id&#39;</span><span class="o">,</span> <span class="o">[</span>
+   <span class="s">&#39;options&#39;</span><span class="o"> =&gt;</span> <span class="nf">FaqCategory</span><span class="o">::</span><span class="nf">all</span><span class="o">()-&gt;</span><span class="nf">prepend</span><span class="o">([</span><span class="s">&#39;name&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;&#39;</span><span class="o">,</span> <span class="s">&#39;id&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;&#39;</span><span class="o">])-&gt;</span><span class="nf">pluck</span><span class="o">(</span><span class="s">&#39;name&#39;</span><span class="o">,</span> <span class="s">&#39;id&#39;</span><span class="o">),</span>
+   <span class="s">&#39;label&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Faq Category (optional)&#39;</span><span class="o">,</span>
+   <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">150</span><span class="o">,</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">select</span><span class="o">(</span><span class="s">&#39;resource_category_id&#39;</span><span class="o">,</span> <span class="o">[</span>
+   <span class="s">&#39;options&#39;</span><span class="o"> =&gt;</span> <span class="nf">ResourceCategory</span><span class="o">::</span><span class="nf">all</span><span class="o">()-&gt;</span><span class="nf">prepend</span><span class="o">([</span><span class="s">&#39;name&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;&#39;</span><span class="o">,</span> <span class="s">&#39;id&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;&#39;</span><span class="o">])-&gt;</span><span class="nf">pluck</span><span class="o">(</span><span class="s">&#39;name&#39;</span><span class="o">,</span> <span class="s">&#39;id&#39;</span><span class="o">),</span>
+   <span class="s">&#39;label&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Resource Category (optional)&#39;</span><span class="o">,</span>
+   <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">160</span><span class="o">,</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">select</span><span class="o">(</span><span class="s">&#39;event_tag_id&#39;</span><span class="o">,</span> <span class="o">[</span>
+   <span class="s">&#39;options&#39;</span><span class="o"> =&gt;</span> <span class="nf">Tag</span><span class="o">::</span><span class="nf">all</span><span class="o">()-&gt;</span><span class="nf">prepend</span><span class="o">([</span><span class="s">&#39;name&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;&#39;</span><span class="o">,</span> <span class="s">&#39;id&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;&#39;</span><span class="o">])-&gt;</span><span class="nf">pluck</span><span class="o">(</span><span class="s">&#39;name&#39;</span><span class="o">,</span> <span class="s">&#39;id&#39;</span><span class="o">),</span>
+   <span class="s">&#39;label&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Events Tag Category (optional)&#39;</span><span class="o">,</span>
+   <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">170</span><span class="o">,</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">select</span><span class="o">(</span><span class="s">&#39;post_tag_id&#39;</span><span class="o">,</span> <span class="o">[</span>
+   <span class="s">&#39;options&#39;</span><span class="o"> =&gt;</span> <span class="nf">Tag</span><span class="o">::</span><span class="nf">all</span><span class="o">()-&gt;</span><span class="nf">prepend</span><span class="o">([</span><span class="s">&#39;name&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;&#39;</span><span class="o">,</span> <span class="s">&#39;id&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;&#39;</span><span class="o">])-&gt;</span><span class="nf">pluck</span><span class="o">(</span><span class="s">&#39;name&#39;</span><span class="o">,</span> <span class="s">&#39;id&#39;</span><span class="o">),</span>
+   <span class="s">&#39;label&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;News Tag (optional)&#39;</span><span class="o">,</span>
+   <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">180</span><span class="o">,</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">select</span><span class="o">(</span><span class="s">&#39;status&#39;</span><span class="o">,</span> <span class="o">[</span>
+   <span class="s">&#39;options&#39;</span><span class="o"> =&gt;</span> <span class="nf">Program</span><span class="o">::</span><span class="nf">getStatuses</span><span class="o">(),</span>
+   <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">190</span><span class="o">,</span>
+<span class="o">])</span>
+</pre></div>
+</div>
+<p>Notice that we have three selects on this Program DynamoController. The user may optionally select categories to connect to this program they are creating.
+This way, on the front-end of the website, they will see FAQ&#8217;s related to this program in a sidebar when they are on this programs page.</p>
+<img alt="_images/select2.png" class="align-center" src="_images/select2.png" />
+<p>This is the form view that the user will interact with.</p>
+<img alt="_images/select3.png" class="align-center" src="_images/select3.png" />
+<p>How the select boxes options look. (little bug here with the blank spaces, don&#8217;t worry about that)</p>
+<hr>
 
 <p><a name="method-setAddItemText"></a></p>
 <h4><code>setAddItemText()</code></h4>
 <p>The <code>setAddItemText</code> method will allow the user to override the text on the Add button for models. The default text says "Add $dynamo->name" or "Add Faq"
    The reason we created this method is because normally you want to use camelcase(thisIsCamelCase) when naming your Dynamo models and variable names. But you might not want
-   the text of the add button to read "Add Faq". You might instead want it to read "Add FAQ". Therefore, the ->setAddItemText function was born.</p><hr>
+   the text of the add button to read "Add Faq". You might instead want it to read "Add FAQ". Therefore, the ->setAddItemText function was born.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">setAddItemText</span><span class="o">(</span><span class="s">&#39;SET ADD TEXT&#39;</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>Here I call the function -&gt;setAddItemText() to override the default Add Item Text. The next screenshot shows the result.</p>
+<img alt="_images/setAddItemText2.png" class="align-center" src="_images/setAddItemText2.png" />
+<p>This is the result. Notice in the upper right-hand corner the text of the green &#8220;Add&#8221; button has changed.</p>
+<hr>
 
 <p><a name="method-setFormPanelTitle"></a></p>
 <h4><code>setFormPanelTitle()</code></h4>
-<p>The <code>setFormPanelTitle</code> method will allow the user to override the text on the dynamo Form panel.</p><hr>
+<p>The <code>setFormPanelTitle</code> method will allow the user to override the text on the dynamo Form panel.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">setFormPanelTitle</span><span class="o">(</span><span class="s">&quot;Form boy&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>Here I call the function -&gt;setFormPanelTitle() to override the default Form Panel Title Text. The next screenshot shows the result.</p>
+<img alt="_images/setFormPanelTitle2.png" class="align-center" src="_images/setFormPanelTitle2.png" />
+<hr>
 
 <p><a name="method-setIndexPanelTitle"></a></p>
 <h4><code>setIndexPanelTitle()</code></h4>
-<p>The <code>setIndexPanelTitle</code> method will allow the user to override the text on the dynamo Index panel.</p><hr>
-
-<p><a name="method-setPreviewLink"></a></p>
-<h4><code>setPreviewLink()</code></h4>
-<p>The <code>setPreviewLink</code> method will allow the user to override the url() link on the "Preview" button on the dynamo Form. By default
-   the "Preview" button will look for a function on the dynamo model called "url()". If that function, exist, the button will render. But sometimes,
-   you may want to override that link and use your own link. If so, use the ->setPreviewLink() function</p><hr>
+<p>The <code>setIndexPanelTitle</code> method will allow the user to override the text on the dynamo Index panel.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">setIndexPanelTitle</span><span class="o">(</span><span class="s">&quot;Colton&#39;s module manger override text&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>Here I call the function -&gt;setIndexPanelTitle() to override the default Index Panel Title Text. The next screenshot shows the result.</p>
+<img alt="_images/setIndexPanelTitle2.png" class="align-center" src="_images/setIndexPanelTitle2.png" />
+<hr>
 
 <p><a name="method-setSaveItemText"></a></p>
 <h4><code>setSaveItemText()</code></h4>
-<p>The <code>setSaveItemText</code> method will allow the user to override the text on the blue Save button at the bottom of the dynamo Form.</p><hr>
+<p>The <code>setSaveItemText</code> method will allow the user to override the text on the blue Save button at the bottom of the dynamo Form.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">setSaveItemText</span><span class="o">(</span><span class="s">&#39;SET SAVE TEXT&#39;</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>Here I call the function to override the Save button text on the form.</p>
+<img alt="_images/setSaveItemText2.png" class="align-center" src="_images/setSaveItemText2.png" />
+<hr>
 
 <p><a name="method-text"></a></p>
 <h4><code>text()</code></h4>
@@ -406,12 +831,79 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
    in other parameters as you can with all Dynamo methods, such as position (to make the field appear in a different order than default), tooltip(allows you to
    render a ? mark tooltip explaining perhaps the format that is expected in the field), class(where you can assign the input field to have additional class names),
    label(allows you to change the label text of the input field, be default it will be whatever the name of the field is in the database), and you can also do
-   closure functions with the "current item" as the argument for the third parameter of the text field. Check out some of the examples below.</p><hr>
+   closure functions with the "current item" as the argument for the third parameter of the text field. Check out some of the examples below.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">auto</span><span class="o">()</span>
+<span class="o">-&gt;</span><span class="nf">text</span><span class="o">(</span><span class="s">&#39;this is a text box, my friend&#39;</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>The simplest example.</p>
+<img alt="_images/text2.png" class="align-center" src="_images/text2.png" />
+<p>The result on the form. ^</p>
+<div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">auto</span><span class="o">()</span>
+<span class="o">-&gt;</span><span class="nf">text</span><span class="o">(</span><span class="s">&#39;district&#39;</span><span class="o">,</span> <span class="o">[</span>
+    <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">0</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">singleImage</span><span class="o">(</span><span class="s">&#39;headshot&#39;</span><span class="o">,</span> <span class="o">[</span>
+    <span class="s">&#39;maxWidth&#39;</span><span class="o"> =&gt;</span> <span class="m">400</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">singleImage</span><span class="o">(</span><span class="s">&#39;featured_image&#39;</span><span class="o">,</span> <span class="o">[</span>
+    <span class="s">&#39;maxWidth&#39;</span><span class="o"> =&gt;</span> <span class="m">1600</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">gallery</span><span class="o">(</span><span class="s">&#39;gallery&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="nf">text</span><span class="o">(</span><span class="s">&#39;party&#39;</span><span class="o">,</span> <span class="o">[</span>
+    <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">50</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">text</span><span class="o">(</span><span class="s">&#39;email&#39;</span><span class="o">,</span> <span class="o">[</span>
+    <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">60</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">text</span><span class="o">(</span><span class="s">&#39;phone&#39;</span><span class="o">,</span> <span class="o">[</span>
+    <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">60</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">text</span><span class="o">(</span><span class="s">&#39;fax&#39;</span><span class="o">,</span> <span class="o">[</span>
+    <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">70</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">text</span><span class="o">(</span><span class="s">&#39;address&#39;</span><span class="o">,</span> <span class="o">[</span>
+    <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">80</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">text</span><span class="o">(</span><span class="s">&#39;city&#39;</span><span class="o">,</span> <span class="o">[</span>
+    <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">90</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">text</span><span class="o">(</span><span class="s">&#39;zip&#39;</span><span class="o">,</span> <span class="o">[</span>
+    <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">100</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">text</span><span class="o">(</span><span class="s">&#39;seniority&#39;</span><span class="o">,</span> <span class="o">[</span>
+    <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">110</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">text</span><span class="o">(</span><span class="s">&#39;religion&#39;</span><span class="o">,</span> <span class="o">[</span>
+    <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">120</span>
+<span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">text</span><span class="o">(</span><span class="s">&#39;past_service&#39;</span><span class="o">,</span> <span class="o">[</span>
+    <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">130</span>
+<span class="o">])</span>
+</pre></div>
+</div>
+<p>In this example, we pass in an array of options with only one option, that being &#8216;position&#8217;. The position option is there so you can manually set the order
+of the fields in the form if needed. The auto() function usually handles this, but in some cases you may want to reorder.</p>
+<img alt="_images/text4.png" class="align-center" src="_images/text4.png" />
+<img alt="_images/text5.png" class="align-center" src="_images/text5.png" />
+<p>A more complicated example. Here we pass in an option to the top two text fields. This option is &#8216;class&#8217; =&gt; &#8216;dateTimePicker&#8217; which lets a little calendar pop
+up to aid the user in selected the dates for the these fields. And I&#8217;m not even going to explain what&#8217;s going on in the third text field. It was a super weird case,
+usually things don&#8217;t look that messy.</p>
+<img alt="_images/text7.png" class="align-center" src="_images/text7.png" />
+<p>Here we see the dateTimePicker</p>
+<img alt="_images/text6.png" class="align-center" src="_images/text6.png" />
+<hr>
 
 <p><a name="method-textarea"></a></p>
 <h4><code>textarea()</code></h4>
 <p>The <code>textarea</code> method is just like the text() method, except it's a bigger text box on the form. In many of our websites, we pass in a class
-   called "wysiwyg editor" which stands for "What You See Is What You Get". This will only work if you have the |froala| text-editor installed in your laravel project.</p><hr></div>
+   called "wysiwyg editor" which stands for "What You See Is What You Get". This will only work if you have the Froala text-editor installed in your laravel project.
+   There are other text editors like Froala out there you might be able to find as well, and pass a class into the text area function to achieve the same thing.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">textarea</span><span class="o">(</span><span class="s">&#39;bio&#39;</span><span class="o">,</span> <span class="o">[</span>
+  <span class="s">&#39;class&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;wysiwyg-editor&#39;</span><span class="o">,</span>
+<span class="o">])</span>
+</pre></div>
+</div>
+<img alt="_images/textarea2.png" class="align-center" src="_images/textarea2.png" />
+<hr></div>
 
 
            </div>
