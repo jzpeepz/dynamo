@@ -65,7 +65,12 @@ class DynamoField
 
     public function getOption($key)
     {
-        if ($key == 'maxlength' && $this->type == 'text' && !isset($this->options['maxlength'])) {
+        if ($key == 'maxlength'
+            && $this->type == 'text'
+            && (!isset($this->options['maxlength'])
+                || (isset($this->options['maxlength'])
+                && empty($this->options['maxlength'])))
+        ) {
             $this->attributes['options']['maxlength'] = 255;
         }
 
