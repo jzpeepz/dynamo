@@ -127,40 +127,40 @@ the same, except you need to rename the variables and relationship function name
 Then in the form when creating a new User, the admin can select the friends of that User. If then, the admin saves, and takes a look at one of those friend models, the new User will populate in the select box automatically.
 If the relationship gets detached on either model, it will automatically be detached from the other model as well, since the pivot table is saving it in one row rather than like I explained at the beginning.
 
-Below are some screenshots of the outcome (click the images to read the captions):
+Below are some screenshots of the outcome (The captions under them help explain whats going on):
 
-.. thumbnail:: images/self1.png
+.. image:: images/self1.png
    :align: center
 
-   Here I create a new Product
+Here I create a new Product
 
-.. thumbnail:: images/self2.png
+.. image:: images/self2.png
    :align: center
 
-   I relate my new Product to another Product called Related Product.
+I relate my new Product to another Product called Related Product.
 
 
-.. thumbnail:: images/self3.png
+.. image:: images/self3.png
    :align: center
 
-   Here we see the pivot table and 1 single row related these two products.
+Here we see the pivot table and 1 single row related these two products.
 
-.. thumbnail:: images/self4.png
+.. image:: images/self4.png
   :align: center
 
-  Next I navigate to and Edit the Related Product in the CMS.
+Next I navigate to and Edit the Related Product in the CMS.
 
-.. thumbnail:: images/self5.png
+.. image:: images/self5.png
    :align: center
 
-   And I automatically see the new Product I created attached to it. If we were using a ->hasManySimple() function on our DynamoController like we normally would to relate two SEPARATE models (not the same model), we would not see the newly created Product show up here automatically, and the user may try to select it again, creating a duplicate in the database which is not good.
+And I automatically see the new Product I created attached to it. If we were using a ->hasManySimple() function on our DynamoController like we normally would to relate two SEPARATE models (not the same model), we would not see the newly created Product show up here automatically, and the user may try to select it again, creating a duplicate in the database which is not good.
 
-.. thumbnail:: images/self6.png
+.. image:: images/self6.png
    :align: center
 
-   Still on the Related Product Edit page, I deselect the Product1 I created from the beginning and hit save. We expect that the row in the database is gone, and that if I go back to Product1 and edit it, that I won't see Related Product attached to it.
+Still on the Related Product Edit page, I deselect the Product1 I created from the beginning and hit save. We expect that the row in the database is gone, and that if I go back to Product1 and edit it, that I won't see Related Product attached to it.
 
-.. thumbnail:: images/self7.png
+.. image:: images/self7.png
    :align: center
 
-   As expected, the row is gone and the two Products are no longer related.
+As expected, the row is gone and the two Products are no longer related.

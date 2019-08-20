@@ -87,7 +87,7 @@ This function goes on the FaqCategory.php file in the root of the app folder
     <strong style="font-size: 20px;">Step 4: Implement the Dynamo Controllers for each.</strong> (click the image)<br><br>
 
 
-.. thumbnail:: images/deleteRelationship1.png
+.. image:: images/deleteRelationship1.png
   :align: center
 
 .. raw:: html

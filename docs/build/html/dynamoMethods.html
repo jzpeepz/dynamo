@@ -186,6 +186,7 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
        <a href="#method-addHandler">addHandler</a>
        <a href="#method-addIndex">addIndex</a>
        <a href="#method-addIndexButton">addIndexButton</a>
+       <a href="#method-applyScopes">applyScopes</a>
        <a href="#method-auto">auto</a>
        <a href="#method-checkbox">checkbox</a>
        <a href="#method-clearIndexes">clearIndexes</a>
@@ -195,6 +196,7 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
        <a href="#method-hasManySimple">hasManySimple</a>
        <a href="#method-hideAdd">hideAdd</a>
        <a href="#method-hideDelete">hideDelete</a>
+       <a href="#method-ignoredScopes">ignoredScopes</a>
        <a href="#method-indexOrderBy">indexOrderBy</a>
        <a href="#method-paginate">paginate</a>
        <a href="#method-password">password</a>
@@ -236,6 +238,7 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
      <span class="s">&#39;tooltip&#39;</span><span class="o"> =&gt;</span> <span class="s">&#39;Use the \&#39;\&#39;Draft\&#39;\&#39; status to save information as you have it. When you\&#39;re ready for an FAQ to</span>
 <span class="s">                   show up on the front end of the website, change it to \&#39;\&#39;Published\&#39;\&#39; and then click the \&#39;\&#39;Save FAQ\&#39;\&#39; button.&#39;</span><span class="o">,</span>
      <span class="s">&#39;position&#39;</span><span class="o"> =&gt;</span> <span class="m">200</span><span class="o">,</span>
+     <span class="s">&#39;required&#39;</span><span class="o"> =&gt;</span> <span class="nf">true</span><span class="o">,</span>
  <span class="o">])</span>
 </pre></div>
 </div>
@@ -405,6 +408,13 @@ another form for uploading Representatives via .csv.</p>
 </pre></div>
 </div>
 <p>This is the function in use. It takes one parameter that is a closure function that returns raw html linking to that page.</p>
+<hr>
+
+<p><a name="method-applyScopes"></a></p>
+<h4><code>applyScopes()</code></h4>
+<p>The <code>applyScopes</code> method allows you to apply all global scopes that are defined in your app. This function gets called by default if you run the auto() function.
+   We created this function because sometimes you don't run the auto function but still want to apply your scopes. This is especially helpful if you are using soft deletes.
+   This function works together with ->ignoredScopes([]) which takes in an array of scopes that you want to ignore.</p><img alt="_images/applyScopes1.png" class="align-center" src="_images/applyScopes1.png" />
 <hr>
 
 <p><a name="method-auto"></a></p>
@@ -647,6 +657,28 @@ steps. ( which is faq_categories )</p>
 <p>Now I uncomment hideDelete(), ...</p>
 <img alt="_images/hideDelete4.png" class="align-center" src="_images/hideDelete4.png" />
 <p>And the delete button is hidden. Magical isn&#8217;t it?</p>
+<hr>
+
+<p><a name="method-ignoredScopes"></a></p>
+<h4><code>ignoredScopes([])</code></h4>
+<p>The <code>ignoredScopes([])</code> method takes in an array of scopes that you want to set to be ignored when you run ->applyScopes(). applyScopes() gets run default
+   if you use the auto() function.</p><div class="highlight-trafficscript"><div class="highlight"><pre><span></span><span class="o">-&gt;</span><span class="nf">ignoredScopes</span><span class="o">([</span><span class="s">&#39;deleted_at&#39;</span><span class="o">,</span> <span class="s">&#39;age_scope&#39;</span><span class="o">])</span>
+<span class="o">-&gt;</span><span class="nf">applyScopes</span><span class="o">()</span>
+<span class="o">-&gt;</span><span class="nf">removeField</span><span class="o">(</span><span class="s">&#39;position&#39;</span><span class="o">)</span>
+
+<span class="o">//</span><span class="nf">set</span> <span class="nf">admin</span> <span class="nf">view</span>
+<span class="o">-&gt;</span><span class="nf">clearIndexes</span><span class="o">()</span>
+<span class="o">-&gt;</span><span class="nf">addIndexButton</span><span class="o">(</span><span class="nf">function</span> <span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s">&#39;&lt;a href=&quot;/pilot/staff/import&quot; class=&quot;btn btn-primary btn-xs&quot;&gt;Import Staff from Spreadsheet&lt;/a&gt;&#39;</span><span class="o">;</span>
+<span class="o">})</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;hamburger&#39;</span><span class="o">,</span> <span class="s">&#39;Sort&#39;</span><span class="o">,</span> <span class="nf">function</span><span class="o">(</span><span class="nv">$item</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="s">&#39;&lt;i class=&quot;fas fa-bars fa-2x&quot; &gt;&lt;/i&gt;&#39;</span><span class="o">;</span>
+<span class="o">})</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;name&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="nf">addIndex</span><span class="o">(</span><span class="s">&#39;job_title&#39;</span><span class="o">)</span>
+<span class="o">-&gt;</span><span class="k">in</span><span class="nf">dexOrderBy</span><span class="o">(</span><span class="s">&#39;position&#39;</span><span class="o">);</span>
+</pre></div>
+</div>
 <hr>
 
 <p><a name="method-indexOrderBy"></a></p>

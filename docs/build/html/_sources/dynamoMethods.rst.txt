@@ -27,6 +27,7 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
            <a href="#method-addHandler">addHandler</a>
            <a href="#method-addIndex">addIndex</a>
            <a href="#method-addIndexButton">addIndexButton</a>
+           <a href="#method-applyScopes">applyScopes</a>
            <a href="#method-auto">auto</a>
            <a href="#method-checkbox">checkbox</a>
            <a href="#method-clearIndexes">clearIndexes</a>
@@ -36,6 +37,7 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
            <a href="#method-hasManySimple">hasManySimple</a>
            <a href="#method-hideAdd">hideAdd</a>
            <a href="#method-hideDelete">hideDelete</a>
+           <a href="#method-ignoredScopes">ignoredScopes</a>
            <a href="#method-indexOrderBy">indexOrderBy</a>
            <a href="#method-paginate">paginate</a>
            <a href="#method-password">password</a>
@@ -83,6 +85,7 @@ or the case of renaming a field in the form, or sizing a picture a specific way,
          'tooltip' => 'Use the \'\'Draft\'\' status to save information as you have it. When you\'re ready for an FAQ to
                        show up on the front end of the website, change it to \'\'Published\'\' and then click the \'\'Save FAQ\'\' button.',
          'position' => 200,
+         'required' => true,
      ])
 
 
@@ -334,6 +337,19 @@ This is the page the button links to
     })
 
 This is the function in use. It takes one parameter that is a closure function that returns raw html linking to that page.
+
+.. raw:: html
+
+    <hr>
+
+    <p><a name="method-applyScopes"></a></p>
+    <h4><code>applyScopes()</code></h4>
+    <p>The <code>applyScopes</code> method allows you to apply all global scopes that are defined in your app. This function gets called by default if you run the auto() function.
+       We created this function because sometimes you don't run the auto function but still want to apply your scopes. This is especially helpful if you are using soft deletes.
+       This function works together with ->ignoredScopes([]) which takes in an array of scopes that you want to ignore.</p>
+
+.. image:: images/applyScopes1.png
+   :align: center
 
 .. raw:: html
 
@@ -692,6 +708,33 @@ Now I uncomment hideDelete(), ...
     :align: center
 
 And the delete button is hidden. Magical isn't it?
+
+.. raw:: html
+
+    <hr>
+
+    <p><a name="method-ignoredScopes"></a></p>
+    <h4><code>ignoredScopes([])</code></h4>
+    <p>The <code>ignoredScopes([])</code> method takes in an array of scopes that you want to set to be ignored when you run ->applyScopes(). applyScopes() gets run default
+       if you use the auto() function.</p>
+
+.. code-block:: trafficscript
+
+   ->ignoredScopes(['deleted_at', 'age_scope'])
+   ->applyScopes()
+   ->removeField('position')
+
+   //set admin view
+   ->clearIndexes()
+   ->addIndexButton(function () {
+       return '<a href="/pilot/staff/import" class="btn btn-primary btn-xs">Import Staff from Spreadsheet</a>';
+   })
+   ->addIndex('hamburger', 'Sort', function($item) {
+       return '<i class="fas fa-bars fa-2x" ></i>';
+   })
+   ->addIndex('name')
+   ->addIndex('job_title')
+   ->indexOrderBy('position');
 
 .. raw:: html
 
