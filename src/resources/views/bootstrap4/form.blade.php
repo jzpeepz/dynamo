@@ -118,7 +118,7 @@
 
                                 @if ($item->exists)
                                     @if ($dynamo->deleteVisible())
-                                        {!! Form::open(['route' => [$dynamo->getRoute('destroy'), $item->id], 'method' => 'delete', 'class' => 'delete-form dynamo-delete-form float-right d-inline mb-0', 'style' => 'display: inline-block;', 'onsubmit' => 'return confirm(\'Are you sure?\');']) !!}
+                                        {!! Form::open(['route' => [$dynamo->getRoute('destroy'), $item->id], 'method' => 'delete', 'class' => 'delete-form dynamo-delete-form float-right d-inline mb-0', 'style' => 'display: inline-block;', 'onsubmit' => 'return confirm(\'Are you sure you want to delete this? This action cannot be undone and will be deleted forever.\');']) !!}
                                             <button type="submit" class="btn btn-danger btn-delete dynamo-delete-btn " style="float: right;">Delete</button>
                                         {!! Form::close() !!}
                                     @endif
