@@ -17,7 +17,7 @@
                         @endif
 
                         @if ($item->exists && method_exists($item, 'url'))
-                            <a href="{{ $item->url() }}" target="_blank" class="btn btn-info btn-sm float-right"><i class="fa fa-eye"></i> Preview</a>
+                            <a href="{{ $item->url() }}" target="_blank" class="btn btn-info btn-sm float-right"><i class="fa fa-eye"></i> View</a>
                         @endif
 
                         @foreach ($dynamo->getFormHeaderButtons() as $button)

@@ -213,8 +213,8 @@ Form Footer Buttons are awesome!
    <p><a name="method-addFormHeaderButton"></a></p>
    <h4><code>addFormHeaderButton()</code></h4>
    <p>The <code>addFormHeaderButton</code> method let's you add a custom button on the header section of the dynamo form. Foreach time you call this function,
-      a new button will appear on the header in the order you called the functions. By default, Dynamo creates a "Preview" button that is rendered if you are editing
-      an item. The preview button's link will call the url() function that you created on your Dynamo model. So if you created a Dynamo object called "FAQ", you would
+      a new button will appear on the header in the order you called the functions. By default, Dynamo creates a "View" button that is rendered if you are editing
+      an item. The view button's link will call the url() function that you created on your Dynamo model. So if you created a Dynamo object called "FAQ", you would
       want to implement a function on that model called url(). Check out the screenshots below</p>
 
 .. image:: images/addFormHeaderButton1.png
