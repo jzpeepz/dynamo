@@ -14,8 +14,8 @@ $group = $dynamo->getGroup($field->key);
                 <h4 style="margin-top: 0px;">{!! $group->options->get('label') !!}</h4>
             @endif
             @if ($group->options->has('tooltip'))
-                <i id="dont-show-on-mobile-tooltip" style="font-size: 16px; color: black;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
-                title="{!! $field->getOption('tooltip') !!}"></i>
+                <i id="dont-show-on-mobile-tooltip" style="font-size: 16px; color: black;" class="fas fa-question-circle ml-2" data-toggle="tooltip" data-html="true"
+                title="{!! $group->options->get('tooltip') !!}"></i>
             @endif
 
             {!! $group->render($item) !!}
