@@ -5,6 +5,10 @@ $group = $dynamo->getGroup($field->key);
 {!! $group->renderBefore() !!}
 
 <div class="dynamo-group dynamo-group-{{ $group->name }} {{ $group->options->get('class') }}">
+    @if (! empty($field->getOption('tooltip')))
+        <i id="dont-show-on-mobile-tooltip" style="font-size: 16px; color: black;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
+        title="{!! $field->getOption('tooltip') !!}"></i>
+    @endif
 
     <div class="dynamo-group-card card">
 
