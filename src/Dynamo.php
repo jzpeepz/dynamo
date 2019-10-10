@@ -81,7 +81,7 @@ class Dynamo
         $data = request()->all();
 
         // fill and save so that we have an id for saving uploaded files
-        if (! $item->exists) {
+        if (!$item->exists) {
             $item->save();
         }
 
@@ -113,7 +113,7 @@ class Dynamo
 
     private function makeLabel($key)
     {
-        return ucwords(str_replace(['_','-'], ' ', $key));
+        return ucwords(str_replace(['_', '-'], ' ', $key));
     }
 
     public function addIndex($key, $label = null, $formatCallable = null)
@@ -216,7 +216,7 @@ class Dynamo
 
         // remove field from groups
         $this->fields->transform(function ($field, $key) use ($fieldKey) {
-            if ($field->type =='group') {
+            if ($field->type == 'group') {
                 $group = $field->getOption('group');
                 $group->removeField($fieldKey);
                 $field->setOption('group', $group);
@@ -291,7 +291,7 @@ class Dynamo
         // dd($types);
 
         foreach ($columns as $column) {
-            if (! $item->isGuarded($column) || $item->isFillable($column)) {
+            if (!$item->isGuarded($column) || $item->isFillable($column)) {
                 $this->addField($column, $this->getFieldFromType($types[$column]), ['onIndex' => true]);
             }
         }
@@ -327,8 +327,8 @@ class Dynamo
         $query = $this->executeViewFilter($query, $view);
 
         // do any searching
-        if (! $this->searchable->isEmpty() && request()->has('q')) {
-            $query = $query->where(DB::raw('CONCAT('.$this->getSearchableKeys()->implode(", ' ', ").')'), 'like', '%'.request()->input('q').'%');
+        if (!$this->searchable->isEmpty() && request()->has('q')) {
+            $query = $query->where(DB::raw('CONCAT(' . $this->getSearchableKeys()->implode(", ' ', ") . ')'), 'like', '%' . request()->input('q') . '%');
         }
 
         foreach ($this->filters as $filter) {
@@ -336,7 +336,7 @@ class Dynamo
             $query = $filter->modifyQuery($query);
         }
 
-        foreach($this->getIndexOrderBy() as $orderBy) {
+        foreach ($this->getIndexOrderBy() as $orderBy) {
             $query = $query->orderBy($orderBy['column'], $orderBy['sort']);
         }
 
@@ -347,7 +347,7 @@ class Dynamo
     {
         $query = $this->getIndexItemsQueryBuilder();
 
-        if (! empty($this->paginate)) {
+        if (!empty($this->paginate)) {
             $items = $query->paginate($this->paginate);
         } else {
             $items = $query->get();
@@ -364,7 +364,7 @@ class Dynamo
 
         $tab = $this->getIndexTab($view);
 
-        if (! empty($tab)) {
+        if (!empty($tab)) {
             $query = call_user_func($tab->queryFilter, $query);
         }
 
@@ -374,29 +374,27 @@ class Dynamo
     public function handleSpecialFields($item, $data = [])
     {
         $processedHasMany = [];
-        
+
         foreach ($this->getHandlers() as $key => $handler) {
-            call_user_func_array($handler, [&$item, &$data, &$processedHasMany]);
+            call_user_func_array($handler, [&$item, &$data, &$processedHasMany, &$this]);
         }
 
         $globalHandlers = static::getGlobalHandlers();
 
         foreach ($data as $key => $value) {
-
             $fieldType = $this->getFieldTypeByKey($key);
 
             // ignore any keys that already have handlers assigned
-            if (! $this->getHandlers()->has($key) && ! $globalHandlers->has($fieldType)) {
-
+            if (!$this->getHandlers()->has($key) && !$globalHandlers->has($fieldType)) {
                 // handle uploaded files
                 if (is_object($value) && (get_class($value) == "Illuminate\Http\UploadedFile" || get_class($value) == "Symfony\Component\HttpFoundation\File\UploadedFile")) {
-                    $fileName = str_replace('.'.$value->getClientOriginalExtension(), '', $value->getClientOriginalName());
-                    $destinationFileName = str_slug($fileName).'-'.rand(10000, 99999).'.'.strtolower($value->getClientOriginalExtension());
+                    $fileName = str_replace('.' . $value->getClientOriginalExtension(), '', $value->getClientOriginalName());
+                    $destinationFileName = str_slug($fileName) . '-' . rand(10000, 99999) . '.' . strtolower($value->getClientOriginalExtension());
 
                     $disk = Storage::disk(config('dynamo.storage_disk'));
-                    $disk->put(config('dynamo.upload_path').$destinationFileName, file_get_contents($value->getRealPath()));
+                    $disk->put(config('dynamo.upload_path') . $destinationFileName, file_get_contents($value->getRealPath()));
 
-                    $data[$key] = config('dynamo.upload_path').$destinationFileName;
+                    $data[$key] = config('dynamo.upload_path') . $destinationFileName;
                 }
 
                 // handle password fields
@@ -416,7 +414,6 @@ class Dynamo
                     unset($data[$key]);
                     $processedHasMany[] = $key;
                 }
-
             }
 
             // Check to see if there is a global handler
@@ -425,12 +422,11 @@ class Dynamo
             if ($globalHandlers->has($fieldType)) {
                 call_user_func_array($globalHandlers->get($fieldType), [&$item, &$data, $key]);
             }
-
         }
 
         // handle empty has many fields
         foreach ($this->getFieldsByType('hasMany') as $field) {
-            if (! isset($data[$field->key]) && ! in_array($field->key, $processedHasMany)) {
+            if (!isset($data[$field->key]) && !in_array($field->key, $processedHasMany)) {
                 $item->{$field->key}()->detach();
             }
         };
@@ -440,12 +436,12 @@ class Dynamo
 
     public function hasSearchable()
     {
-        return ! $this->searchable->isEmpty();
+        return !$this->searchable->isEmpty();
     }
 
     public function getSearchableKeys()
     {
-        return $this->searchable->map(function($field, $key){
+        return $this->searchable->map(function ($field, $key) {
             return $field->key;
         });
     }
@@ -456,7 +452,8 @@ class Dynamo
         return $this;
     }
 
-    public function getPlaceholder() {
+    public function getPlaceholder()
+    {
         return $this->searchPlaceholder;
     }
 
@@ -471,7 +468,7 @@ class Dynamo
         $arr = [];
         $options = $this->searchOptions;
 
-        foreach($options as $key => $value) {
+        foreach ($options as $key => $value) {
             $arr[] = "$key = \"$value\"";
         }
 
@@ -481,8 +478,8 @@ class Dynamo
     public function searchable($key, $type = null, $options = [])
     {
         $label = isset($options['label']) ? $options['label'] : null;
-        $type = ! empty($type) ? $type : 'text';
-        $searchPlaceholder = !empty($placeHolder) ? $placeHolder : "";
+        $type = !empty($type) ? $type : 'text';
+        $searchPlaceholder = !empty($placeHolder) ? $placeHolder : '';
 
         $this->searchable->push(DynamoField::make([
             'key' => $key,
@@ -496,7 +493,7 @@ class Dynamo
 
     public function hasIndexTabs()
     {
-        return ! $this->indexTabs->isEmpty();
+        return !$this->indexTabs->isEmpty();
     }
 
     public function getIndexTabs()
@@ -511,7 +508,7 @@ class Dynamo
 
     public function hasFormTabs()
     {
-        return ! $this->formTabs->isEmpty();
+        return !$this->formTabs->isEmpty();
     }
 
     public function getFormTabs()
@@ -606,7 +603,7 @@ class Dynamo
 
     public function getField($key)
     {
-        foreach($this->fields as $field) {
+        foreach ($this->fields as $field) {
             if ($field->key == $key) {
                 return $field;
             }
@@ -617,7 +614,7 @@ class Dynamo
 
     public function getIndex($key)
     {
-        foreach($this->indexes as $index) {
+        foreach ($this->indexes as $index) {
             if ($index->key == $key) {
                 return $index;
             }
@@ -635,7 +632,7 @@ class Dynamo
 
     public function hasGroupLabel($group)
     {
-        return isset($this->groupLabels[$group]) && ! empty($this->groupLabels[$group]);
+        return isset($this->groupLabels[$group]) && !empty($this->groupLabels[$group]);
     }
 
     public function getGroupLabel($group)
@@ -661,6 +658,13 @@ class Dynamo
     public function addHandler($field, $closure)
     {
         $this->handlers->put($field, $closure);
+
+        return $this;
+    }
+
+    public function removeHandler($field)
+    {
+        $this->handlers->forget($field);
 
         return $this;
     }
@@ -894,7 +898,7 @@ class Dynamo
         // instance, look in groups and tabs
         $field = $this->findFieldByKey($key);
 
-        if (! empty($field)) {
+        if (!empty($field)) {
             return $field->type;
         }
 
@@ -914,28 +918,22 @@ class Dynamo
 
         // if not found, look within tabs
         foreach ($this->formTabs as $tab) {
-
             // within the fields inside of tabs
             foreach ($tab->fields as $field) {
-
                 if ($field->key == $key) {
                     return $field;
                 }
 
                 // if the field is a group
                 if ($field->type == 'group') {
-
                     // look at each field within the group
                     foreach ($field->getOption('group')->fields as $groupField) {
                         if ($groupField->key == $key) {
                             return $groupField;
                         }
                     }
-
                 }
-
             }
-
         }
 
         return null;
@@ -990,7 +988,7 @@ class Dynamo
 
     public function ignoredScopes(array $scopes = [])
     {
-        if (! is_array($scopes)) {
+        if (!is_array($scopes)) {
             $scopes = [$scopes];
         }
 
@@ -1012,7 +1010,7 @@ class Dynamo
     public function modify($closure)
     {
         $this->modifier = $closure;
-        
+
         return $this;
     }
 
