@@ -67,6 +67,16 @@ class DynamoController extends Controller
     {
         $item = new $this->dynamo->class;
 
+        if (method_exists($item, 'validator')) {
+            $validator = $item->validator($request->all());
+
+            if ($validator->fails()) {
+                return back()
+                        ->withErrors($validator)
+                        ->withInput();
+            }
+        }
+
         $this->dynamo->store($item);
 
         session(['alert-success' => $this->dynamo->getName() . ' was saved successfully!']);
@@ -127,6 +137,16 @@ class DynamoController extends Controller
 
         $item = $className::withoutGlobalScopes()->find($id);
 
+        if (method_exists($item, 'validator')) {
+            $validator = $item->validator($request->all());
+
+            if ($validator->fails()) {
+                return back()
+                        ->withErrors($validator)
+                        ->withInput();
+            }
+        }
+
         $this->dynamo->store($item);
 
         session(['alert-success' => $this->dynamo->getName() . ' was saved successfully!']);
@@ -142,17 +162,14 @@ class DynamoController extends Controller
      */
     public function destroy($id)
     {
-
         $className = $this->dynamo->class;
 
         // Run through and look for fields with type 'multiSelect'
-        foreach($this->dynamo->getFields() as $field) {
-
-            if($field->type == 'hasMany') {
+        foreach ($this->dynamo->getFields() as $field) {
+            if ($field->type == 'hasMany') {
                 //if 'multiSelect' found then relational data may exist. Detach data from the model
                 $className::withoutGlobalScopes()->find($id)->{$field->key}()->detach();
             }
-
         }
 
         $item = $className::withoutGlobalScopes()->findOrFail($id);
