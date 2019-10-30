@@ -96,7 +96,7 @@
                                 @endif
                             </div>
 
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary" {{ $dynamo->allInputsDisabled() ? 'disabled' : '' }}>
                             @if ($dynamo->hasSaveItemTextChange() == null)
                                 Save {{ $dynamo->getName() }}
                             @else

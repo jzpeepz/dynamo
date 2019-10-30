@@ -38,6 +38,7 @@ class Dynamo
     private $addItemText = null;
     public static $globalHandlers = null;
     private $modifier = null;
+    private $allInputsDisabled = false;
 
     public function __construct($class)
     {
@@ -129,6 +130,17 @@ class Dynamo
         return $this;
     }
 
+    public function addIndexes()
+    {
+        $args = func_get_args();
+
+        foreach ($args as $arg) {
+            $this->addIndex($arg);
+        }
+
+        return $this;
+    }
+
     public function removeIndex($indexKey)
     {
         $this->indexes = $this->indexes->filter(function ($field, $key = null) use ($indexKey) {
@@ -178,6 +190,15 @@ class Dynamo
 
         if ($onIndex) {
             $this->addIndex($key, $label, $formatCallable);
+        }
+
+        // set disabled attribute if all inputs are disabled
+        if ($this->allInputsDisabled) {
+            if (!isset($options['attributes'])) {
+                $options['attributes'] = [];
+            }
+
+            $options['attributes']['disabled'] = true;
         }
 
         $field = DynamoField::make([
@@ -328,7 +349,11 @@ class Dynamo
 
         // do any searching
         if (!$this->searchable->isEmpty() && request()->has('q')) {
-            $query = $query->where(DB::raw('CONCAT(' . $this->getSearchableKeys()->implode(", ' ', ") . ')'), 'like', '%' . request()->input('q') . '%');
+            $query = $query->where(
+                DB::raw('CONCAT(' . $this->getSearchableKeys()->implode(", ' ', ") . ')'),
+                'like',
+                '%' . request()->input('q') . '%'
+            );
         }
 
         foreach ($this->filters as $filter) {
@@ -387,12 +412,25 @@ class Dynamo
             // ignore any keys that already have handlers assigned
             if (!$this->getHandlers()->has($key) && !$globalHandlers->has($fieldType)) {
                 // handle uploaded files
-                if (is_object($value) && (get_class($value) == "Illuminate\Http\UploadedFile" || get_class($value) == "Symfony\Component\HttpFoundation\File\UploadedFile")) {
-                    $fileName = str_replace('.' . $value->getClientOriginalExtension(), '', $value->getClientOriginalName());
-                    $destinationFileName = str_slug($fileName) . '-' . rand(10000, 99999) . '.' . strtolower($value->getClientOriginalExtension());
+                if (is_object($value) &&
+                    (
+                        get_class($value) == "Illuminate\Http\UploadedFile" ||
+                        get_class($value) == "Symfony\Component\HttpFoundation\File\UploadedFile"
+                    )
+                ) {
+                    $fileName = str_replace(
+                        '.' . $value->getClientOriginalExtension(),
+                        '',
+                        $value->getClientOriginalName()
+                    );
+                    $destinationFileName = str_slug($fileName) . '-' . rand(10000, 99999) .
+                                        '.' . strtolower($value->getClientOriginalExtension());
 
                     $disk = Storage::disk(config('dynamo.storage_disk'));
-                    $disk->put(config('dynamo.upload_path') . $destinationFileName, file_get_contents($value->getRealPath()));
+                    $disk->put(
+                        config('dynamo.upload_path') . $destinationFileName,
+                        file_get_contents($value->getRealPath())
+                    );
 
                     $data[$key] = config('dynamo.upload_path') . $destinationFileName;
                 }
@@ -472,14 +510,14 @@ class Dynamo
             $arr[] = "$key = \"$value\"";
         }
 
-        return implode($arr, ' ');
+        return implode(' ', $arr);
     }
 
     public function searchable($key, $type = null, $options = [])
     {
         $label = isset($options['label']) ? $options['label'] : null;
         $type = !empty($type) ? $type : 'text';
-        $searchPlaceholder = !empty($placeHolder) ? $placeHolder : '';
+        // $searchPlaceholder = !empty($placeHolder) ? $placeHolder : '';
 
         $this->searchable->push(DynamoField::make([
             'key' => $key,
@@ -565,6 +603,18 @@ class Dynamo
         return $this;
     }
 
+    public function disableAllInputs()
+    {
+        $this->allInputsDisabled = true;
+
+        return $this;
+    }
+
+    public function allInputsDisabled()
+    {
+        return $this->allInputsDisabled;
+    }
+
     public function addVisible()
     {
         return $this->addHidden;
@@ -648,7 +698,9 @@ class Dynamo
 
         $options['nameField'] = isset($options['nameField']) ? $options['nameField'] : 'name';
 
-        $options['options'] = isset($options['options']) ? $options['options'] : $options['modelClass']::orderBy($options['nameField'])->pluck($options['nameField'], 'id');
+        $options['options'] = isset($options['options'])
+                ? $options['options']
+                : $options['modelClass']::orderBy($options['nameField'])->pluck($options['nameField'], 'id');
 
         $options['class'] = isset($options['class']) ? $options['class'] : config('dynamo.default_has_many_class');
 
@@ -698,7 +750,7 @@ class Dynamo
         $dynamoFields = $this->fields;
 
         // group fields
-        $groupFields = $this->groups->reduce(function ($allFields = null, $group) {
+        $groupFields = $this->groups->reduce(function ($allFields = null, $group = null) {
             if (is_null($allFields)) {
                 $allFields = collect();
             }
@@ -712,7 +764,7 @@ class Dynamo
         }
 
         // tab fields and groups within tabs
-        $tabFields = $this->formTabs->reduce(function ($allFields = null, $tab) {
+        $tabFields = $this->formTabs->reduce(function ($allFields = null, $tab = null) {
             if (is_null($allFields)) {
                 $allFields = collect();
             }
