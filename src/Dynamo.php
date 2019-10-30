@@ -83,6 +83,11 @@ class Dynamo
 
         // fill and save so that we have an id for saving uploaded files
         if (!$item->exists) {
+            if (property_exists($item, 'keyFields')) {
+                foreach ($item->keyFields as $field) {
+                    $item->$field = $data[$field];
+                }
+            }
             $item->save();
         }
 
