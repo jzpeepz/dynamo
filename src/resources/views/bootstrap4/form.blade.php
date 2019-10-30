@@ -55,7 +55,7 @@
 
                             <input type="hidden" id="item-id" value="{{ $item->id }}">
 
-                            <div class="tab-content">
+                            <div class="tab-content {{ $dynamo->hasFormTabs() ? 'pt-3' : 'pt-0' }}">
                                 @if ($dynamo->hasFormTabs())
 
                                     {{--***************************************
