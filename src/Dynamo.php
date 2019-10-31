@@ -856,7 +856,11 @@ class Dynamo
 
     public function setIndexPanelTitle($value)
     {
-        $this->indexPanelTitleText = $value;
+        if (is_callable($value)) {
+            $this->indexPanelTitleText = call_user_func($value);
+        } else {
+            $this->indexPanelTitleText = $value;
+        }
 
         return $this;
     }

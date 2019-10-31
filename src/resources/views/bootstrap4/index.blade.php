@@ -30,7 +30,7 @@
                         @if($dynamo->hasIndexPanelTitleOverride() == null)
                             {{ $dynamo->getName() }} Manager
                         @else
-                            {{ $dynamo->getIndexPanelTitleOverride() }}
+                            {!! $dynamo->getIndexPanelTitleOverride() !!}
                         @endif
                     </div>
                     {{--***************************
