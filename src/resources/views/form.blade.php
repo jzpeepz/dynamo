@@ -13,7 +13,7 @@
                         @if($dynamo->hasFormPanelTitleOverride() == null)
                             {{ $dynamo->getName() }}
                         @else
-                            {{ $dynamo->getFormPanelTitleOverride() }}
+                            {!! $dynamo->getFormPanelTitleOverride() !!}
                         @endif
 
                         @if ($item->exists && method_exists($item, 'url'))

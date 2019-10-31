@@ -877,7 +877,11 @@ class Dynamo
 
     public function setFormPanelTitle($value)
     {
-        $this->formPanelTitleText = $value;
+        if (is_callable($value)) {
+            $this->formPanelTitleText = call_user_func($value);
+        } else {
+            $this->formPanelTitleText = $value;
+        }
 
         return $this;
     }
