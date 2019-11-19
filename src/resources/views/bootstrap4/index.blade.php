@@ -118,7 +118,7 @@
                             ********************************************** --}}
                         @if ($items->isEmpty())
 
-                            <div class="dynamo-index-table-empty mt-0">No items found. <a href="{{ route($dynamo->getRoute('create')) }}">Add one.</a></div>
+                            <div class="dynamo-index-table-empty mt-3">No items found. <a href="{{ route($dynamo->getRoute('create')) }}">Add one.</a></div>
 
                         @else
 
