@@ -21,6 +21,8 @@ return [
 
     'default_has_many_class' => '',
 
+    'editor_command' => 'code',
+
     /*
     |--------------------------------------------------------------------------
     | Model use statements

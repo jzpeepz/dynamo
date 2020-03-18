@@ -4,6 +4,7 @@ namespace Jzpeepz\Dynamo;
 
 use DB;
 use Storage;
+use Illuminate\Support\Str;
 
 class Dynamo
 {
@@ -104,7 +105,7 @@ class Dynamo
     {
         $baseClassName = $this->getBaseClass();
 
-        return $this->makeLabel(snake_case($baseClassName));
+        return $this->makeLabel(Str::snake($baseClassName));
     }
 
     public function getBaseClass()
@@ -428,7 +429,7 @@ class Dynamo
                         '',
                         $value->getClientOriginalName()
                     );
-                    $destinationFileName = str_slug($fileName) . '-' . rand(10000, 99999) .
+                    $destinationFileName = Str::slug($fileName) . '-' . rand(10000, 99999) .
                                         '.' . strtolower($value->getClientOriginalExtension());
 
                     $disk = Storage::disk(config('dynamo.storage_disk'));
@@ -697,7 +698,7 @@ class Dynamo
 
     public function hasManySimple($key, $options = [])
     {
-        $modelClass = '\\App\\' . str_singular(studly_case($key));
+        $modelClass = '\\App\\' . Str::singular(Str::studly($key));
 
         $options['modelClass'] = isset($options['modelClass']) ? $options['modelClass'] : $modelClass;
 

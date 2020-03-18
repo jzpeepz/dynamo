@@ -2,6 +2,8 @@
 
 namespace Jzpeepz\Dynamo;
 
+use Illuminate\Support\Str;
+
 class ModuleTab
 {
     protected $name;
@@ -11,7 +13,7 @@ class ModuleTab
     public function __construct($name)
     {
         $this->name = $name;
-        $this->key = str_slug($name);
+        $this->key = Str::slug($name);
         $this->options = collect();
     }
 

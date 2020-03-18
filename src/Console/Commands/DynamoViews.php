@@ -5,6 +5,7 @@ namespace Jzpeepz\Dynamo\Console\Commands;
 use Illuminate\Console\Command;
 use Jzpeepz\Dynamo\Dynamo;
 use Jzpeepz\Dynamo\LaravelVersion;
+use Illuminate\Support\Str;
 
 class DynamoViews extends Command
 {
@@ -42,7 +43,7 @@ class DynamoViews extends Command
         $srcPath = __DIR__.'/../..';
 
         $model = $this->argument('model');
-        $table = strtolower(snake_case(str_plural($model)));
+        $table = strtolower(Str::snake(str_plural($model)));
 
         // get Dynamo instance
         $controllerClass = config('dynamo.controller_namespace') . '\\' . $model . 'Controller';

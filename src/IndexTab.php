@@ -2,6 +2,8 @@
 
 namespace Jzpeepz\Dynamo;
 
+use Illuminate\Support\Str;
+
 class IndexTab extends ModuleTab
 {
     public $queryFilter;
@@ -10,13 +12,13 @@ class IndexTab extends ModuleTab
     public function __construct($name, $queryFilter = null)
     {
         $this->name = $name;
-        $this->key = str_slug($name);
+        $this->key = Str::slug($name);
         $this->options = collect();
 
         if (is_null($queryFilter)) {
             $this->queryFilter = function ($query) {
-                        return $query;
-                    };
+                return $query;
+            };
         } else {
             $this->queryFilter = $queryFilter;
         }
@@ -29,7 +31,7 @@ class IndexTab extends ModuleTab
 
     public function getViewName()
     {
-        return str_slug($this->getName());
+        return Str::slug($this->getName());
     }
 
     public function showCount()
@@ -43,5 +45,4 @@ class IndexTab extends ModuleTab
     {
         return $this->showCount;
     }
-
 }

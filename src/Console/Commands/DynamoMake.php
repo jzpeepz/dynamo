@@ -5,6 +5,7 @@ namespace Jzpeepz\Dynamo\Console\Commands;
 use Illuminate\Console\Command;
 use Jzpeepz\Dynamo\Dynamo;
 use Jzpeepz\Dynamo\LaravelVersion;
+use Illuminate\Support\Str;
 
 class DynamoMake extends Command
 {
@@ -39,98 +40,126 @@ class DynamoMake extends Command
      */
     public function handle()
     {
-        $srcPath = __DIR__.'/../..';
+        $srcPath = __DIR__ . '/../..';
 
         $model = $this->argument('model');
-        $table = strtolower(snake_case(str_plural($model)));
+        $table = strtolower(Str::snake(Str::plural($model)));
 
         $makeMigration = $this->option('migration');
         $makeModel = $this->option('model');
         $makeController = $this->option('controller');
         $makeRoute = $this->option('route');
 
-        $stubsDirectory = $srcPath.'/Console/stubs/';
+        $stubsDirectory = $srcPath . '/Console/stubs/';
 
         // make migration
+        $migrationPath = null;
         if ($makeMigration == 'yes') {
+            $migrationShortName = 'create_' . $table . '_table';
             $this->call('make:migration', [
-                'name' => 'create_' . $table . '_table', '--create' => $table
+                'name' => $migrationShortName, '--create' => $table
             ]);
+            $migrationPaths = glob(base_path("database/migrations/*_$migrationShortName.php"));
+            if (isset($migrationPaths[0])) {
+                $migrationPath = $migrationPaths[0];
+            }
         }
 
         // make model
         if ($makeModel == 'yes') {
             $modelDirectory = app_path('/');
             $newModelFile = $modelDirectory . $model . '.php';
-    		if (! file_exists($newModelFile)) {
+            if (!file_exists($newModelFile)) {
                 $this->writeModelFile($model);
 
-    			$this->info($model . ' model successfully created.');
-    		} else {
-    			$this->error($model . ' model file already exists!');
-    			return;
-    		}
+                $this->info($model . ' model successfully created.');
+            } else {
+                $this->error($model . ' model file already exists!');
+                return;
+            }
         }
 
         // make dynamo controller
         if ($makeController == 'yes') {
             $controllerDirectory = config('dynamo.controller_path') . '/';
             $newControllerFile = $controllerDirectory . $model . 'Controller.php';
-    		if (! file_exists($newControllerFile)) {
-    			// pull in controller stub
-    			$controllerStub = file_get_contents($stubsDirectory . 'DynamoController.stub');
+            if (!file_exists($newControllerFile)) {
+                // pull in controller stub
+                $controllerStub = file_get_contents($stubsDirectory . 'DynamoController.stub');
 
-    			// replace values in stub
-    			$controllerString = str_replace('$MODEL$', $model, $controllerStub);
+                // replace values in stub
+                $controllerString = str_replace('$MODEL$', $model, $controllerStub);
 
-    			$controllerString = str_replace('$NAMESPACE$', trim(config('dynamo.controller_namespace'), '\\'), $controllerString);
+                $controllerString = str_replace('$NAMESPACE$', trim(config('dynamo.controller_namespace'), '\\'), $controllerString);
 
-    			// create controller file
-    			file_put_contents($newControllerFile, $controllerString);
+                // create controller file
+                file_put_contents($newControllerFile, $controllerString);
 
-    			$this->info($model . 'Controller successfully created.');
-    		} else {
-    			$this->error($model . 'Controller file already exists!');
-    			return;
-    		}
+                $this->info($model . 'Controller successfully created.');
+            } else {
+                $this->error($model . 'Controller file already exists!');
+                return;
+            }
         }
 
         // insert routes
         if ($makeRoute == 'yes') {
             $resource = strtolower($model);
-    		$route = "Route::resource('$resource', '" . config('dynamo.controller_namespace') . "\\{$model}Controller');";
+            $route = "Route::resource('$resource', '" . config('dynamo.controller_namespace') . "\\{$model}Controller');";
 
-    		// get routes file source
+            // get routes file source
             $routesPath = base_path('routes/web.php');
             if (LaravelVersion::is('4.2')) {
                 $routesPath = app_path('routes.php');
             } elseif (LaravelVersion::is(['5.0', '5.1', '5.2'])) {
                 $routesPath = app_path('Http/routes.php');
             }
-    		$source = file_get_contents($routesPath);
+            $source = file_get_contents($routesPath);
 
-    		// insert new route
-    		$insertMarker = '/* ---- Dynamo Routes ---- */';
+            // insert new route
+            $insertMarker = '/* ---- Dynamo Routes ---- */';
             $hasMarker = strpos($source, $insertMarker);
             if ($hasMarker === false) {
                 $source = $source . "\n" . $route;
             } else {
-    		    $source = str_replace($insertMarker, $insertMarker . "\n    " . $route, $source);
+                $source = str_replace($insertMarker, $insertMarker . "\n    " . $route, $source);
             }
 
-    		// rewrite routes file
-    		file_put_contents($routesPath, $source);
+            // rewrite routes file
+            file_put_contents($routesPath, $source);
         }
 
-		$this->info('Complete the migration and get started by linking to:');
-        $this->comment("route('" . config('dynamo.route_prefix') . strtolower($model) . ".index')");
+        $confirm = $this->confirm('Would you like to insert a link to this module?');
+        if ($confirm) {
+            $routeName = config('dynamo.route_prefix') . strtolower($model) . '.index';
+            $label = Str::plural($model);
+            $link = "<li class=\"nav-item {{ Request::is(route('$routeName').'*')  ? 'active' : null }}\">\n" .
+                "    <a class=\"nav-link\" href=\"{{ route('$routeName') }}\">$label</a>\n" .
+                "</li>\n";
+            $placeholder = "{{-- Dynamo Modules --}}";
+            $modulesContent = file_get_contents(config('dynamo.modules_links_path'));
+            $modulesContent = str_replace($placeholder, $placeholder."\n".$link, $modulesContent);
+            file_put_contents(config('dynamo.modules_links_path'), $modulesContent);
+
+            $this->info('Complete and run the migration!');
+        } else {
+            $this->info('Complete the migration and get started by linking to:');
+            $this->comment("route('" . config('dynamo.route_prefix') . strtolower($model) . ".index')");
+        }
+
+        if (!is_null($migrationPath)) {
+            exec(
+                config('dynamo.editor_command') . ' ' .
+                escapeshellarg($migrationPath)
+            );
+        }
     }
 
     public function getStubsDirectory()
     {
-        $srcPath = __DIR__.'/../..';
+        $srcPath = __DIR__ . '/../..';
 
-        return $srcPath.'/Console/stubs/';
+        return $srcPath . '/Console/stubs/';
     }
 
     public function writeModelFile($model)
@@ -150,21 +179,21 @@ class DynamoMake extends Command
 
         $modelUses = array_map(function ($value) {
             return "use $value;";
-        },$modelUses);
+        }, $modelUses);
 
         $modelString = str_replace('// use statements', implode("\n", $modelUses), $modelString);
 
         // insert implements
         $modelImplements = config('dynamo.model_implements', []);
 
-        if (! empty($modelImplements)) {
+        if (!empty($modelImplements)) {
             $modelString = str_replace('// implements', 'implements ' . implode(', ', $modelImplements), $modelString);
         }
 
         // insert traits
         $modelTraits = config('dynamo.model_traits', []);
 
-        if (! empty($modelTraits)) {
+        if (!empty($modelTraits)) {
             $modelString = str_replace('// traits', 'use ' . implode(', ', $modelTraits) . ';', $modelString);
         }
 

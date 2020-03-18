@@ -2,12 +2,14 @@
 
 namespace Jzpeepz\Dynamo;
 
+use Illuminate\Support\Str;
+
 class DynamoView
 {
     public static function make($dynamo, $view, $params = [])
     {
         // check for overridden view
-        $viewFolder = strtolower(str_plural($dynamo->getBaseClass()));
+        $viewFolder = strtolower(Str::plural($dynamo->getBaseClass()));
         $shortViewName = str_replace('dynamo::', '', $view);
         $viewName = config('dynamo.view_prefix') . '.' . $viewFolder . '.' . $shortViewName;
 
@@ -15,7 +17,7 @@ class DynamoView
             return view($viewName, $params);
         }
 
-        if (! empty(config('dynamo.view_theme'))) {
+        if (!empty(config('dynamo.view_theme'))) {
             $view = str_replace('::', '::' . config('dynamo.view_theme') . '.', $view);
         }
 

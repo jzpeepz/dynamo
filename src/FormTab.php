@@ -2,6 +2,8 @@
 
 namespace Jzpeepz\Dynamo;
 
+use Illuminate\Support\Str;
+
 class FormTab extends ModuleTab
 {
     public $fields = null;
@@ -10,7 +12,7 @@ class FormTab extends ModuleTab
     public function __construct($name, $options = [])
     {
         $this->name = $name;
-        $this->key = str_slug($name);
+        $this->key = Str::slug($name);
         $this->options = collect();
         $this->fields = collect();
         $this->dynamo = new Dynamo('');

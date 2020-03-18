@@ -90,8 +90,8 @@
                                      <ul class="nav nav-tabs card-header-tabs" id="dynamo-index-nav-tabs" role="tablist">
                                         @foreach ($dynamo->getIndexTabs() as $index => $tab)
                                             <li class="nav-item" id="dynamo-index-tab-margin-bottom">
-                                                <a class="nav-link {{ ($index == 0 && ! request()->has('view')) || (request()->input('view') == str_slug($tab->getName())) ? 'active' : '' }}"
-                                                    href="{{ route($dynamo->getRoute('index'), ['view' => str_slug($tab->getViewName())]) }}" role="tab">{{ $tab->getName() }}
+                                                <a class="nav-link {{ ($index == 0 && ! request()->has('view')) || (request()->input('view') == Str::slug($tab->getName())) ? 'active' : '' }}"
+                                                    href="{{ route($dynamo->getRoute('index'), ['view' => Str::slug($tab->getViewName())]) }}" role="tab">{{ $tab->getName() }}
                                                     @if ($tab->shouldShowCount())
                                                         <span class="round-badge">{{ $dynamo->getIndexItemsQueryBuilder($tab->getViewName())->count() }}</span>
                                                     @endif

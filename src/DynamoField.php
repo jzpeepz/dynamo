@@ -2,6 +2,8 @@
 
 namespace Jzpeepz\Dynamo;
 
+use Illuminate\Support\Str;
+
 class DynamoField
 {
     private $attributes = [];
@@ -99,7 +101,7 @@ class DynamoField
         // check to see if the key ends with '_id' meaning a refence to another model
         $lastThree = substr($key, strlen($key) - 3);
         if ($lastThree == '_id') {
-            $class = '\\App\\' . studly_case(str_replace($lastThree, '', $key));
+            $class = '\\App\\' . Str::studly(str_replace($lastThree, '', $key));
 
             if (class_exists($class)) {
                 $model = $class::find($item->$key);
