@@ -138,7 +138,7 @@ class DynamoMake extends Command
                 "</li>\n";
             $placeholder = "{{-- Dynamo Modules --}}";
             $modulesContent = file_get_contents(config('dynamo.modules_links_path'));
-            $modulesContent = str_replace($placeholder, $placeholder."\n".$link, $modulesContent);
+            $modulesContent = str_replace($placeholder, $link."\n".$placeholder, $modulesContent);
             file_put_contents(config('dynamo.modules_links_path'), $modulesContent);
 
             $this->info('Complete and run the migration!');
