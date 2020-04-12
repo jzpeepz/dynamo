@@ -82,7 +82,14 @@ class DynamoMake extends Command
         // make dynamo controller
         if ($makeController == 'yes') {
             $controllerDirectory = config('dynamo.controller_path') . '/';
+
+            // if the controllerDirectory doesn't exist create it
+            if (!is_dir($controllerDirectory)) {
+                mkdir($controllerDirectory, 0777, true);
+            }
+
             $newControllerFile = $controllerDirectory . $model . 'Controller.php';
+
             if (!file_exists($newControllerFile)) {
                 // pull in controller stub
                 $controllerStub = file_get_contents($stubsDirectory . 'DynamoController.stub');
@@ -137,6 +144,16 @@ class DynamoMake extends Command
                 "    <a class=\"nav-link\" href=\"{{ route('$routeName') }}\">$label</a>\n" .
                 "</li>\n";
             $placeholder = "{{-- Dynamo Modules --}}";
+
+            // if the directory for module links doesn't exist, create it
+            if (!file_exists(config('dynamo.modules_links_path'))) {
+                // get the directory name without the file name
+                $directoryName = preg_replace('~/[^/]*/?$~', '', config('dynamo.modules_links_path'));
+                mkdir($directoryName, 0777, true);
+                file_put_contents(config('dynamo.modules_links_path'), '');
+                
+            }
+
             $modulesContent = file_get_contents(config('dynamo.modules_links_path'));
             $modulesContent = str_replace($placeholder, $link."\n".$placeholder, $modulesContent);
             file_put_contents(config('dynamo.modules_links_path'), $modulesContent);
