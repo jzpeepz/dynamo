@@ -149,9 +149,10 @@ class DynamoMake extends Command
             if (!file_exists(config('dynamo.modules_links_path'))) {
                 // get the directory name without the file name
                 $directoryName = preg_replace('~/[^/]*/?$~', '', config('dynamo.modules_links_path'));
-                mkdir($directoryName, 0777, true);
-                file_put_contents(config('dynamo.modules_links_path'), '');
-                
+                if(!is_dir($directoryName)) {
+                    mkdir($directoryName, 0777, true);
+                }
+                file_put_contents(config('dynamo.modules_links_path'), $placeholder);
             }
 
             $modulesContent = file_get_contents(config('dynamo.modules_links_path'));
