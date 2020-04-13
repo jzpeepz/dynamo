@@ -11,5 +11,7 @@ class $MODEL$ extends Model // implements
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
+    protected $emptyStrings = [];
+
     // methods
 }
