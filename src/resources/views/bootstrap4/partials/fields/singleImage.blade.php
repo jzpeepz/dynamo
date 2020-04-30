@@ -8,9 +8,6 @@
 
         <label for="" title="Position: {{ $field->position }}">
             {{ $field->label }}
-            @if (! empty($field->getOption('help')))
-                ({!! $field->getOption('help') !!})
-            @endif
             @if (! empty($field->getOption('tooltip')))
                 <i id="dont-show-on-mobile-tooltip" style="font-size: 16px; color: black;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
                 title="{!! $field->getOption('tooltip') !!}"></i>
@@ -68,6 +65,10 @@
             @endif
 
         ></gallery-manager>
+
+        @if (! empty($field->getOption('help')))
+        <div class="help-block" style="margin-top: -11px; margin-bottom: 20px;">{!! $field->getOption('help') !!}</div>
+        @endif
 
     </div>
 
