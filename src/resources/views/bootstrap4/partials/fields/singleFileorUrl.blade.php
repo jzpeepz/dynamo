@@ -14,6 +14,10 @@
                  @endif
             </label>
 
+            @if (! empty($field->getOption('help')))
+                <div class="help-block" style="margin-top: -7px;">{!! $field->getOption('help') !!}</div>
+            @endif
+
             <file-or-text :name="'{{ $field->key }}'"
                           :value="'{{ $item->{$field->key} }}'"
                           :type="'{{ empty($mediaItem) ? 'text' : 'file' }}'"
@@ -26,9 +30,5 @@
             ></file-or-text>
 
         </div>
-
-        @if (! empty($field->getOption('help')))
-        <div class="help-block" style="margin-top: -11px; margin-bottom: 20px;">{!! $field->getOption('help') !!}</div>
-        @endif
 
 @endif

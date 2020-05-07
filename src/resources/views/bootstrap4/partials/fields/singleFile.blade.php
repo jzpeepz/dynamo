@@ -14,6 +14,10 @@
             @endif
         </label>
 
+        @if (! empty($field->getOption('help')))
+            <div class="help-block" style="margin-top: -7px;">{!! $field->getOption('help') !!}</div>
+        @endif
+
         <gallery-manager
             :name="'{{ $field->key }}'"
             :media="{{ $mediaItems->toJson() }}"
@@ -22,9 +26,5 @@
         ></gallery-manager>
 
     </div>
-
-    @if (! empty($field->getOption('help')))
-    <div class="help-block" style="margin-top: -11px; margin-bottom: 20px;">{!! $field->getOption('help') !!}</div>
-    @endif
 
 @endif

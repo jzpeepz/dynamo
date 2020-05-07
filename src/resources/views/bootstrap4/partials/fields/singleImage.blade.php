@@ -13,6 +13,9 @@
                 title="{!! $field->getOption('tooltip') !!}"></i>
             @endif
         </label>
+        @if (! empty($field->getOption('help')))
+            <div class="help-block" style="margin-top: -7px;">{!! $field->getOption('help') !!}</div>
+        @endif
 
         <gallery-manager
             :name="'{{ $field->key }}'"
@@ -65,10 +68,6 @@
             @endif
 
         ></gallery-manager>
-
-        @if (! empty($field->getOption('help')))
-        <div class="help-block" style="margin-top: -11px; margin-bottom: 20px;">{!! $field->getOption('help') !!}</div>
-        @endif
 
     </div>
 
