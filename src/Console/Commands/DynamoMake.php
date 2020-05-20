@@ -59,9 +59,13 @@ class DynamoMake extends Command
             $this->call('make:migration', [
                 'name' => $migrationShortName, '--create' => $table
             ]);
-            $migrationPaths = glob(base_path("database/migrations/*_$migrationShortName.php"));
+            $migrationPaths = glob(base_path('database/migrations/' . date('Y_m_d') . "_*_$migrationShortName.php"), GLOB_NOSORT);
             if (isset($migrationPaths[0])) {
                 $migrationPath = $migrationPaths[0];
+                // add softDeletes() to the new migration
+                $migrationString = file_get_contents($migrationPath);
+                $migrationString = str_replace('$table->timestamps();', '$table->timestamps();' . "\n            " . '$table->softDeletes();', $migrationString);
+                file_put_contents($migrationPath, $migrationString);
             }
         }
 
@@ -143,20 +147,20 @@ class DynamoMake extends Command
             $link = "<li class=\"nav-item {{ Request::is(route('$routeName').'*')  ? 'active' : null }}\">\n" .
                 "    <a class=\"nav-link\" href=\"{{ route('$routeName') }}\">$label</a>\n" .
                 "</li>\n";
-            $placeholder = "{{-- Dynamo Modules --}}";
+            $placeholder = '{{-- Dynamo Modules --}}';
 
             // if the directory for module links doesn't exist, create it
             if (!file_exists(config('dynamo.modules_links_path'))) {
                 // get the directory name without the file name
                 $directoryName = preg_replace('~/[^/]*/?$~', '', config('dynamo.modules_links_path'));
-                if(!is_dir($directoryName)) {
+                if (!is_dir($directoryName)) {
                     mkdir($directoryName, 0777, true);
                 }
                 file_put_contents(config('dynamo.modules_links_path'), $placeholder);
             }
 
             $modulesContent = file_get_contents(config('dynamo.modules_links_path'));
-            $modulesContent = str_replace($placeholder, $link."\n".$placeholder, $modulesContent);
+            $modulesContent = str_replace($placeholder, $link . "\n" . $placeholder, $modulesContent);
             file_put_contents(config('dynamo.modules_links_path'), $modulesContent);
 
             $this->info('Complete and run the migration!');
@@ -212,7 +216,11 @@ class DynamoMake extends Command
         $modelTraits = config('dynamo.model_traits', []);
 
         if (!empty($modelTraits)) {
-            $modelString = str_replace('// traits', 'use ' . implode(', ', $modelTraits) . ';', $modelString);
+            $traitsString = 'use ' . implode(', ', $modelTraits);
+            if ($traitsString[strlen($traitsString) - 1] != '}') {
+                $traitsString .= ';';
+            }
+            $modelString = str_replace('// traits', $traitsString, $modelString);
         }
 
         // insert custom methods

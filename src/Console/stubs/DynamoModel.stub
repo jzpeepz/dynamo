@@ -9,9 +9,7 @@ class $MODEL$ extends Model // implements
 {
     // traits
 
-    protected $guarded = ['id', 'created_at', 'updated_at'];
-
-    protected $emptyStrings = [];
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     // methods
 }
