@@ -101,9 +101,20 @@ class Dynamo
         return $item;
     }
 
+    public function alias($name)
+    {
+        $this->alias = $name;
+
+        return $this;
+    }
+
     public function getName()
     {
         $baseClassName = $this->getBaseClass();
+
+        if (!empty($this->alias)) {
+            return $this->alias;
+        }
 
         return $this->makeLabel(Str::snake($baseClassName));
     }
