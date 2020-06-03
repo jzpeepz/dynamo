@@ -4,7 +4,7 @@
         $mediaItems = $item->getMedia($field->key);
     @endphp
 
-    <div class="form-group form-group-gallery">
+    <div class="form-group form-group-gallery form-group-{{ $field->key }}">
 
         <label for="" title="Position: {{ $field->position }}">
             {{ $field->label }}

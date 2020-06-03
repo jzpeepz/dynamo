@@ -1,6 +1,6 @@
 @if ($display)
 
-    <div class="form-group">
+    <div class="form-group form-group-{{ $field->key }}">
         <label for="" title="Position: {{ $field->position }}">
             {{ $field->label }}
             @if (! empty($field->getOption('tooltip')))

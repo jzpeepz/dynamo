@@ -1,6 +1,6 @@
 @if ($display)
 
-<div class="form-group">
+<div class="form-group form-group-{{ $field->key }}">
     <div class="checkbox">
         <label title="Position: {{ $field->position }}">
             <input type="hidden" name="{{ $field->key }}" value="0">

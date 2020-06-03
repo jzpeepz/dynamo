@@ -4,7 +4,7 @@
     $multiple = ! empty($field->getOption('multiple'));
     ?>
 
-    <div class="form-group">
+    <div class="form-group form-group-{{ $field->key }}">
         <label for="" title="Position: {{ $field->position }}">{{ $field->label }}</label>
         @if (! empty($field->getOption('help')))
             <p class="help-block">{!! $field->getOption('help') !!}</p>
