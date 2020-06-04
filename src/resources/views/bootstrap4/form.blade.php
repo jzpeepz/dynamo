@@ -104,7 +104,7 @@
                                 {{ $dynamo->getSaveItemText() }}
                             @endif
                             </button>
-                            <a href="{{ route($dynamo->getRoute('index')) }}" class="btn">Cancel</a>
+                            <a href="{{ route($dynamo->getRoute('index'), $dynamo->getRouteParameters('index')) }}" class="btn">Cancel</a>
 
                             {!! Form::close() !!}
 

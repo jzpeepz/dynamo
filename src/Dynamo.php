@@ -40,6 +40,7 @@ class Dynamo
     public static $globalHandlers = null;
     private $modifier = null;
     private $allInputsDisabled = false;
+    private $routeParameters = [];
 
     public function __construct($class)
     {
@@ -127,6 +128,17 @@ class Dynamo
     public function getRoute($action)
     {
         return config('dynamo.route_prefix') . strtolower($this->getBaseClass()) . '.' . $action;
+    }
+
+    public function getRouteParameters($action)
+    {
+        return isset($this->routeParameters[$action]) ? $this->routeParameters[$action] : null;
+    }
+
+    public function setRouteParameters($action, $parameters = [])
+    {
+        $this->routeParameters[$action] = $parameters;
+        return $this;
     }
 
     private function makeLabel($key)
