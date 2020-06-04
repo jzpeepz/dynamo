@@ -4,8 +4,8 @@ namespace Jzpeepz\Dynamo;
 
 use Collective\Html\FormFacade as Form;
 
-class Filter {
-
+class Filter
+{
     private $key;
 
     private $closure;
@@ -46,7 +46,18 @@ class Filter {
 
     public function render()
     {
-        return '<div class="form-group mb-3 mr-2"><label>' . ucwords(str_replace('_', ' ', $this->key)) . '</label> ' . Form::select($this->key, $this->options, request()->has($this->key) ? request()->input($this->key) : null, $this->parameters) . '</div>';
+        $default = isset($this->parameters['default']) ? $this->parameters['default'] : null;
+        return '<div class="form-group mb-3 mr-2"><label>' . $this->getLabel() . '</label> ' . Form::select($this->key, $this->options, request()->has($this->key) ? request()->input($this->key) : $default, $this->parameters) . '</div>';
     }
 
+    public function getLabel()
+    {
+        $label = ucwords(str_replace('_', ' ', $this->key));
+
+        if (isset($this->parameters['label'])) {
+            $label = $this->parameters['label'];
+        }
+
+        return $label;
+    }
 }
