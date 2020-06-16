@@ -3,9 +3,9 @@
 @section('title', $dynamo->getName() . ' Manager')
 
 @section(config('dynamo.target_blade_section', 'content'))
-    <div class="container-fluid pt-4">
+    <div class="container-fluid pt-4 {{ config('pilot.backend_side_bar_layout') ? 'pl-lg-0 pr-lg-0' : ''}}">
         <div class="row justify-content-center">
-            <div class="col-12 col-lg-11 col-xl-10">
+            <div class="col-12 col-lg-11 col-xl-10 {{ config('pilot.backend_side_bar_layout') ? 'pl-lg-0 pr-lg-0' : ''}}">
                 <div class="card">
                     {{--*****************************************************************
                         *                         START HEADER BLOCK                    *
