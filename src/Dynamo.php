@@ -76,7 +76,7 @@ class Dynamo
 
     public static function make($class)
     {
-        return new Dynamo($class);
+        return new static($class);
     }
 
     public function store($item)
