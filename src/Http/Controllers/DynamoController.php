@@ -3,8 +3,6 @@
 namespace Jzpeepz\Dynamo\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Jzpeepz\Dynamo\DynamoView;
 use Illuminate\Database\QueryException;
@@ -184,5 +182,31 @@ class DynamoController extends Controller
         session(['alert-warning' => $this->dynamo->getName() . ' was deleted successfully!']);
 
         return redirect()->route($this->dynamo->getRoute('index'));
+    }
+
+    public function reorder(Request $request)
+    {
+        $ids = $request->ids;
+        $data = [];
+        $position = 0;
+        $section = 0;
+
+        foreach ($ids as $index => $id) {
+            if ($id == '---') {
+                $section++;
+                $position = ($section * 100);
+            } else {
+                $data[$id] = $position;
+                $position++;
+            }
+        }
+
+        $dynamo = $this->getDynamo();
+        $className = $dynamo->class;
+        foreach ($data as $id => $position) {
+            $className::where('id', $id)->update(['position' => $position]);
+        }
+
+        return $data;
     }
 }

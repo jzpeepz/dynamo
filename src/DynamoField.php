@@ -84,9 +84,9 @@ class DynamoField
         $this->attributes['options'][$key] = $value;
     }
 
-    public function hasOption()
+    public function hasOption($key)
     {
-        return !$this->options[$key];
+        return isset($this->options[$key]);
     }
 
     public function getValue($item)

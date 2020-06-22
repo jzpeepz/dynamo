@@ -41,6 +41,8 @@ class Dynamo
     private $modifier = null;
     private $allInputsDisabled = false;
     private $routeParameters = [];
+    private $indexRows = null;
+    private $sortable = false;
 
     public function __construct($class)
     {
@@ -60,6 +62,7 @@ class Dynamo
         $this->actionButtons = collect();
         $this->formHeaderButtons = collect();
         $this->formFooterButtons = collect();
+        $this->indexRows = collect();
     }
 
     public function __call($name, $arguments)
@@ -146,17 +149,33 @@ class Dynamo
         return ucwords(str_replace(['_', '-'], ' ', $key));
     }
 
-    public function addIndex($key, $label = null, $formatCallable = null)
+    public function addIndex($key, $label = null, $formatCallable = null, $options = [], $type = 'push')
     {
         $this->removeIndex($key);
 
-        $this->indexes->push(DynamoField::make([
+        $this->indexes->$type(DynamoField::make([
             'key' => $key,
             'label' => empty($label) ? $this->makeLabel($key) : $label,
             'formatCallable' => $formatCallable,
+            'options' => $options
         ]));
 
         return $this;
+    }
+
+    public function prependIndex($key, $label = null, $formatCallable = null, $options = [])
+    {
+        return $this->addIndex($key, $label, $formatCallable, $options, 'prepend');
+    }
+
+    public function addIndexImage($key, $label = null, $size = 'thumb', $options = [])
+    {
+        return $this->addIndex($key, $label, function ($item) use ($key, $size) {
+            if (empty($item->$key)) {
+                return null;
+            }
+            return '<img src="' . $item->{ $key . '__' . $size} . '" style="width: 100px;">';
+        }, $options);
     }
 
     public function addIndexes()
@@ -1110,5 +1129,60 @@ class Dynamo
         }
 
         return $this;
+    }
+
+    public function addIndexRow(IndexRow $row)
+    {
+        $this->indexRows->push($row);
+
+        return $this;
+    }
+
+    public function getIndexRows()
+    {
+        return $this->indexRows;
+    }
+
+    public function shiftIndexRow($type = null)
+    {
+        foreach ($this->indexRows as $key => $row) {
+            if ($row->isType($type)) {
+                return $this->indexRows->pull($key);
+            }
+        }
+
+        return null;
+    }
+
+    public function sortable($column = 'position', $sort = 'asc')
+    {
+        $this->sortable = true;
+        $this->indexOrderBy($column, $sort);
+        $this->prependIndex('sort', 'Sort', function () {
+            return '<div class="dynamo-index-drag-handle" style="cursor: grab; padding-left: 5px;"><i class="fas fa-bars fa-2x"></i></div>';
+        }, ['style' => 'width: 50px;']);
+        return $this;
+    }
+
+    public function isSortable()
+    {
+        return $this->sortable;
+    }
+
+    public function addIndexDivider($label = '', $id = '---')
+    {
+        return $this->addIndexRow(IndexRow::make(function () use ($id, $label) {
+            return sprintf('<tr class="dynamo-index-row" data-id="%s">
+                <td colspan="100" style="background-color: #3a3a3a; color: #fff;">
+                    <div style="display: flex; justify-content: flex-start; align-items: center;">
+                        <div class="dynamo-index-drag-handle" style="display: flex; align-items: center; width: 100%%; padding: 3px 5px; cursor: grab;">
+                            <i class="fas fa-bars fa-2x"></i>
+                            <span style="margin-left: 15px;">%s</span>
+                            <i class="fas fa-arrow-up" style="margin-left: 15px;"></i>
+                        </div>
+                    </div>
+                </td>
+            </tr>', $id, $label);
+        })->type('divider'));
     }
 }

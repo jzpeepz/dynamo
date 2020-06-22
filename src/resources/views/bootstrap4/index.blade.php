@@ -141,13 +141,19 @@
                                     <thead>
                                         <tr>
                                             @foreach ($dynamo->getIndexes() as $index)
-                                                <th>{{ $index->label }}</th>
+                                                <th style="{{ $index->hasOption('style') ? $index->getOption('style') : '' }}">{{ $index->label }}</th>
                                             @endforeach
                                             <th class="dynamo-width-of-action-column">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="dynamo-index-body">
+                                        <?php $lastPosition = 0; ?>
                                         @foreach ($items as $item)
+                                            @if ($dynamo->isSortable() && $item->position - $lastPosition > 2)
+                                                @if ($indexRow = $dynamo->shiftIndexRow('divider'))
+                                                    {!! $indexRow->render($item) !!}
+                                                @endif
+                                            @endif
                                             <tr class="dynamo-index-row" data-id="{{ $item->id }}">
                                                 @foreach ($dynamo->getIndexes() as $index)
                                                     <td>{!! $index->getValue($item) !!}</td>
@@ -159,7 +165,11 @@
                                                     @endforeach
                                                 </td>
                                             </tr>
+                                            <?php $lastPosition = $item->position; ?>
                                         @endforeach
+                                        @while ($indexRow = $dynamo->shiftIndexRow('divider'))
+                                            {!! $indexRow->render($item) !!}
+                                        @endwhile
                                     </tbody>
                                 </table>
                             </div>
@@ -325,5 +335,26 @@
             categoryCheckbox.checked = false;
         })
     })
+
+    // sorting code
+    window.addEventListener('load', function (event) {
+        var handles = document.querySelectorAll('.dynamo-index-drag-handle');
+        if (handles.length > 0) {
+            new Sortable(document.querySelector('#dynamo-index-body'), {
+                handle: '.dynamo-index-drag-handle',
+                animation: 150,
+                onUpdate: function (evt) {
+                    var ids = $('.dynamo-index-row').map(function () {
+                        return $(this).attr("data-id");
+                    });
+                    console.log(ids.toArray());
+                    const token = document.querySelector('meta[name=csrf-token]').getAttribute('content');
+                    $.post('/pilot/{{ strtolower($dynamo->getBaseClass()) }}/reorder', { ids: ids.toArray(), _token: token },function (data) {
+                        console.log(data);
+                    });
+                }
+            });
+        }
+    });
     </script>
 @endsection

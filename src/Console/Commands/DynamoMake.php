@@ -116,7 +116,8 @@ class DynamoMake extends Command
         // insert routes
         if ($makeRoute == 'yes') {
             $resource = strtolower($model);
-            $route = "Route::resource('$resource', '" . config('dynamo.controller_namespace') . "\\{$model}Controller');";
+            $route = "Route::post('$resource/reorder', '" . config('dynamo.controller_namespace') . "\\{$model}Controller@reorder')->name('$resource.reorder');";
+            $route .= "\nRoute::resource('$resource', '" . config('dynamo.controller_namespace') . "\\{$model}Controller');";
 
             // get routes file source
             $routesPath = base_path('routes/web.php');
