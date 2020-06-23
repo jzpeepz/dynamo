@@ -149,10 +149,13 @@
                                     <tbody id="dynamo-index-body">
                                         <?php $lastPosition = 0; ?>
                                         @foreach ($items as $item)
-                                            @if ($dynamo->isSortable() && $item->position - $lastPosition > 2)
-                                                @if ($indexRow = $dynamo->shiftIndexRow('divider'))
-                                                    {!! $indexRow->render($item) !!}
-                                                @endif
+                                            @if ($dynamo->isSortable() && $item->position > 0 && $item->position % 100 == 0)
+                                                <?php $dividerCount = ceil(($item->position - $lastPosition) / 100); ?>
+                                                @for ($i = 0; $i < $dividerCount; $i++)
+                                                    @if ($indexRow = $dynamo->shiftIndexRow('divider'))
+                                                        {!! $indexRow->render($item) !!}
+                                                    @endif
+                                                @endfor
                                             @endif
                                             <tr class="dynamo-index-row" data-id="{{ $item->id }}">
                                                 @foreach ($dynamo->getIndexes() as $index)
