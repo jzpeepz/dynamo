@@ -43,6 +43,8 @@ class Dynamo
     private $routeParameters = [];
     private $indexRows = null;
     private $sortable = false;
+    private $indexFilters = null;
+    private $viewHooks = null;
 
     public function __construct($class)
     {
@@ -63,6 +65,8 @@ class Dynamo
         $this->formHeaderButtons = collect();
         $this->formFooterButtons = collect();
         $this->indexRows = collect();
+        $this->indexFilters = collect();
+        $this->viewHooks = collect();
     }
 
     public function __call($name, $arguments)
@@ -439,6 +443,11 @@ class Dynamo
 
         if (!empty($tab)) {
             $query = call_user_func($tab->queryFilter, $query);
+        }
+
+        // apply index filters
+        foreach ($this->indexFilters as $filter) {
+            $query = call_user_func($filter, $query);
         }
 
         return $query;
@@ -1184,5 +1193,44 @@ class Dynamo
                 </td>
             </tr>', $id, $label);
         })->type('divider'));
+    }
+
+    public function addIndexFilter(callable $filter)
+    {
+        $this->indexFilters->push($filter);
+        return $this;
+    }
+
+    public function viewHook(string $key, callable $hook)
+    {
+        $hooks = $this->viewHooks->get($key);
+
+        // make sure we have a collection. if not, make it one
+        if (!method_exists($hooks, 'put')) {
+            $hooks = collect();
+        }
+
+        // add the new hook to the "stack" of hooks
+        $hooks->push($hook);
+
+        // put the updated "stack" of hooks back into the master hooks collection
+        $this->viewHooks->put($key, $hooks);
+
+        return $this;
+    }
+
+    public function callViewHook(string $key, $item)
+    {
+        $hooks = $this->viewHooks->get($key);
+
+        // make sure we have a collection. if not, make it one
+        if (!method_exists($hooks, 'put')) {
+            $hooks = collect();
+        }
+
+        // call all hooks within the "stack" of hooks and implode the results
+        return $hooks->map(function ($hook) use ($item) {
+            return call_user_func($hook, $this, $item);
+        })->implode('');
     }
 }

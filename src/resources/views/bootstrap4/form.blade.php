@@ -29,6 +29,8 @@
 
                         @include('dynamo::partials.alerts')
 
+                        {!! $dynamo->callViewHook('form_before', $item) !!}
+
                         {{--***************************************
                             *     If the user uses Formtabs       *
                             *      Run this block to render       *
@@ -127,9 +129,7 @@
                             </div>
 
 
-                        {{-- @if (class_exists('\Uploader'))
-                            {!! Uploader::helper() !!}
-                        @endif --}}
+                            {!! $dynamo->callViewHook('form_after', $item) !!}
                     </div>
                 </div>
             </div>

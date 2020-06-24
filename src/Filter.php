@@ -14,6 +14,15 @@ class Filter
 
     private $parameters;
 
+    /**
+     * __construct
+     *
+     * @param string $key
+     * @param array|object $options
+     * @param callable $closure
+     * @param mixed array
+     * @return Filter
+     */
     public function __construct($key, $options, $closure, $parameters = [])
     {
         $this->key = $key;
@@ -29,6 +38,15 @@ class Filter
         $this->parameters = array_merge($defaults, $parameters);
     }
 
+    /**
+     * make
+     *
+     * @param string $key
+     * @param array|object $options
+     * @param callable $closure
+     * @param array $parameters
+     * @return Filter
+     */
     public static function make($key, $options, $closure, $parameters = [])
     {
         return new static($key, $options, $closure, $parameters);

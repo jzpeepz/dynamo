@@ -157,6 +157,7 @@
                                                     @endif
                                                 @endfor
                                             @endif
+                                            {!! $dynamo->callViewHook('index_row_before', $item) !!}
                                             <tr class="dynamo-index-row" data-id="{{ $item->id }}">
                                                 @foreach ($dynamo->getIndexes() as $index)
                                                     <td>{!! $index->getValue($item) !!}</td>
@@ -168,6 +169,7 @@
                                                     @endforeach
                                                 </td>
                                             </tr>
+                                            {!! $dynamo->callViewHook('index_row_after', $item) !!}
                                             <?php $lastPosition = $item->position; ?>
                                         @endforeach
                                         @while ($indexRow = $dynamo->shiftIndexRow('divider'))
