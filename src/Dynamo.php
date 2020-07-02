@@ -137,6 +137,11 @@ class Dynamo
         return config('dynamo.route_prefix') . strtolower($this->getBaseClass()) . '.' . $action;
     }
 
+    public function getRouteUrl($action)
+    {
+        return redirect()->route($this->getRoute($action), $this->getRouteParameters($action));
+    }
+
     public function getRouteParameters($action)
     {
         return isset($this->routeParameters[$action]) ? $this->routeParameters[$action] : null;

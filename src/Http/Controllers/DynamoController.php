@@ -181,7 +181,7 @@ class DynamoController extends Controller
 
         session(['alert-warning' => $this->dynamo->getName() . ' was deleted successfully!']);
 
-        return redirect()->route($this->dynamo->getRoute('index'));
+        return $this->dynamo->getRouteUrl('index');
     }
 
     public function reorder(Request $request)
