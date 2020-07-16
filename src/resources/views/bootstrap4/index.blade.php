@@ -37,6 +37,7 @@
                         *     END HEADER BLOCK    *
                         *************************** --}}
 
+                    {!! $dynamo->callViewHook('index_top', $item) !!}
 
                     {{--**************************************
                         *       START SEARCH BAR BLOCK       *
