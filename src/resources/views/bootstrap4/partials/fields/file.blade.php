@@ -1,5 +1,8 @@
 @if ($display)
 
+{!! $field->renderBefore() !!}
+<div class="dynamo-field-root {{ $field->getOption('root-class') }}">
+
     <div class="form-group form-group-{{ $field->key }}">
         <label for="" title="Position: {{ $field->position }}">
             {{ $field->label }}
@@ -16,5 +19,8 @@
             <p class="help-block">Current: <a href="{{ $item->{$field->key} }}" target="_blank">{{ $item->{$field->key} }}</a></p>
         @endif
     </div>
+
+</div>
+{!! $field->renderAfter() !!}
 
 @endif

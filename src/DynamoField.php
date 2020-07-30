@@ -171,4 +171,14 @@ class DynamoField
 
         return isset($attributes['required']) && $attributes['required'] == true;
     }
+
+    public function renderBefore()
+    {
+        return $this->getOption('before');
+    }
+
+    public function renderAfter()
+    {
+        return $this->getOption('after');
+    }
 }

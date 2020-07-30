@@ -1,5 +1,8 @@
 @if ($display)
 
+{!! $field->renderBefore() !!}
+<div class="dynamo-field-root {{ $field->getOption('root-class') }}">
+
     <div class="form-group form-group-{{ $field->key }}">
         <label for="" title="Position: {{ $field->position }}">{{ $field->label }}</label>
         @if (! empty($field->getOption('help')))
@@ -11,5 +14,8 @@
         @endif
         {!! Form::password($field->key, ['class' => 'form-control '.$field->getOption('class'), 'autocomplete' => 'new-password']) !!}
     </div>
+
+</div>
+{!! $field->renderAfter() !!}
 
 @endif

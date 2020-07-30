@@ -4,6 +4,9 @@
         $mediaItem = $item->getFirstMedia($field->key);
     @endphp
 
+    {!! $field->renderBefore() !!}
+    <div class="dynamo-field-root {{ $field->getOption('root-class') }}">
+
         <div class="form-group form-group-{{ $field->key }}">
 
             <label for="" title="Position: {{ $field->position }}">
@@ -30,5 +33,8 @@
             ></file-or-text>
 
         </div>
+
+    </div>
+    {!! $field->renderAfter() !!}
 
 @endif
