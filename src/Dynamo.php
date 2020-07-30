@@ -1224,7 +1224,7 @@ class Dynamo
         return $this;
     }
 
-    public function callViewHook(string $key, $item)
+    public function callViewHook(string $key, $item = null)
     {
         $hooks = $this->viewHooks->get($key);
 
