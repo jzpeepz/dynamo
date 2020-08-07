@@ -164,10 +164,12 @@
                                                     <td>{!! $index->getValue($item) !!}</td>
                                                 @endforeach
                                                 <td class="dynamo-width-of-action-row">
-                                                    <a href="{{ route($dynamo->getRoute('edit'), $item->id) }}" style="padding: 0px !important;" class="btn btn-link btn-sm">Edit</a>
-                                                    @foreach ($dynamo->getActionButtons() as $button)
-                                                        {!! call_user_func($button, $item) !!}
-                                                    @endforeach
+                                                    <div style="display: flex; gap: 5px;">
+                                                        <a href="{{ route($dynamo->getRoute('edit'), $item->id) }}" style="padding: 0px !important;" class="btn btn-link btn-sm">Edit</a>
+                                                        @foreach ($dynamo->getActionButtons() as $button)
+                                                            {!! call_user_func($button, $item) !!}
+                                                        @endforeach
+                                                    </div>
                                                 </td>
                                             </tr>
                                             {!! $dynamo->callViewHook('index_row_after', $item) !!}
