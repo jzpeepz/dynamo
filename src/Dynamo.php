@@ -14,12 +14,23 @@ class Dynamo
     private $indexOrderBy = null;
     private $paginate = 200;
     private $searchable = null;
+    private $searchOptions = null;
     private $deleteHidden = true;
     private $addHidden = true;
     private $currentGroup = null;
     private $groupLabels = [];
     private $position = 10;
     private $render = true;
+    private $indexTabs = null;
+    private $indexButtons = null;
+    private $indexPanelTitleText = null;
+    private $formPanelTitleText = null;
+    private $saveItemText = null;
+    private $addItemText = null;
+    private $routeParameters = [];
+    private $ignoredScopes = null;
+    private $indexFilters = null;
+    private $handlers = null;
 
     public function __construct($class)
     {
@@ -29,6 +40,11 @@ class Dynamo
         $this->fields = collect();
         $this->indexOrderBy = collect();
         $this->searchable = collect();
+        $this->searchOptions = collect();
+        $this->indexTabs = collect();
+        $this->indexButtons = collect();
+        $this->indexFilters = collect();
+        $this->handlers = collect();
     }
 
     public function __call($name, $arguments)
@@ -52,7 +68,12 @@ class Dynamo
         $data = request()->all();
 
         // fill and save so that we have an id for saving uploaded files
-        if (! $item->exists) {
+        if (!$item->exists) {
+            if (property_exists($item, 'keyFields')) {
+                foreach ($item->keyFields as $field) {
+                    $item->$field = $data[$field];
+                }
+            }
             $item->save();
         }
 
@@ -80,6 +101,22 @@ class Dynamo
     public function getRoute($action)
     {
         return config('dynamo.route_prefix') . strtolower($this->getBaseClass()) . '.' . $action;
+    }
+
+    public function getRouteUrl($action)
+    {
+        return redirect()->route($this->getRoute($action), $this->getRouteParameters($action));
+    }
+
+    public function getRouteParameters($action)
+    {
+        return isset($this->routeParameters[$action]) ? $this->routeParameters[$action] : null;
+    }
+
+    public function setRouteParameters($action, $parameters = [])
+    {
+        $this->routeParameters[$action] = $parameters;
+        return $this;
     }
 
     private function makeLabel($key)
@@ -235,28 +272,95 @@ class Dynamo
         return $this;
     }
 
-    public function getIndexItems()
+    public function getIndexItemsQueryBuilder($view = null)
     {
+        
         $className = $this->class;
 
-        $query = $className::whereRaw('1=1');
+        // $query = $className::withoutGlobalScopes($this->getIgnoredScopes());
+        $query = $className::query();
+
+        $query = $this->executeViewFilter($query, $view);
 
         // do any searching
-        if (! $this->searchable->isEmpty() && request()->has('q')) {
-            $query = $query->where(DB::raw('CONCAT('.$this->getSearchableKeys()->implode(", ' ', ").')'), 'like', '%'.request()->input('q').'%');
+        if (!$this->searchable->isEmpty() && request()->has('q')) {
+            $query = $query->where(
+                DB::raw('CONCAT(' . $this->getSearchableKeys()->implode(", ' ', ") . ')'),
+                'like',
+                '%' . request()->input('q') . '%'
+            );
         }
 
-        foreach($this->getIndexOrderBy() as $orderBy) {
+        // foreach ($this->filters as $filter) {
+        //     // apply filters
+        //     $query = $filter->modifyQuery($query);
+        // }
+
+        foreach ($this->getIndexOrderBy() as $orderBy) {
             $query = $query->orderBy($orderBy['column'], $orderBy['sort']);
         }
 
-        if (! empty($this->paginate)) {
+        return $query;
+    }
+
+    public function getIndexItems()
+    {
+        $query = $this->getIndexItemsQueryBuilder();
+
+        if (!empty($this->paginate)) {
             $items = $query->paginate($this->paginate);
         } else {
             $items = $query->get();
         }
 
         return $items;
+    }
+
+    public function executeViewFilter($query, $view = null)
+    {
+        if (empty($view)) {
+            $view = request()->input('view');
+        }
+       
+        $tab = $this->getIndexTab($view);
+
+        if (!empty($tab)) {
+            $query = call_user_func($tab->queryFilter, $query);
+        }
+
+        // apply index filters
+        foreach ($this->indexFilters as $filter) {
+            $query = call_user_func($filter, $query);
+        }
+
+        return $query;
+    }
+
+    public function addIndexFilter(callable $filter)
+    {
+        $this->indexFilters->push($filter);
+        return $this;
+    }
+
+    public function ignoredScopes(array $scopes = [])
+    {
+        if (!is_array($scopes)) {
+            $scopes = [$scopes];
+        }
+
+        $this->ignoredScopes = $scopes;
+
+        return $this;
+    }
+
+    public function applyScopes()
+    {
+        return $this->ignoredScopes();
+    }
+
+    public function getIgnoredScopes()
+    {
+        return $this->ignoredScopes;
     }
 
     public function handleSpecialFields($item, $data = [])
@@ -306,6 +410,30 @@ class Dynamo
         });
     }
 
+    public function searchOptions($options = [])
+    {
+        $this->searchOptions = collect($options);
+        return $this;
+    }
+
+    public function getSearchOptions()
+    {
+        return $this->searchOptions;
+    }
+
+    public function getSearchOptionsString()
+    {
+        //take this dynamo's searchOptions array and convert it into a string with spaces inbetween each options
+        $arr = [];
+        $options = $this->searchOptions;
+
+        foreach ($options as $key => $value) {
+            $arr[] = "$key = \"$value\"";
+        }
+
+        return implode(' ', $arr);
+    }
+
     public function searchable($key, $type = null, $options = [])
     {
         $label = isset($options['label']) ? $options['label'] : null;
@@ -317,6 +445,28 @@ class Dynamo
             'label' => empty($label) ? $this->makeLabel($key) : $label,
             'options' => $options,
         ]));
+
+        return $this;
+    }
+
+    public function hasIndexTabs()
+    {
+        return !$this->indexTabs->isEmpty();
+    }
+
+    public function getIndexTabs()
+    {
+        return $this->indexTabs;
+    }
+
+    public function getIndexTab($key)
+    {
+        return $this->indexTabs->where('key', $key)->first();
+    }
+
+    public function indexTab(IndexTab $indexTab)
+    {
+        $this->indexTabs->push($indexTab);
 
         return $this;
     }
@@ -357,6 +507,94 @@ class Dynamo
     public function addVisible()
     {
         return $this->addHidden;
+    }
+
+    public function addIndexButton(\Closure $button)
+    {
+        $this->indexButtons->push($button);
+
+        return $this;
+    }
+
+    public function getIndexButtons()
+    {
+        return $this->indexButtons;
+    }
+
+    public function hasIndexPanelTitleOverride()
+    {
+        return isset($this->indexPanelTitleText);
+    }
+
+    public function setIndexPanelTitle($value)
+    {
+        if (is_callable($value)) {
+            $this->indexPanelTitleText = call_user_func($value);
+        } else {
+            $this->indexPanelTitleText = $value;
+        }
+
+        return $this;
+    }
+
+    public function getIndexPanelTitleOverride()
+    {
+        return $this->indexPanelTitleText;
+    }
+
+    public function hasFormPanelTitleOverride()
+    {
+        return isset($this->formPanelTitleText);
+    }
+
+    public function setFormPanelTitle($value)
+    {
+        if (is_callable($value)) {
+            $this->formPanelTitleText = call_user_func($value);
+        } else {
+            $this->formPanelTitleText = $value;
+        }
+
+        return $this;
+    }
+
+    public function getFormPanelTitleOverride()
+    {
+        return $this->formPanelTitleText;
+    }
+
+    public function hasSaveItemTextChange()
+    {
+        return isset($this->saveItemText);
+    }
+
+    public function setSaveItemText($value)
+    {
+        $this->saveItemText = $value;
+
+        return $this;
+    }
+
+    public function getSaveItemText()
+    {
+        return $this->saveItemText;
+    }
+
+    public function hasAddItemTextChange()
+    {
+        return isset($this->addItemText);
+    }
+
+    public function setAddItemText($value)
+    {
+        $this->addItemText = $value;
+
+        return $this;
+    }
+
+    public function getAddItemText()
+    {
+        return $this->addItemText;
     }
 
     public function setGroup($name)
@@ -417,4 +655,50 @@ class Dynamo
         return $this->hasGroupLabel($group) ? $this->groupLabels[$group] : null;
     }
 
+    public function hasManySimple($key, $options = [])
+    {
+        $modelClass = '\\App\\' . str_singular(studly_case($key));
+
+        $options['modelClass'] = isset($options['modelClass']) ? $options['modelClass'] : $modelClass;
+
+        $options['nameField'] = isset($options['nameField']) ? $options['nameField'] : 'name';
+
+        $options['options'] = isset($options['options']) ? $options['options'] : $options['modelClass']::orderBy($options['nameField'])->lists($options['nameField'], 'id');
+
+        $options['class'] = isset($options['class']) ? $options['class'] : config('dynamo.default_has_many_class');
+
+        return $this->addField($key, 'hasMany', $options);
+    }
+
+    public function addHandler($field, $closure)
+    {
+        $this->handlers->put($field, $closure);
+
+        return $this;
+    }
+
+    public function getHandlers()
+    {
+        return $this->handlers;
+    }
+
+    public static function getGlobalHandlers()
+    {
+        if (empty(static::$globalHandlers)) {
+            return collect();
+        }
+
+        return static::$globalHandlers;
+    }
+
+    public function getFieldTypeByKey($key)
+    {
+        foreach ($this->fields as $field) {
+            if ($field->key == $key) {
+                return $field->type;
+            }
+        }
+
+        return null;
+    }
 }

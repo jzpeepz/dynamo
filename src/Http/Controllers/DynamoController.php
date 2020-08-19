@@ -41,6 +41,8 @@ class DynamoController extends Controller
         $formOptions = [
             'route' => $this->dynamo->getRoute('store'),
             'files' => true,
+            'autocomplete' => 'off',
+            'class' => 'mb-0',
         ];
 
         return DynamoView::make($this->dynamo, 'dynamo::form', compact('item', 'formOptions'));
@@ -123,23 +125,27 @@ class DynamoController extends Controller
      */
     public function destroy($id)
     {
-
         $className = $this->dynamo->class;
 
         // Run through and look for fields with type 'multiSelect'
-        foreach($this->dynamo->getFields() as $field) {
-
-            if($field->type == 'hasMany') {
+        foreach ($this->dynamo->getFields() as $field) {
+            if ($field->type == 'hasMany') {
                 //if 'multiSelect' found then relational data may exist. Detach data from the model
                 $className::find($id)->{$field->key}()->detach();
             }
-
         }
 
-        $className::destroy($id);
+        $item = $className::findOrFail($id);
+
+        try {
+            $item->delete();
+        } catch (QueryException $e) {
+            session(['alert-danger' => $this->dynamo->getName() . ' cannot be deleted while in use!']);
+            return redirect()->route($this->dynamo->getRoute('index'));
+        }
 
         session(['alert-warning' => $this->dynamo->getName() . ' was deleted successfully!']);
 
-        return redirect()->route($this->dynamo->getRoute('index'));
+        return $this->dynamo->getRouteUrl('index');
     }
 }

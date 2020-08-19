@@ -7,35 +7,106 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
                 <div class="panel panel-default">
+
+                    {{--*****************************************************************
+                        *                         START HEADER BLOCK                    *
+                        *            This block is the header of the dynamo panel        *
+                        *    Includes name of manager, index buttons, and create button *
+                        ***************************************************************** --}}
+
                     <div class="panel-heading">
                         @if ($dynamo->addVisible())
-                            <a href="{{ route($dynamo->getRoute('create')) }}" class="btn btn-success btn-xs pull-right">Add {{ $dynamo->getName() }}</a>
+                            <a href="{{ route($dynamo->getRoute('create')) }}" class="btn btn-success btn-xs pull-right">
+                                @if ($dynamo->hasAddItemTextChange() == null)
+                                Add {{ $dynamo->getName() }}
+                                @else
+                                    {{ $dynamo->getAddItemText()}}
+                                @endif
+                            </a>
                         @endif
-                        {{ $dynamo->getName() }} Manager
+
+                        @foreach ($dynamo->getIndexButtons() as $button)
+                            <div class="pull-right" style="margin-right: 5px;">{!! call_user_func($button) !!}</div>
+                        @endforeach
+
+                        @if($dynamo->hasIndexPanelTitleOverride() == null)
+                            {{ $dynamo->getName() }} Manager
+                        @else
+                            {!! $dynamo->getIndexPanelTitleOverride() !!}
+                        @endif
+
                     </div>
 
+                    {{--***************************
+                        *     END HEADER BLOCK    *
+                        *************************** --}}
+
+                    {{--**************************************
+                            *       START SEARCH BAR BLOCK       *
+                            *  This block begins the panel-body   *
+                            *     Includes search bar form       *
+                            ************************************** --}}
+
                     <div class="panel-body">
+
+                        <form action="{{ route($dynamo->getRoute('index')) }}" method="get" class="dynamo-search">
+
+                        <input type="hidden" name="view" class="form-control" value="{{ request()->input('view') }}">
 
                         @include('dynamo::partials.alerts')
 
                         @if ($dynamo->hasSearchable())
-                            <form action="{{ route($dynamo->getRoute('index')) }}" method="get" class="dynamo-search">
-
+                        
                                 <div class="form-group">
-                                    <label for="" class="sr-only">Search</label>
-                                    <div class="input-group">
-                                        <input type="text" name="q" class="form-control" placeholder="" value="{{ request()->input('q') }}">
+                                    <label for="" class="search-label">Search</label>
+                                    <div class="input-group" style="margin-top: -20px;">
+                                        <input type="text" name="q" class="form-control" value="{{ request()->input('q') }}" {!! $dynamo->getSearchOptionsString() !!}>
                                         <span class="input-group-btn">
                                             @if (request()->has('q'))
-                                                <a href="{{ route($dynamo->getRoute('index')) }}" class="btn btn-default">Clear</a>
+                                                <a href="{{ route($dynamo->getRoute('index'), request()->only('view')) }}" class="btn btn-default">Clear</a>
                                             @endif
                                             <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Search</button>
                                         </span>
                                     </div>
                                 </div>
 
-                            </form>
-                        @endif
+                            @endif
+
+                            {{--*******************************
+                                *     END SEARCH BAR BLOCK    *
+                                ******************************* --}}
+
+                                 {{--*********************************************************
+                                    *                 START INDEXTAB BLOCK                  *
+                                    *             This block renders indexTabs              *
+                                    *   Includes indexTabs, count of members in that tab,   *
+                                    *                and tooltps for each tab               *
+                                    ********************************************************* --}}
+
+                            @if ($dynamo->hasIndexTabs())
+                                 <ul class="nav nav-tabs" style="margin-top: 15px;">
+                                    @foreach ($dynamo->getIndexTabs() as $index => $tab)
+                                        <li class="{{ ($index == 0 && ! request()->has('view')) || (request()->input('view') == $tab->getViewName()) ? 'active' : '' }}">
+                                            <a href="{{ route($dynamo->getRoute('index'), ['view' => $tab->getViewName()]) }}" role="tab">
+                                                {{ $tab->getName() }}
+                                                @if ($tab->shouldShowCount())
+                                                    <span class="round-badge">{{ $dynamo->getIndexItemsQueryBuilder($tab->getViewName())->count() }}</span>
+                                                @endif
+                                                @if ($tab->hasOption('tooltip'))
+                                                    <i style="font-size: 17px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"
+                                                    title="{!! $tab->getOption('tooltip') !!}"></i>
+                                                @endif
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+
+                            @endif
+
+                        </form>
+                        {{--*****************************
+                            *     END INDEXTAB BLOCK    *
+                            ***************************** --}}
 
                         @if ($items->isEmpty())
 
