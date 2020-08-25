@@ -31,6 +31,7 @@ class Dynamo
     private $ignoredScopes = null;
     private $indexFilters = null;
     private $handlers = null;
+    private $actionButtons = null;
 
     public function __construct($class)
     {
@@ -45,6 +46,7 @@ class Dynamo
         $this->indexButtons = collect();
         $this->indexFilters = collect();
         $this->handlers = collect();
+        $this->actionButtons = collect();
     }
 
     public function __call($name, $arguments)
@@ -365,6 +367,8 @@ class Dynamo
 
     public function handleSpecialFields($item, $data = [])
     {
+        $processedHasMany = [];
+
         foreach ($data as $key => $value) {
 
             if (is_object($value) && (get_class($value) == "Illuminate\Http\UploadedFile" || get_class($value) == "Symfony\Component\HttpFoundation\File\UploadedFile")) {
@@ -387,15 +391,82 @@ class Dynamo
                 }
             }
 
-            if(is_array($value)) {
+            // handle has many relationships
+            if (is_array($value) && method_exists($item, $key)) {
                 $syncables = $data[$key];
                 $item->{$key}()->sync($syncables);
                 unset($data[$key]);
+                $processedHasMany[] = $key;
             }
 
         }
 
+        // handle empty has many fields
+        foreach ($this->getFieldsByType('hasMany') as $field) {
+            if (!isset($data[$field->key]) && !in_array($field->key, $processedHasMany)) {
+                $item->{$field->key}()->detach();
+            }
+        };
+
         return $data;
+    }
+
+    public function getFieldsByType($type)
+    {
+        $fields = $this->getAllFields();
+
+        // dd($fields);
+
+        return $fields->filter(function ($field) use ($type) {
+            return $field->type == $type;
+        });
+    }
+
+    public function getAllFields()
+    {
+        // base object fields
+        return $this->fields;
+
+        // group fields
+        // $groupFields = $this->groups->reduce(function ($allFields = null, $group = null) {
+        //     if (is_null($allFields)) {
+        //         $allFields = collect();
+        //     }
+
+        //     return $allFields->merge($group->fields);
+        // });
+
+        // handle null collection
+        // if (is_null($groupFields)) {
+        //     $groupFields = collect();
+        // }
+
+        // // tab fields and groups within tabs
+        // $tabFields = $this->formTabs->reduce(function ($allFields = null, $tab = null) {
+        //     if (is_null($allFields)) {
+        //         $allFields = collect();
+        //     }
+
+        //     $tabAndGroupFields = collect();
+
+        //     foreach ($tab->fields as $tabField) {
+        //         if ($tabField->type == 'group') {
+        //             $tabAndGroupFields = $tabAndGroupFields->merge($tabField->getOption('group')->fields);
+        //         } else {
+        //             $tabAndGroupFields = $tabAndGroupFields->merge([$tabField]);
+        //         }
+        //     }
+
+        //     return $allFields->merge($tabAndGroupFields);
+        // });
+
+        // handle null collection
+        if (is_null($tabFields)) {
+            $tabFields = collect();
+        }
+
+        // merge all field collections and return
+        return $dynamoFields->merge($groupFields)->merge($tabFields);
     }
 
     public function hasSearchable()
@@ -700,5 +771,17 @@ class Dynamo
         }
 
         return null;
+    }
+
+    public function addActionButton(\Closure $button)
+    {
+        $this->actionButtons->push($button);
+
+        return $this;
+    }
+
+    public function getActionButtons()
+    {
+        return $this->actionButtons;
     }
 }

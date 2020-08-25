@@ -132,6 +132,10 @@
                                             <td>
                                                 <a href="{{ route($dynamo->getRoute('edit'), $item->id) }}" class="btn btn-default btn-xs">Edit</a>
 
+                                                @foreach ($dynamo->getActionButtons() as $button)
+                                                    {!! call_user_func($button, $item) !!}
+                                                @endforeach
+
                                                 @if ($dynamo->deleteVisible())
                                                     {!! Form::open(['route' => [$dynamo->getRoute('destroy'), $item->id], 'method' => 'delete', 'style' => 'display: inline-block;']) !!}
                                                         <button class="btn btn-default btn-xs btn-delete">Delete</button>
