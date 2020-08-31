@@ -165,7 +165,7 @@
                                                 @endforeach
                                                 <td class="dynamo-width-of-action-row">
                                                     <div style="display: flex; gap: 5px;">
-                                                        <a href="{{ route($dynamo->getRoute('edit'), $item->id) }}" style="padding: 0px !important;" class="btn btn-link btn-sm">Edit</a>
+                                                        <a href="{{ route($dynamo->getRoute('edit'), $item->id) }}" class="btn btn-secondary btn-sm">Edit</a>
                                                         @foreach ($dynamo->getActionButtons() as $button)
                                                             {!! call_user_func($button, $item) !!}
                                                         @endforeach
