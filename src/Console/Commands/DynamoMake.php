@@ -143,11 +143,13 @@ class DynamoMake extends Command
 
         $confirm = $this->confirm('Would you like to insert a link to this module?');
         if ($confirm) {
+            // add the route the BOTH the normal pilot nav and sidebar pilot nav
+            // first we write to the modules.blade.php file
             $routeName = config('dynamo.route_prefix') . strtolower($model) . '.index';
             $label = Str::plural($model);
             $link = "<li class=\"nav-item {{ Request::is(route('$routeName').'*')  ? 'active' : null }}\">\n" .
-                "    <a class=\"nav-link\" href=\"{{ route('$routeName') }}\">$label</a>\n" .
-                "</li>\n";
+                    "    <a class=\"nav-link\" href=\"{{ route('$routeName') }}\">$label</a>\n" .
+                    "</li>\n";
             $placeholder = '{{-- Dynamo Modules --}}';
 
             // if the directory for module links doesn't exist, create it
@@ -163,6 +165,31 @@ class DynamoMake extends Command
             $modulesContent = file_get_contents(config('dynamo.modules_links_path'));
             $modulesContent = str_replace($placeholder, $link . "\n" . $placeholder, $modulesContent);
             file_put_contents(config('dynamo.modules_links_path'), $modulesContent);
+
+            /******************************************************************************/
+
+            // next we write to the modulesSidebar.blade.php file, create new link & placeholder
+            $link = "PilotNavItem::make('" . Str::plural($model) . "', " . $routeName . ", ['view' => 'published']), '" . substr($routeName, 0, -5) . '*' . "')";
+            $placeholderSidebar = "{!! PilotNav::create(\n" .
+                "       // Dynamo Modules\n" .
+                ") !!}";
+
+            // if the directory for module links doesn't exist, create it
+            if (!file_exists(config('dynamo.modulesSidebar_links_path'))) {
+                // get the directory name without the file name
+                $directoryName = preg_replace('~/[^/]*/?$~', '', config('dynamo.modulesSidebar_links_path'));
+                if (!is_dir($directoryName)) {
+                    mkdir($directoryName, 0777, true);
+                }
+                
+                file_put_contents(config('dynamo.modulesSidebar_links_path'), $placeholderSidebar);
+            }
+
+            $placeholderSidebar = "// Dynamo Modules";
+
+            $modulesContent = file_get_contents(config('dynamo.modulesSidebar_links_path'));
+            $modulesContent = str_replace($placeholderSidebar, $link . "\n" . $placeholderSidebar, $modulesContent);
+            file_put_contents(config('dynamo.modulesSidebar_links_path'), $modulesContent);
 
             $this->info('Complete and run the migration!');
         } else {
