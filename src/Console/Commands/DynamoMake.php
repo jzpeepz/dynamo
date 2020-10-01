@@ -169,9 +169,9 @@ class DynamoMake extends Command
             /******************************************************************************/
 
             // next we write to the modulesSidebar.blade.php file, create new link & placeholder
-            $link = "PilotNavItem::make('" . Str::plural($model) . "', " . $routeName . ", ['view' => 'published']), '" . substr($routeName, 0, -5) . '*' . "')";
+            $link = "PilotNavItem::make('" . Str::plural($model) . "', route('" . $routeName . "'), '" . substr($routeName, 0, -5) . '*' . "', ['view' => 'published']),";
             $placeholderSidebar = "{!! PilotNav::create(\n" .
-                "       // Dynamo Modules\n" .
+                "   // Dynamo Modules\n" .
                 ") !!}";
 
             // if the directory for module links doesn't exist, create it
@@ -185,7 +185,7 @@ class DynamoMake extends Command
                 file_put_contents(config('dynamo.modulesSidebar_links_path'), $placeholderSidebar);
             }
 
-            $placeholderSidebar = "// Dynamo Modules";
+            $placeholderSidebar = " // Dynamo Modules";
 
             $modulesContent = file_get_contents(config('dynamo.modulesSidebar_links_path'));
             $modulesContent = str_replace($placeholderSidebar, $link . "\n" . $placeholderSidebar, $modulesContent);

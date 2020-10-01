@@ -6,7 +6,7 @@
     <div class="container-fluid pt-4 {{ config('pilot.backend_side_bar_layout') ? 'pl-lg-0 pr-lg-0' : ''}}">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-11 col-xl-10 {{ config('pilot.backend_side_bar_layout') ? 'pl-lg-0 pr-lg-0' : ''}}">
-                <div class="card mb-4">
+                <div class="card {{ config('pilot.backend_side_bar_layout') ? 'sidebar-card' : ''}} mb-4">
                     <div class="card-header">
                         {{ $item->exists ? 'Edit' : 'Add' }}
 

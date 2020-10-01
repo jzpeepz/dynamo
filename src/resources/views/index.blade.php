@@ -96,7 +96,7 @@
                                             <a href="{{ route($dynamo->getRoute('index'), ['view' => $tab->getViewName()]) }}" role="tab">
                                                 {{ $tab->getName() }}
                                                 @if ($tab->shouldShowCount())
-                                                    <span class="round-badge">{{ $dynamo->getIndexItemsQueryBuilder($tab->getViewName())->count() }}</span>
+                                                    <span class="{{ $tab->badgeColor = 'red' ? 'round-badge' : 'round-badge-blue' }}">{{ $dynamo->getIndexItemsQueryBuilder($tab->getViewName())->count() }}</span>
                                                 @endif
                                                 @if ($tab->hasOption('tooltip'))
                                                     <i style="font-size: 17px; padding-left: 2px;" class="fas fa-question-circle" data-toggle="tooltip" data-html="true"

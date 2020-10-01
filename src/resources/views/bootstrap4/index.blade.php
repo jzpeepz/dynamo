@@ -6,7 +6,7 @@
     <div class="container-fluid pt-4 {{ config('pilot.backend_side_bar_layout') ? 'pl-lg-0 pr-lg-0' : ''}}">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-11 col-xl-10 {{ config('pilot.backend_side_bar_layout') ? 'pl-lg-0 pr-lg-0' : ''}}">
-                <div class="card">
+                <div class="card {{ config('pilot.backend_side_bar_layout') ? 'sidebar-card' : ''}}">
                     {{--*****************************************************************
                         *                         START HEADER BLOCK                    *
                         *            This block is the header of the dynamo card        *
@@ -94,7 +94,7 @@
                                                 <a class="nav-link {{ ($index == 0 && ! request()->has('view')) || (request()->input('view') == Str::slug($tab->getName())) ? 'active' : '' }}"
                                                     href="{{ route($dynamo->getRoute('index'), ['view' => Str::slug($tab->getViewName())]) }}" role="tab">{{ $tab->getName() }}
                                                     @if ($tab->shouldShowCount())
-                                                        <span class="round-badge">{{ $dynamo->getIndexItemsQueryBuilder($tab->getViewName())->count() }}</span>
+                                                        <span class="{{ $tab->getBadgeColor() == 'red' ? 'round-badge' : 'round-badge-blue' }}">{{ $dynamo->getIndexItemsQueryBuilder($tab->getViewName())->count() }}</span>
                                                     @endif
                                                     @if ($tab->hasOption('tooltip'))
                                                         <i id="dont-show-on-mobile-tooltip" class="fas fa-question-circle dynamo-tooltip" data-toggle="tooltip" data-html="true"

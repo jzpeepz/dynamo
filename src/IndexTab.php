@@ -8,6 +8,7 @@ class IndexTab extends ModuleTab
 {
     public $queryFilter;
     private $showCount = false;
+    private $badgeColor = 'red';
 
     public function __construct($name, $queryFilter = null)
     {
@@ -39,6 +40,18 @@ class IndexTab extends ModuleTab
         $this->showCount = true;
 
         return $this;
+    }
+
+    public function setBadgeColor($color = 'red')
+    {
+        $this->badgeColor = $color;
+
+        return $this;
+    }
+
+    public function getBadgeColor()
+    {
+        return $this->badgeColor;
     }
 
     public function shouldShowCount()
