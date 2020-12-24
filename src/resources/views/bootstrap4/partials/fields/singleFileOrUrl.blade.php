@@ -8,7 +8,6 @@
     <div class="dynamo-field-root {{ $field->getOption('root-class') }}">
 
         <div class="form-group form-group-{{ $field->key }}">
-
             <label for="" title="Position: {{ $field->position }}">
                 {{ $field->label }}
                 @if (! empty($field->getOption('tooltip')))
@@ -22,7 +21,7 @@
             @endif
 
             <file-or-text :name="'{{ $field->key }}'"
-                          :value="'{{ $item->{$field->key} }}'"
+                          :value="'{{ addslashes($item->{$field->key}) }}'"
                           :type="'{{ empty($mediaItem) ? 'text' : 'file' }}'"
                           :class_name="'{{ $field->getOption('class') }}'"
                           :styles="'{{ $field->getOption('style') }}'"
