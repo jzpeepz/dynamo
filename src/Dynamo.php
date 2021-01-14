@@ -397,6 +397,9 @@ class Dynamo
                 $item->{$key}()->sync($syncables);
                 unset($data[$key]);
                 $processedHasMany[] = $key;
+            } elseif (is_array($value)) {
+                // ignore any unused array fields
+                unset($data[$key]);
             }
 
         }
